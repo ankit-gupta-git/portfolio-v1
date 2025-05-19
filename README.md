@@ -26,7 +26,7 @@ Welcome to my personal portfolio website! This is a modern, responsive portfolio
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/portfolio.git
+git clone https://github.com/ankit-gupta-git/portfolio-v1.git
 ```
 
 2. Navigate to the project directory:
