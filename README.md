@@ -87,4 +87,4 @@ For any inquiries, please reach out to me at [ankitkumargupta752@gmail.com](mail
 
 ---
 
-Made with ❤️ by [Ankit]
+Made with ❤️ by Ankit
