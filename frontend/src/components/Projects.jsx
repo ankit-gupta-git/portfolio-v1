@@ -12,7 +12,7 @@ const projects = [
     tech: ["React", "Tailwind", "Node.js", "API"],
     github: "https://github.com/ankit-gupta-git/Napster",
     live: "https://ankit-gupta-git.github.io/Napster/",
-    image: "/public/ProjectImg/napster.png",
+    image: "/ProjectImg/napster.png",
   },
   {
     title: "Wanderlust - Airbnb Clone",
