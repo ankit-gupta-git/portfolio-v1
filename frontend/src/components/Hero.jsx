@@ -83,7 +83,7 @@ const Hero = () => {
               }`}
             >
               <img
-                src="../public/for twitter.jpg"
+                src="/for-twitter.jpg"
                 alt="Ankit Gupta"
                 className="rounded-full object-cover w-full h-full"
               />
