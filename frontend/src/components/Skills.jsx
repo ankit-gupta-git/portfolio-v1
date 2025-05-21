@@ -262,31 +262,6 @@ const Skills = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ 
-            type: "spring",
-            stiffness: 100,
-            damping: 15,
-            delay: 0.4 
-          }}
-          className={`mt-24 max-w-2xl mx-auto rounded-2xl p-4 ${
-            isDark
-              ? "bg-gradient-to-b from-[#181818] to-[#0f0f0f] border border-neutral-800 shadow-[0_0_40px_rgba(255,255,255,0.15)]"
-              : "bg-white border border-gray-200 shadow-lg"
-          }`}
-        >
-          <p
-            className={`text-center text-lg font-sans ${
-              isDark ? "text-gray-300" : "text-gray-600"
-            }`}
-          >
-            Always exploring new technologies to expand my toolkit and solve
-            complex problems more effectively.
-          </p>
-        </motion.div>
       </motion.div>
     </section>
   );

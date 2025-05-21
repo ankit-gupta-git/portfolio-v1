@@ -14,6 +14,32 @@ import { motion, AnimatePresence } from "framer-motion";
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();
 
+  // Optimized animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        when: "beforeChildren",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <section
       id="home"
@@ -38,9 +64,9 @@ const Hero = () => {
             x: isDark ? (window.innerWidth < 640 ? 24 : 32) : 0,
             transition: { 
               type: "spring", 
-              stiffness: 500, 
-              damping: 30,
-              mass: 1
+              stiffness: 400, 
+              damping: 25,
+              mass: 0.8
             }
           }}
         >
@@ -50,7 +76,7 @@ const Hero = () => {
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               exit={{ scale: 0, rotate: 180 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
             >
               {isDark ? (
                 <FaSun className="text-yellow-500 text-xs sm:text-sm" />
@@ -62,12 +88,15 @@ const Hero = () => {
         </motion.div>
       </motion.button>
 
-      <div className="max-w-7xl w-full grid md:grid-cols-2 gap-10 items-center">
+      <motion.div 
+        className="max-w-7xl w-full grid md:grid-cols-2 gap-10 items-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* RIGHT SIDE - IMAGE */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+          variants={itemVariants}
           className="flex justify-center order-1 md:order-2"
         >
           <div
@@ -86,6 +115,8 @@ const Hero = () => {
                 src="/for-twitter.jpg"
                 alt="Ankit Gupta"
                 className="rounded-full object-cover w-full h-full"
+                loading="eager"
+                fetchPriority="high"
               />
             </div>
           </div>
@@ -93,27 +124,30 @@ const Hero = () => {
 
         {/* LEFT SIDE */}
         <motion.div
-          initial={{ opacity: 0, x: 0 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+          variants={itemVariants}
           className={`space-y-6 order-2 md:order-1 ${
             isDark ? "text-white" : "text-gray-800"
           } transition duration-300`}
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-col gap-2 text-center md:text-left">
-            <span>Hi, I'm</span>
-            <span className={`${isDark ? "text-blue-500" : "text-blue-600"}`}>
+            <motion.span variants={itemVariants}>Hi, I'm</motion.span>
+            <motion.span 
+              variants={itemVariants}
+              className={`${isDark ? "text-blue-500" : "text-blue-600"}`}
+            >
               Ankit Gupta
-            </span>
+            </motion.span>
           </h1>
-          <h2
+          <motion.h2
+            variants={itemVariants}
             className={`text-lg sm:text-xl md:text-2xl font-medium ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}
           >
             Full Stack Developer | Aspiring SDE
-          </h2>
-          <p
+          </motion.h2>
+          <motion.p
+            variants={itemVariants}
             className={`max-w-xl text-sm sm:text-base md:text-lg ${
               isDark ? "text-gray-400" : "text-gray-700"
             }`}
@@ -122,10 +156,13 @@ const Hero = () => {
             Java junkie, and 5x hackathoner building real-world tech with a hint
             of AI. Currently exploring how smart systems can solve not-so-smart
             problems. Let's connect and create something amazing together!
-          </p>
+          </motion.p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
+          <motion.div 
+            variants={itemVariants}
+            className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start"
+          >
             <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -162,16 +199,18 @@ const Hero = () => {
                 LeetCode <FaCode className="text-lg" />
               </span>
             </motion.a>
-          </div>
+          </motion.div>
 
           {/* Social Icons */}
-          <div
+          <motion.div
+            variants={itemVariants}
             className={`flex gap-5 pt-4 text-2xl justify-center md:justify-start ${
               isDark ? "text-gray-300" : "text-gray-600"
             }`}
           >
             <motion.a
               whileHover={{ scale: 1.2, y: -5 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
               href="https://github.com/ankit-gupta-git"
               target="_blank"
               rel="noreferrer"
@@ -180,6 +219,7 @@ const Hero = () => {
             </motion.a>
             <motion.a
               whileHover={{ scale: 1.2, y: -5 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
               href="https://www.linkedin.com/in/ankitgupta-tech"
               target="_blank"
               rel="noreferrer"
@@ -188,15 +228,16 @@ const Hero = () => {
             </motion.a>
             <motion.a
               whileHover={{ scale: 1.2, y: -5 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
               href="https://x.com/ankitgupta_79"
               target="_blank"
               rel="noreferrer"
             >
               <FaXTwitter className="hover:text-blue-700 transition" />
             </motion.a>
-          </div>
+          </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };
