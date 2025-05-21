@@ -21,16 +21,16 @@ const Experience = () => {
     {
       title: "2023 - Present",
       content: (
-        <div className="flex items-start gap-3">
-          {/* Laptop icon: 2x bigger on mobile, normal on desktop */}
-          <Laptop className={`w-40 sm:w-12 sm:h-5 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
-          <div>
+        <div className="flex items-start gap-2 sm:gap-3">
+          {/* Laptop icon: adjusted size and alignment */}
+          <Laptop className={`w-6 h-6 sm:w-5 sm:h-8 mt-1.5 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
+          <div className="flex-1 pl-1">
             <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>Bachelor of Technology in CSE - AIML</h3>
-            <div className="flex items-center gap-1 sm:gap-2 mb-1">
-              <MapPin className={`w-4 h-4 sm:w-5 sm:h-6 ${isDark ? "text-gray-400" : "text-gray-600"}`} />
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-2">
+              <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${isDark ? "text-gray-400" : "text-gray-600"}`} />
               <p className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>Quantum University, Roorkee, IN</p>
             </div>
-            <p className={`text-xs sm:text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+            <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
               Pursuing a comprehensive education in Computer Science and Engineering with a specialization in Artificial Intelligence and Machine Learning. Building strong problem-solving skills through core CS fundamentals, algorithms, data structures, machine learning models, and full-stack development, with hands-on projects and real-world applications.
             </p>
           </div>
@@ -40,10 +40,10 @@ const Experience = () => {
     {
       title: "Hackathons",
       content: (
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-2 sm:gap-3">
           {/* Code2 icon: 2x bigger on mobile, normal on desktop */}
-          <Code2 className={`w-28 h-5 sm:w-5 sm:h-7 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
-          <div>
+          <Code2 className={`w-8 h-5 sm:w-5 sm:h-7 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
+          <div className="flex-1">
             <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>Hackathon Team Lead</h3>
             <p className={`text-xs sm:text-sm mb-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Aug 2023 - May 2025</p>
             <ul className={`list-none pl-0 space-y-2 ${isDark ? "text-gray-300 text-xs sm:text-sm" : "text-gray-700 text-xs sm:text-sm"}`}>
@@ -86,9 +86,9 @@ const Experience = () => {
     {
       title: "Awards & Recognition",
       content: (
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-2 sm:gap-3">
           {/* Award icon: smaller on desktop, normal on mobile */}
-          <Award className={`w-7 h-7 sm:w-6 sm:h-6 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
+          <Award className={`w-5 h-8 sm:w-6 sm:h-6 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
           <div className="flex-1">
             <h3 className={`text-base sm:text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>Hackathon Achievements</h3>
             {(() => {
@@ -139,7 +139,7 @@ const Experience = () => {
   return (
     <section
       id="experience"
-      className={`relative py-20 px-4 md:px-10 overflow-hidden ${
+      className={`relative py-20 px-2 sm:px-4 md:px-10 overflow-hidden ${
         !isDark ? "bg-gradient-to-b from-blue-50 to-white" : ""
       }`}
     >
@@ -156,8 +156,9 @@ const Experience = () => {
         Experience
       </motion.h2>
 
-      {/* Keep the rest of the timeline as is */}
-      <Timeline data={experiences} />
+      <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] mx-auto">
+        <Timeline data={experiences} />
+      </div>
     </section>
   );
 };
