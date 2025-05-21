@@ -52,10 +52,50 @@ const Projects = () => {
   const { isDark } = useTheme();
   const [modalProject, setModalProject] = useState(null);
 
-  // Animation variants for grid items
+  // Optimized animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        when: "beforeChildren",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
   const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      transition: {
+        duration: 0.2,
+        ease: "easeIn"
+      }
+    }
   };
 
   return (
@@ -68,7 +108,8 @@ const Projects = () => {
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center ${
           isDark
             ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
@@ -77,7 +118,13 @@ const Projects = () => {
       >
         Projects
       </motion.h2>
-      <div className="flex flex-col items-center mb-8 sm:mb-12">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex flex-col items-center mb-8 sm:mb-12"
+      >
         <h3 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold text-center flex items-center gap-2`}>
           <span className={`${isDark 
             ? 'bg-gradient-to-r from-cyan-200 via-pink-200 to-yellow-200' 
@@ -87,21 +134,22 @@ const Projects = () => {
         <p className={`mt-3 sm:mt-4 text-sm sm:text-md text-center ${isDark ? "text-gray-300" : "text-gray-600"}`}>
           Each project is unique. Here are some of my works.
         </p>
-      </div>
+      </motion.div>
 
       {/* Projects Grid */}
       <motion.div 
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto"
+        variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        transition={{ staggerChildren: 0.1 }}
       >
         {projects.map((project, index) => (
           <motion.div
             key={index}
             variants={itemVariants}
             whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
             className={`h-auto flex flex-col justify-between ${
               isDark
                 ? "bg-[#171717] border border-white/10"
@@ -166,7 +214,9 @@ const Projects = () => {
             <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5 ${
               isDark ? "text-sky-300" : "text-blue-600"
             }`}>
-              <a 
+              <motion.a 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 href={project.github} 
                 target="_blank" 
                 rel="noopener noreferrer"
@@ -178,8 +228,10 @@ const Projects = () => {
               >
                 <FaGithub className="text-lg sm:text-xl" />
                 <span className="font-medium">GitHub</span>
-              </a>
-              <a 
+              </motion.a>
+              <motion.a 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 href={project.live} 
                 target="_blank" 
                 rel="noopener noreferrer"
@@ -191,7 +243,7 @@ const Projects = () => {
               >
                 <FaExternalLinkAlt className="text-lg sm:text-xl" />
                 <span className="font-medium">Live Demo</span>
-              </a>
+              </motion.a>
             </div>
           </motion.div>
         ))}
@@ -201,66 +253,71 @@ const Projects = () => {
       <AnimatePresence>
         {modalProject && (
           <motion.div
-            className="fixed inset-0 z-50 bg-transparent flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={modalVariants}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={() => setModalProject(null)}
           >
             <motion.div
-              onClick={(e) => e.stopPropagation()}
-              className={`${
-                isDark
-                  ? "bg-black/10 backdrop-blur-lg border border-white/20"
-                  : "bg-white/90 backdrop-blur-lg border border-gray-200 shadow-xl"
-              } rounded-2xl p-6 max-w-2xl w-full relative`}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              className={`max-w-2xl w-full p-6 rounded-xl ${
+                isDark ? "bg-[#171717]" : "bg-white"
+              }`}
+              onClick={e => e.stopPropagation()}
             >
-              <h3 className={`text-3xl font-bold ${
-                isDark ? "text-blue-300" : "text-blue-600"
-              } mb-4`}>{modalProject.title}</h3>
-              <img
-                src={modalProject.image}
-                alt={modalProject.title}
-                className="w-full h-56 object-cover rounded-lg mb-4"
-              />
-              <p className={`text-lg ${
-                isDark ? "text-gray-200" : "text-gray-600"
-              } mb-4`}>{modalProject.description}</p>
-              <div className="flex flex-wrap gap-3 mb-4">
-                {modalProject.tech.map((tech, i) => (
+              <h3 className={`text-2xl font-bold mb-4 ${
+                isDark ? "text-blue-400" : "text-blue-600"
+              }`}>{modalProject.title}</h3>
+              <p className={`mb-6 ${
+                isDark ? "text-gray-300" : "text-gray-600"
+              }`}>{modalProject.description}</p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {modalProject.tech.map((tech, index) => (
                   <span
-                    key={i}
-                    className={`${
+                    key={index}
+                    className={`px-3 py-1 rounded ${
                       isDark
-                        ? "bg-blue-900 text-blue-300"
-                        : "bg-blue-100 text-blue-600"
-                    } px-3 py-2 rounded-lg`}
+                        ? "bg-sky-900/50 text-sky-300"
+                        : "bg-blue-50 text-blue-600"
+                    }`}
                   >
                     {tech}
                   </span>
                 ))}
               </div>
-              <div className={`flex space-x-6 text-xl ${
-                isDark ? "text-blue-300" : "text-blue-500"
-              }`}>
-                <a href={modalProject.github} target="_blank" rel="noopener noreferrer">
-                  <FaGithub className="hover:text-white" />
-                </a>
-                <a href={modalProject.live} target="_blank" rel="noopener noreferrer">
-                  <FaExternalLinkAlt className="hover:text-white" />
-                </a>
+              <div className="flex gap-4">
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={modalProject.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg ${
+                    isDark
+                      ? "bg-[#171717] text-sky-300 border border-sky-900/50"
+                      : "bg-gray-100 text-blue-600 border border-gray-200"
+                  }`}
+                >
+                  <FaGithub className="text-xl" />
+                  <span>GitHub</span>
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={modalProject.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg ${
+                    isDark
+                      ? "bg-sky-900/50 text-sky-300"
+                      : "bg-blue-500 text-white"
+                  }`}
+                >
+                  <FaExternalLinkAlt className="text-xl" />
+                  <span>Live Demo</span>
+                </motion.a>
               </div>
-              <button
-                onClick={() => setModalProject(null)}
-                className={`absolute top-2 right-3 text-xl ${
-                  isDark ? "text-white" : "text-gray-600"}
-                } hover:text-red-500`}
-              >
-                ✕
-              </button>
             </motion.div>
           </motion.div>
         )}

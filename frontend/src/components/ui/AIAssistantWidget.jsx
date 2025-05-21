@@ -3,7 +3,7 @@ import { MessageCircle, Send, Search, Palette, ChevronDown } from 'lucide-react'
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown';
 
-const API_URL = 'http://localhost:3000/ai/get-response';
+const API_URL = `${import.meta.env.VITE_BACKEND_URL}/ai/get-response`;
 
 const suggestionChips = [
   { icon: <Palette size={16} />, text: 'Tell me about your skills' },
