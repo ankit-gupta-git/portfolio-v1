@@ -45,8 +45,8 @@ const Footer = () => {
         }`}>
           &copy; {new Date().getFullYear()} Ankit Kumar Gupta. All rights reserved.
         </p>
-        <p className={isDark ? "text-gray-300" : "text-gray-500"}>
-          Portfolio under construction.
+        <p className={`${isDark ? "text-gray-300" : "text-gray-500"} text-sm font-medium animate-pulse`}>
+          🚧 Portfolio in Progress - Crafting Something Amazing! 🚧
         </p>
       </div>
     </footer>
