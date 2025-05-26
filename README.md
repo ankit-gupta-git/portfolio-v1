@@ -88,7 +88,7 @@ This project is open source under the MIT License.
 ## 🙋‍♂️ Author
 
 **Ankit Kumar Gupta**  
-🔗 [ankitdev.xyz]
+🔗 [ankitdev.xyz](https://ankitdev.xyz)  
 📧 [ankitkumargupta752@gmail.com](mailto:ankitkumargupta752@gmail.com)
 
 ## 🙏 Acknowledgments
