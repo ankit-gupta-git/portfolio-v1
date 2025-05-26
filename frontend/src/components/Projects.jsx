@@ -148,35 +148,27 @@ const Projects = () => {
           <motion.div
             key={index}
             variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
             className={`h-auto flex flex-col justify-between ${
               isDark
                 ? "bg-[#171717] border border-white/10"
                 : "bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg"
-            } rounded-xl sm:rounded-2xl p-4 sm:p-7`}
+            } rounded-xl sm:rounded-2xl overflow-hidden`}
           >
-            <div className="w-full h-40 sm:h-44 overflow-hidden rounded-lg mb-4 sm:mb-5 relative group">
+            <div className="w-full h-48 sm:h-56 overflow-hidden relative group">
               <img
                 src={project.image}
                 alt={project.title}
                 loading="eager"
                 fetchPriority="high"
-                className="w-full h-full object-cover object-center transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-1"
+                className="w-full h-full object-cover object-center transform transition-all duration-500 group-hover:scale-105"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "https://via.placeholder.com/400x300?text=Project+Image";
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-4">
-                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <h4 className="text-white text-lg font-semibold mb-2">{project.title}</h4>
-                  <p className="text-gray-200 text-sm line-clamp-2">{project.description}</p>
-                </div>
-              </div>
             </div>
 
-            <div className="flex-1 min-h-[120px] sm:min-h-[140px]">
+            <div className="flex-1 p-4 sm:p-6">
               <h3 className={`text-lg sm:text-xl font-semibold line-clamp-1 ${
                 isDark ? "text-blue-400" : "text-blue-600"
               }`}>{project.title}</h3>
@@ -210,41 +202,41 @@ const Projects = () => {
                   </span>
                 ))}
               </div>
-            </div>
 
-            <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5 ${
-              isDark ? "text-sky-300" : "text-blue-600"
-            }`}>
-              <motion.a 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href={project.github} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
-                  isDark 
-                    ? "bg-[#171717] hover:bg-[#1f1f1f] text-sky-300 hover:text-white border border-sky-900/50" 
-                    : "bg-gray-100 hover:bg-gray-200 text-blue-600 hover:text-blue-700 border border-gray-200"
-                }`}
-              >
-                <FaGithub className="text-lg sm:text-xl" />
-                <span className="font-medium">GitHub</span>
-              </motion.a>
-              <motion.a 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href={project.live} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
-                  isDark 
-                    ? "bg-sky-900/50 hover:bg-sky-800 text-sky-300 hover:text-white" 
-                    : "bg-blue-500 hover:bg-blue-600 text-white hover:text-white"}
-                }`}
-              >
-                <FaExternalLinkAlt className="text-lg sm:text-xl" />
-                <span className="font-medium">Live Demo</span>
-              </motion.a>
+              <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5 ${
+                isDark ? "text-sky-300" : "text-blue-600"
+              }`}>
+                <motion.a 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={project.github} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
+                    isDark 
+                      ? "bg-[#171717] hover:bg-[#1f1f1f] text-sky-300 hover:text-white border border-sky-900/50" 
+                      : "bg-gray-100 hover:bg-gray-200 text-blue-600 hover:text-blue-700 border border-gray-200"
+                  }`}
+                >
+                  <FaGithub className="text-lg sm:text-xl" />
+                  <span className="font-medium">GitHub</span>
+                </motion.a>
+                <motion.a 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={project.live} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
+                    isDark 
+                      ? "bg-sky-900/50 hover:bg-sky-800 text-sky-300 hover:text-white" 
+                      : "bg-blue-500 hover:bg-blue-600 text-white hover:text-white"}
+                  }`}
+                >
+                  <FaExternalLinkAlt className="text-lg sm:text-xl" />
+                  <span className="font-medium">Live Demo</span>
+                </motion.a>
+              </div>
             </div>
           </motion.div>
         ))}

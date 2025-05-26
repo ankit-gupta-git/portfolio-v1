@@ -1,9 +1,11 @@
 import { Sparkles } from "./ui/sparkles";  // Sparkles component
 import BlobBackground from "./ui/BlobBackground";  // Blob Background component
 import { useTheme } from "./ui/ThemeContext";  // Theme context to get theme state
+import useLenisScroll from "../hooks/useLenisScroll";  // Import the smooth scroll hook
 
 export default function Layout({ children }) {
   const { isDark } = useTheme(); // Get current theme from context
+  useLenisScroll(); // Initialize smooth scrolling
 
   return (
     <div
