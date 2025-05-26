@@ -28,9 +28,9 @@ const Experience = () => {
             <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>Bachelor of Technology in CSE - AIML</h3>
             <div className="flex items-center gap-1.5 sm:gap-2 mb-2">
               <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${isDark ? "text-gray-400" : "text-gray-600"}`} />
-              <p className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>Quantum University, Roorkee, IN</p>
+              <p className={`text-sm sm:text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>Quantum University, Roorkee, IN</p>
             </div>
-            <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+            <p className={`text-sm sm:text-sm leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
               Pursuing a comprehensive education in Computer Science and Engineering with a specialization in Artificial Intelligence and Machine Learning. Building strong problem-solving skills through core CS fundamentals, algorithms, data structures, machine learning models, and full-stack development, with hands-on projects and real-world applications.
             </p>
           </div>
@@ -45,8 +45,8 @@ const Experience = () => {
           <Code2 className={`w-8 h-5 sm:w-5 sm:h-7 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
           <div className="flex-1">
             <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>Hackathon Team Lead</h3>
-            <p className={`text-xs sm:text-sm mb-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Aug 2023 - May 2025</p>
-            <ul className={`list-none pl-0 space-y-2 ${isDark ? "text-gray-300 text-xs sm:text-sm" : "text-gray-700 text-xs sm:text-sm"}`}>
+            <p className={`text-sm sm:text-sm mb-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Aug 2023 - May 2025</p>
+            <ul className={`list-none pl-0 space-y-2 ${isDark ? "text-gray-300 text-sm sm:text-sm" : "text-gray-700 text-sm sm:text-sm"}`}>
               <li>Actively participated in multiple hackathons, developing impactful tech solutions and leading cross-functional teams.</li>
               <li>
                 <div className="flex items-start gap-1 sm:gap-2">
@@ -113,12 +113,12 @@ const Experience = () => {
                       <FaCircle className={`w-3 h-3 sm:w-2.5 sm:h-2.5 mt-2 flex-shrink-0 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
                       <div>
                         <h4 className={`text-base sm:text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>{award.title}</h4>
-                        <p className={`mt-1 text-xs sm:text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>{award.description}</p>
+                        <p className={`mt-1 text-sm sm:text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>{award.description}</p>
                         {/* Tags */}
                         {award.tags && award.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2 mt-2">
                             {award.tags.map((tag, tagIndex) => (
-                              <span key={tagIndex} className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium ${isDark ? "bg-[#1e293b]/70 text-blue-400 border border-gray-700" : "bg-blue-100 text-blue-800"}`}>
+                              <span key={tagIndex} className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-sm sm:text-sm font-medium ${isDark ? "bg-[#1e293b]/70 text-blue-400 border border-gray-700" : "bg-blue-100 text-blue-800"}`}>
                                 {tag}
                               </span>
                             ))}
