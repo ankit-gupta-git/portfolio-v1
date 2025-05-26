@@ -88,6 +88,7 @@ This project is open source under the MIT License.
 ## 🙋‍♂️ Author
 
 **Ankit Kumar Gupta**  
+🔗 [ankitdev.xyz]
 📧 [ankitkumargupta752@gmail.com](mailto:ankitkumargupta752@gmail.com)
 
 ## 🙏 Acknowledgments
@@ -95,7 +96,3 @@ This project is open source under the MIT License.
 * Thanks to all the open-source projects that made this portfolio possible
 * Special thanks to the React and Vite communities for their excellent documentation
 * Inspired by modern web design trends and best practices
-
----
-
-Made with ❤️ by Ankit Kumar Gupta
