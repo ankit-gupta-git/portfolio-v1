@@ -262,6 +262,17 @@ const Skills = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Text Box with Static Shadow Glow Only */}
+        <div
+          className={`rounded-2xl p-6 mt-12 mx-auto max-w-3xl text-center text-base sm:text-lg font-sans ${isDark
+            ? "bg-[#181818] text-gray-200 shadow-[0_0_7px_7px_rgba(11,36,51,0.5)]"
+            : "bg-white text-gray-700 shadow-lg"
+          } transition-all duration-300 flex items-center justify-center`}
+        >
+          I’m always curious to explore new technologies, constantly expanding my toolkit to tackle challenges more creatively and effectively.
+        </div>
+
       </motion.div>
     </section>
   );

@@ -160,7 +160,8 @@ const Projects = () => {
               <img
                 src={project.image}
                 alt={project.title}
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
                 className="w-full h-full object-cover object-center transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-1"
                 onError={(e) => {
                   e.target.onerror = null;

@@ -15,6 +15,7 @@ const AIAssistantWidget = () => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
   const [messages, setMessages] = useState([
     {
       from: 'ai',
@@ -23,14 +24,28 @@ const AIAssistantWidget = () => {
   ]);
   const [input, setInput] = useState('');
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
+  const [currentTypingMessage, setCurrentTypingMessage] = useState('');
   const messagesEndRef = useRef(null);
   const chatAreaRef = useRef(null);
+
+  // Function to simulate typing effect
+  const typeMessage = (message, index = 0) => {
+    if (index < message.length) {
+      setCurrentTypingMessage(message.substring(0, index + 1));
+      setTimeout(() => typeMessage(message, index + 1), 30); // Adjust speed here (lower = faster)
+    } else {
+      setIsTyping(false);
+      setMessages(prev => [...prev, { from: 'ai', text: message }]);
+      setCurrentTypingMessage('');
+    }
+  };
 
   useEffect(() => {
     if (open && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, open]);
+  }, [messages, open, currentTypingMessage]);
 
   useEffect(() => {
     const chatArea = chatAreaRef.current;
@@ -76,19 +91,23 @@ const AIAssistantWidget = () => {
       setIsLoading(true);
       const response = await axios.post(API_URL, { prompt: messageToSend });
       
-      console.log("API Response:", response.data); // Debugging purpose
-      setMessages((msgs) => [...msgs, { from: 'ai', text: response.data.response }]);
+      console.log("API Response:", response.data);
+      setIsLoading(false);
+      setIsThinking(true);
+      setTimeout(() => {
+        setIsThinking(false);
+        setIsTyping(true);
+        typeMessage(response.data.response);
+      }, 1500);
     } catch (error) {
       console.error("Error fetching response:", error);
-      setMessages((msgs) => [
-        ...msgs,
-        { 
-          from: 'ai', 
-          text: error.response?.data?.error || "I apologize, but I'm having trouble connecting to the server. Please make sure the backend server is running and try again." 
-        },
-      ]);
-    } finally {
       setIsLoading(false);
+      setIsThinking(true);
+      setTimeout(() => {
+        setIsThinking(false);
+        setIsTyping(true);
+        typeMessage(error.response?.data?.error || "I apologize, but I'm having trouble connecting to the server. Please make sure the backend server is running and try again.");
+      }, 1500);
     }
   };
 
@@ -150,7 +169,7 @@ const AIAssistantWidget = () => {
                 {/* Message Area */}
                 <div
                   ref={chatAreaRef}
-                  className="flex-1 px-4 sm:px-6 py-3 sm:py-4 overflow-y-auto bg-[#181c23] scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-transparent"
+                  className="flex-1 relative bg-[#181c23]"
                   style={{
                     backgroundImage: `
                       linear-gradient(to bottom right, 
@@ -172,14 +191,52 @@ const AIAssistantWidget = () => {
                     `
                   }}
                 >
-                  {messages.map((message, index) => (
-                    <div key={index} className={`flex ${message.from === 'user' ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4`}>
-                      <div className={`max-w-[85%] sm:max-w-[70%] px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl ${
-                        message.from === 'user' 
-                          ? 'bg-blue-600 text-white rounded-tr-none' 
-                          : 'bg-[#23283a] text-white rounded-tl-none'
-                      }`}>
-                        {message.from === 'ai' ? (
+                  <div className="absolute inset-0 overflow-y-auto px-4 sm:px-6 py-3 sm:py-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-transparent pb-16">
+                    {messages.map((message, index) => (
+                      <div key={index} className={`flex ${message.from === 'user' ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4`}>
+                        <div className={`max-w-[85%] sm:max-w-[70%] px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl ${
+                          message.from === 'user' 
+                            ? 'bg-blue-600 text-white rounded-tr-none' 
+                            : 'bg-[#23283a] text-white rounded-tl-none'
+                        }`}>
+                          {message.from === 'ai' ? (
+                            <ReactMarkdown
+                              components={{
+                                strong: ({...props}) => <strong className="text-blue-300 font-semibold" {...props} />,
+                                p: ({...props}) => <p className="mb-2 text-sm sm:text-base" {...props} />,
+                                ul: ({...props}) => <ul className="list-disc pl-4 mb-2 text-sm sm:text-base" {...props} />,
+                                li: ({...props}) => <li className="mb-1" {...props} />
+                              }}
+                            >
+                              {message.text}
+                            </ReactMarkdown>
+                          ) : (
+                            <span className="text-sm sm:text-base">{message.text}</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Thinking Animation */}
+                    {isThinking && (
+                      <div className="flex justify-start mb-3 sm:mb-4">
+                        <div className="bg-[#23283a] text-white rounded-xl sm:rounded-2xl rounded-tl-none px-4 sm:px-5 py-2.5 sm:py-3">
+                          <div className="flex items-center gap-2">
+                            <div className="flex space-x-1">
+                              <div className="h-2 w-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                              <div className="h-2 w-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                              <div className="h-2 w-2 bg-blue-400 rounded-full animate-bounce"></div>
+                            </div>
+                            <span className="text-sm text-blue-300">Thinking...</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Typing Indicator or Current Typing Message */}
+                    {isTyping && (
+                      <div className="flex justify-start mb-3 sm:mb-4">
+                        <div className="bg-[#23283a] text-white rounded-xl sm:rounded-2xl rounded-tl-none px-4 sm:px-5 py-2.5 sm:py-3">
                           <ReactMarkdown
                             components={{
                               strong: ({...props}) => <strong className="text-blue-300 font-semibold" {...props} />,
@@ -188,35 +245,20 @@ const AIAssistantWidget = () => {
                               li: ({...props}) => <li className="mb-1" {...props} />
                             }}
                           >
-                            {message.text}
+                            {currentTypingMessage}
                           </ReactMarkdown>
-                        ) : (
-                          <span className="text-sm sm:text-base">{message.text}</span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {/* Typing Indicator */}
-                  {isLoading && (
-                    <div className="flex justify-start mb-3 sm:mb-4">
-                      <div className="bg-[#23283a] text-white rounded-xl sm:rounded-2xl rounded-tl-none px-4 sm:px-5 py-2.5 sm:py-3">
-                        <div className="flex space-x-2">
-                          <div className="h-2 w-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                          <div className="h-2 w-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                          <div className="h-2 w-2 bg-blue-400 rounded-full animate-bounce"></div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                  
-                  <div ref={messagesEndRef} />
+                    )}
+                    
+                    <div ref={messagesEndRef} />
+                  </div>
 
                   {/* Scroll Indicator */}
                   {showScrollIndicator && (
                     <button
                       onClick={scrollToBottom}
-                      className="absolute bottom-16 sm:bottom-20 right-4 sm:right-6 bg-gradient-to-r from-blue-600 to-purple-600 p-1.5 sm:p-2 rounded-full shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all animate-bounce"
+                      className="absolute bottom-4 right-4 bg-gradient-to-r from-blue-600 to-purple-600 p-1.5 sm:p-2 rounded-full shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all animate-bounce z-10 pointer-events-auto"
                       aria-label="Scroll to bottom"
                     >
                       <ChevronDown size={18} className="text-white" />
@@ -225,7 +267,7 @@ const AIAssistantWidget = () => {
                 </div>
 
                 {/* Suggestion Chips */}
-                <div className="px-4 sm:px-6 py-2 sm:py-3 overflow-x-auto scrollbar-hide bg-[#181c23] border-t border-[#23283a]">
+                <div className="px-4 sm:px-6 py-2 sm:py-3 overflow-x-auto scrollbar-hide bg-[#181c23] border-t border-[#23283a] relative z-20">
                   <div className="flex gap-2 sm:gap-3">
                     {suggestionChips.map((chip, idx) => (
                       <button 
@@ -243,15 +285,15 @@ const AIAssistantWidget = () => {
                 <form onSubmit={handleSend} className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 bg-[#23283a] rounded-b-xl sm:rounded-b-2xl">
                   <input
                     type="text"
-                    className="flex-1 bg-[#1e1e1e] text-white rounded-full px-4 sm:px-5 py-2 sm:py-3 outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-[#9a9a9a] text-sm sm:text-base"
-                    placeholder="Type your message..."
+                    className="flex-1 bg-[#1e1e1e] text-white rounded-lg px-4 sm:px-5 py-2 sm:py-3 outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-[#9a9a9a] text-sm sm:text-base"
+                    placeholder="Let's chat! Type your message or tap a suggestion to begin"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     autoFocus
                   />
                   <button 
                     type="submit" 
-                    className="bg-blue-600 hover:bg-blue-700 text-white p-2 sm:p-3 rounded-full transition-colors" 
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-2 sm:p-3 rounded-lg transition-all shadow-lg hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]" 
                     aria-label="Send message"
                     disabled={isLoading}
                   >
