@@ -1,5 +1,5 @@
 import React from "react";
-import Lenis from 'lenis'
+import Lenis from "lenis";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./components/ui/ThemeContext";
 import Navbar from "./components/Navbar";
@@ -16,17 +16,17 @@ import "./App.css";
 const App = () => {
   return (
     <>
-    <ThemeProvider>
-       <Layout>
-      <Navbar />
-       <Hero />
-        <About />
-       <Experience />
-        <Skills />
-        <Projects />
-      <Contact />
-      <Footer />
-      </Layout>
+      <ThemeProvider>
+        <Layout>
+          <Navbar />
+          <Hero />
+          <About />
+          <Experience />
+          <Skills />
+          <Projects />
+          <Contact />
+          <Footer />
+        </Layout>
       </ThemeProvider>
       <AIAssistantWidget />
     </>

@@ -15,7 +15,7 @@ const About = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentText((prev) => (prev + 1) % carouselTexts.length);
-    }, 2000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -49,15 +49,17 @@ const About = () => {
         } text-left transition-all duration-300 hover:shadow-xl`}
       >
         {/* Who Am I */}
-        <h1
-          className={`text-2xl font-bold text-transparent bg-clip-text ${
-            isDark
-              ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
-              : "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
-          } pb-4`}
-        >
-          Who Am I?
-        </h1>
+        <div className="pb-4">
+          <h1
+            className={`text-3xl font-bold text-transparent bg-clip-text ${
+              isDark
+                ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+                : "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
+            }`}
+          >
+            Who Am I?
+          </h1>
+        </div>
 
         {/* Introduction */}
         <h3
@@ -95,18 +97,28 @@ const About = () => {
           <AnimatePresence mode="wait">
             <motion.span
               key={currentText}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
               className={`${
                 isDark ? "text-pink-400" : "text-pink-500"
-              } font-medium`}
+              } font-medium inline-block`}
             >
-              {carouselTexts[currentText]}
+              {carouselTexts[currentText].split("").map((char, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{
+                    delay: i * 0.08,
+                    duration: 0.5,
+                    ease: "easeOut"
+                  }}
+                >
+                  {char}
+                </motion.span>
+              ))}
             </motion.span>
           </AnimatePresence>
-          .
         </p>
       </motion.div>
     </section>

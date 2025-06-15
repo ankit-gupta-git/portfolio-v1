@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { MessageCircle, Send, Search, Palette, ChevronDown } from 'lucide-react';
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown';
@@ -10,6 +10,49 @@ const suggestionChips = [
   { icon: <MessageCircle size={16} />, text: 'What projects have you worked on?' },
   { icon: <MessageCircle size={16} />, text: 'Tell me about your experience' },
 ];
+
+// Memoized suggestion chips
+const SuggestionChips = memo(({ onSuggestionClick }) => (
+  <div className="px-4 sm:px-6 py-2 sm:py-3 overflow-x-auto scrollbar-hide bg-[#181c23] border-t border-[#23283a] relative z-20">
+    <div className="flex gap-2 sm:gap-3">
+      {suggestionChips.map((chip, idx) => (
+        <button 
+          key={idx} 
+          onClick={() => onSuggestionClick(chip.text)}
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#23283a]/60 backdrop-blur-sm text-blue-200/90 border border-blue-700/20 text-xs sm:text-sm font-medium whitespace-nowrap hover:bg-blue-800/30 transition-all duration-200 hover:border-blue-700/40"
+        >
+          {chip.icon} {chip.text}
+        </button>
+      ))}
+    </div>
+  </div>
+));
+
+// Memoized message component
+const Message = memo(({ message, isTyping, currentTypingMessage }) => (
+  <div className={`flex ${message.from === 'user' ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4`}>
+    <div className={`max-w-[85%] sm:max-w-[70%] px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl ${
+      message.from === 'user' 
+        ? 'bg-blue-600 text-white rounded-tr-none' 
+        : 'bg-[#23283a] text-white rounded-tl-none'
+    }`}>
+      {message.from === 'ai' ? (
+        <ReactMarkdown
+          components={{
+            strong: ({...props}) => <strong className="text-blue-300 font-semibold" {...props} />,
+            p: ({...props}) => <p className="mb-2 text-sm sm:text-base" {...props} />,
+            ul: ({...props}) => <ul className="list-disc pl-4 mb-2 text-sm sm:text-base" {...props} />,
+            li: ({...props}) => <li className="mb-1" {...props} />
+          }}
+        >
+          {isTyping ? currentTypingMessage : message.text}
+        </ReactMarkdown>
+      ) : (
+        <span className="text-sm sm:text-base">{message.text}</span>
+      )}
+    </div>
+  </div>
+));
 
 const AIAssistantWidget = () => {
   const [open, setOpen] = useState(false);
@@ -29,41 +72,57 @@ const AIAssistantWidget = () => {
   const messagesEndRef = useRef(null);
   const chatAreaRef = useRef(null);
 
-  // Function to simulate typing effect
-  const typeMessage = (message, index = 0) => {
+  // Optimize scroll behavior
+  const scrollToBottom = useCallback(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }, []);
+
+  // Debounced scroll handler
+  const debouncedScroll = useCallback(() => {
+    let timeoutId;
+    return () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const chatArea = chatAreaRef.current;
+        if (chatArea) {
+          const isAtBottom = chatArea.scrollHeight - chatArea.scrollTop <= chatArea.clientHeight + 100;
+          setShowScrollIndicator(!isAtBottom);
+        }
+      }, 100);
+    };
+  }, []);
+
+  useEffect(() => {
+    const chatArea = chatAreaRef.current;
+    if (chatArea) {
+      const handleScroll = debouncedScroll();
+      chatArea.addEventListener('scroll', handleScroll);
+      return () => chatArea.removeEventListener('scroll', handleScroll);
+    }
+  }, [debouncedScroll]);
+
+  // Optimize typing animation with requestAnimationFrame
+  const typeMessage = useCallback((message, index = 0) => {
     if (index < message.length) {
       setCurrentTypingMessage(message.substring(0, index + 1));
-      setTimeout(() => typeMessage(message, index + 1), 30); // Adjust speed here (lower = faster)
+      requestAnimationFrame(() => {
+        setTimeout(() => typeMessage(message, index + 1), 15); // Even faster typing
+      });
     } else {
       setIsTyping(false);
       setMessages(prev => [...prev, { from: 'ai', text: message }]);
       setCurrentTypingMessage('');
+      scrollToBottom();
     }
-  };
+  }, [scrollToBottom]);
 
   useEffect(() => {
     if (open && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, open, currentTypingMessage]);
-
-  useEffect(() => {
-    const chatArea = chatAreaRef.current;
-    if (chatArea) {
-      const handleScroll = () => {
-        const isAtBottom = chatArea.scrollHeight - chatArea.scrollTop <= chatArea.clientHeight + 100;
-        setShowScrollIndicator(!isAtBottom);
-      };
-      chatArea.addEventListener('scroll', handleScroll);
-      return () => chatArea.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
-
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   const handleOpenModal = () => {
     setIsInitialLoading(true);
@@ -78,38 +137,51 @@ const AIAssistantWidget = () => {
     handleSend(new Event('submit'), text);
   };
 
-  const handleSend = async (e, suggestedText = null) => {
+  // Optimize handleSend with better state management
+  const handleSend = useCallback(async (e, suggestedText = null) => {
     e.preventDefault();
     const messageToSend = suggestedText || input;
     if (!messageToSend.trim()) return;
 
-    // Add user message immediately
-    setMessages((msgs) => [...msgs, { from: 'user', text: messageToSend }]);
-    setInput('');
+    // Batch state updates
+    const updates = () => {
+      setMessages(prev => [...prev, { from: 'user', text: messageToSend }]);
+      setInput('');
+      setIsLoading(true);
+    };
+    updates();
 
     try {
-      setIsLoading(true);
       const response = await axios.post(API_URL, { prompt: messageToSend });
       
-      console.log("API Response:", response.data);
-      setIsLoading(false);
-      setIsThinking(true);
+      // Batch state updates for response
+      const responseUpdates = () => {
+        setIsLoading(false);
+        setIsThinking(true);
+      };
+      responseUpdates();
+      
+      // Reduced thinking time
       setTimeout(() => {
         setIsThinking(false);
         setIsTyping(true);
         typeMessage(response.data.response);
-      }, 1500);
+      }, 500); // Further reduced from 800ms to 500ms
     } catch (error) {
       console.error("Error fetching response:", error);
-      setIsLoading(false);
-      setIsThinking(true);
+      const errorUpdates = () => {
+        setIsLoading(false);
+        setIsThinking(true);
+      };
+      errorUpdates();
+      
       setTimeout(() => {
         setIsThinking(false);
         setIsTyping(true);
         typeMessage(error.response?.data?.error || "I apologize, but I'm having trouble connecting to the server. Please make sure the backend server is running and try again.");
-      }, 1500);
+      }, 500);
     }
-  };
+  }, [input, typeMessage]);
 
   return (
     <>
@@ -169,8 +241,10 @@ const AIAssistantWidget = () => {
                 {/* Message Area */}
                 <div
                   ref={chatAreaRef}
-                  className="flex-1 relative bg-[#181c23]"
+                  className="flex-1 relative bg-[#181c23] overflow-y-auto"
                   style={{
+                    WebkitOverflowScrolling: 'touch', // Enable smooth scrolling on iOS
+                    scrollBehavior: 'smooth',
                     backgroundImage: `
                       linear-gradient(to bottom right, 
                         rgb(9,9,11) 0%,
@@ -193,28 +267,12 @@ const AIAssistantWidget = () => {
                 >
                   <div className="absolute inset-0 overflow-y-auto px-4 sm:px-6 py-3 sm:py-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-transparent pb-16">
                     {messages.map((message, index) => (
-                      <div key={index} className={`flex ${message.from === 'user' ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4`}>
-                        <div className={`max-w-[85%] sm:max-w-[70%] px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl ${
-                          message.from === 'user' 
-                            ? 'bg-blue-600 text-white rounded-tr-none' 
-                            : 'bg-[#23283a] text-white rounded-tl-none'
-                        }`}>
-                          {message.from === 'ai' ? (
-                            <ReactMarkdown
-                              components={{
-                                strong: ({...props}) => <strong className="text-blue-300 font-semibold" {...props} />,
-                                p: ({...props}) => <p className="mb-2 text-sm sm:text-base" {...props} />,
-                                ul: ({...props}) => <ul className="list-disc pl-4 mb-2 text-sm sm:text-base" {...props} />,
-                                li: ({...props}) => <li className="mb-1" {...props} />
-                              }}
-                            >
-                              {message.text}
-                            </ReactMarkdown>
-                          ) : (
-                            <span className="text-sm sm:text-base">{message.text}</span>
-                          )}
-                        </div>
-                      </div>
+                      <Message 
+                        key={index}
+                        message={message}
+                        isTyping={isTyping && index === messages.length}
+                        currentTypingMessage={currentTypingMessage}
+                      />
                     ))}
                     
                     {/* Thinking Animation */}
@@ -266,20 +324,7 @@ const AIAssistantWidget = () => {
                   )}
                 </div>
 
-                {/* Suggestion Chips */}
-                <div className="px-4 sm:px-6 py-2 sm:py-3 overflow-x-auto scrollbar-hide bg-[#181c23] border-t border-[#23283a] relative z-20">
-                  <div className="flex gap-2 sm:gap-3">
-                    {suggestionChips.map((chip, idx) => (
-                      <button 
-                        key={idx} 
-                        onClick={() => handleSuggestionClick(chip.text)}
-                        className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#23283a]/60 backdrop-blur-sm text-blue-200/90 border border-blue-700/20 text-xs sm:text-sm font-medium whitespace-nowrap hover:bg-blue-800/30 transition-all duration-200 hover:border-blue-700/40"
-                      >
-                        {chip.icon} {chip.text}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <SuggestionChips onSuggestionClick={handleSuggestionClick} />
 
                 {/* Input Bar */}
                 <form onSubmit={handleSend} className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 bg-[#23283a] rounded-b-xl sm:rounded-b-2xl">
@@ -309,4 +354,4 @@ const AIAssistantWidget = () => {
   );
 };
 
-export default AIAssistantWidget;
+export default memo(AIAssistantWidget);

@@ -1,8 +1,18 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const NodeCache = require('node-cache');
+
+// Initialize cache with 5 minutes TTL
+const cache = new NodeCache({ stdTTL: 300 });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash",
+  model: "gemini-1.0-pro",
+  generationConfig: {
+    temperature: 0.7,
+    topK: 1,
+    topP: 1,
+    maxOutputTokens: 2048,
+  },
   systemInstruction: `
 You are Ankit Gupta's personal AI assistant. When responding to queries, follow these guidelines:
 
@@ -57,7 +67,7 @@ Hey! Here's a quick look at my experience with [topic].
 
 One of my most rewarding experiences was working on Aranya, where I designed a dynamic UI with Framer Motion.
 
-Let me know if you’d like to hear more about my project approach or tech stack choices!
+Let me know if you'd like to hear more about my project approach or tech stack choices!
 
 **Tone & Personality**
 - Keep it humble but confident.
@@ -69,9 +79,25 @@ Let me know if you’d like to hear more about my project approach or tech stack
 });
 
 async function generateContent(prompt) {
-  const result = await model.generateContent(prompt);
-  console.log(result.response.text());
-  return result.response.text();
+  // Check cache first
+  const cacheKey = prompt.trim().toLowerCase();
+  const cachedResponse = cache.get(cacheKey);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = result.response.text();
+    
+    // Cache the response
+    cache.set(cacheKey, response);
+    
+    return response;
+  } catch (error) {
+    console.error('Error generating content:', error);
+    throw error;
+  }
 }
 
 module.exports = generateContent;
