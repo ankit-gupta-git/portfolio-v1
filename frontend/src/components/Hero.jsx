@@ -5,7 +5,7 @@ import {
   FaXTwitter,
   FaSun,
   FaMoon,
-  FaCode,
+  FaCode
 } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 import { useTheme } from "./ui/ThemeContext";

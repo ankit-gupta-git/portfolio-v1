@@ -5,7 +5,7 @@ import {
   Laptop,
   MapPin,
   SendHorizontal
-} from "lucide-react"; // Note: FaCircle is from react-icons/fa6, will fix import below
+} from "lucide-react"; // Removed Certificate as it's not available
 import Timeline from "./ui/timeline";
 import { useTheme } from "./ui/ThemeContext";
 // eslint-disable-next-line no-unused-vars
@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 
 // Corrected import for FaCircle
 import { FaCircle } from "react-icons/fa6";
+import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 
 const Experience = () => {
   const { isDark } = useTheme();
@@ -96,12 +97,14 @@ const Experience = () => {
                 {
                   title: "Annual Fest Hackathon Winner - \"Swastha\" (Remote Healthcare Monitoring System)",
                   description:"A remote healthcare monitoring system utilizing IoT and Arduino Uno, featuring real-time vitals tracking, an AI-driven medical chatbot, and a live assistant for enhanced user support.",
-                  tags: ["Winner", "Real-time", "Remote Healthcare", "IoT",],
+                  tags: ["Winner", "Real-time", "Remote Healthcare", "IoT"],
+                  certificate: "https://drive.google.com/file/d/1v59ZqExnFulLg3lcRDj4F7PWkq4vfBhC/view?usp=sharing"
                 },
                 {
                   title: "Top 30 at Galgotias International Hackathon - \"Aranya\" (Decentralized Wildlife Conservation Platform)",
                   description: "A decentralized wildlife conservation platform using blockchain, AI, and geospatial tech, featuring GPS-tagged plantation NFTs, a 3D interactive biodiversity map, AI-driven animal chatbots, and real-time data integration.",
                   tags: ["Top 30", "Blockchain", "AI", "Geospatial Tech", "Leadership"],
+                  certificate: "https://drive.google.com/file/d/1iyJCumva4HqNKTeKeCWDn9WGenN4zed3/view?usp=sharing"
                 }
               ];
 
@@ -109,7 +112,6 @@ const Experience = () => {
                 <ul className="space-y-6">
                   {hackathonAwardsData.map((award, index) => (
                     <li key={index} className="flex items-start gap-2 sm:gap-3">
-                      {/* Bullet point icon: smaller on desktop, normal on mobile */}
                       <FaCircle className={`w-3 h-3 sm:w-2.5 sm:h-2.5 mt-2 flex-shrink-0 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
                       <div>
                         <h4 className={`text-base sm:text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>{award.title}</h4>
@@ -123,6 +125,30 @@ const Experience = () => {
                               </span>
                             ))}
                           </div>
+                        )}
+                        {/* Certificate Link */}
+                        {award.certificate && (
+                          <motion.a
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            href={award.certificate}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={`inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-lg text-sm transition relative group overflow-hidden ${
+                              isDark
+                                ? "bg-black/30 backdrop-blur-md border border-blue-500/50"
+                                : "bg-white/30 backdrop-blur-md border border-blue-600"
+                            }`}
+                          >
+                            <span
+                              className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300`}
+                            ></span>
+                            <span className={`relative z-10 flex items-center gap-2 ${
+                              isDark ? "text-white" : "text-blue-600 group-hover:text-white group-active:text-white"
+                            }`}>
+                              View Certificate <HiOutlineDocumentArrowDown className="text-sm" />
+                            </span>
+                          </motion.a>
                         )}
                       </div>
                     </li>
