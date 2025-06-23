@@ -11,6 +11,7 @@ import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
 import AIAssistantWidget from "./components/ui/AIAssistantWidget";
+import TechStackCarousel from "./components/ui/TechStackCarousel";
 import "./App.css";
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
           <About />
           <Experience />
           <Skills />
+          <TechStackCarousel />
           <Projects />
           <Contact />
           <Footer />
