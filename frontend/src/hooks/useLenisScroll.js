@@ -1,10 +1,12 @@
 // frontend/src/hooks/useLenisScroll.js
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Lenis from 'lenis'
 
 const useLenisScroll = () => {
+  const [lenis, setLenis] = useState(null);
+
   useEffect(() => {
-    const lenis = new Lenis({
+    const newLenis = new Lenis({
       duration: 2.5,
       smooth: true,
       direction: 'vertical',
@@ -14,15 +16,19 @@ const useLenisScroll = () => {
       lerp: 0.1,
     });
 
+    setLenis(newLenis);
+
     const raf = (time) => {
-      lenis.raf(time);
+      newLenis.raf(time);
       requestAnimationFrame(raf);
     };
 
     requestAnimationFrame(raf);
 
-    return () => lenis.destroy();
+    return () => newLenis.destroy();
   }, []);
+
+  return lenis;
 };
 
 export default useLenisScroll;
