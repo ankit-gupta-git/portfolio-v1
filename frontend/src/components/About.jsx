@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { useTheme } from "./ui/ThemeContext";
+import { Sparkles } from "./ui/sparkles";
 
 const About = () => {
   const { isDark } = useTheme();
   const [currentText, setCurrentText] = useState(0);
+  const [animate, setAnimate] = useState(true);
   const carouselTexts = [
     "explore new places",
     "play video games",
@@ -14,8 +15,12 @@ const About = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentText((prev) => (prev + 1) % carouselTexts.length);
-    }, 4000);
+      setAnimate(false);
+      setTimeout(() => {
+        setCurrentText((prev) => (prev + 1) % carouselTexts.length);
+        setAnimate(true);
+      }, 200); // match transition duration
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -26,6 +31,18 @@ const About = () => {
         !isDark ? "bg-gradient-to-b from-blue-50 to-white" : "bg-transparent"
       }`}
     >
+      {isDark && (
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Sparkles
+            background="transparent"
+            minSize={0.6}
+            maxSize={1.4}
+            particleDensity={100}
+            className="w-full h-full"
+            particleColor="#ffffff"
+          />
+        </div>
+      )}
       {/* Section Title */}
       <h2
         className={`text-4xl sm:text-5xl md:text-6xl font-bold ${
@@ -38,10 +55,7 @@ const About = () => {
       </h2>
 
       {/* About Content */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
+      <div
         className={`max-w-4xl mx-auto px-8 py-20 rounded-3xl ${
           isDark
             ? "border border-white/20 bg-white/5 backdrop-blur-[20px] shadow-[0_12px_48px_0_rgba(255,255,255,0.1)]"
@@ -94,33 +108,19 @@ const About = () => {
           }`}
         >
           When I'm not coding, I usually{" "}
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={currentText}
+          <span>
+            <span
               className={`${
                 isDark ? "text-pink-400" : "text-pink-500"
-              } font-medium inline-block`}
+              } font-medium inline-block transition-all duration-300 ease-in-out
+                ${animate ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
+              `}
             >
-              {carouselTexts[currentText].split("").map((char, i) => (
-                <motion.span
-                  key={i}
-                  custom={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{
-                    delay: i * 0.08,
-                    duration: 0.5,
-                    ease: "easeOut"
-                  }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </motion.span>
-          </AnimatePresence>
+              {carouselTexts[currentText]}
+            </span>
+          </span>
         </p>
-      </motion.div>
+      </div>
     </section>
   );
 };

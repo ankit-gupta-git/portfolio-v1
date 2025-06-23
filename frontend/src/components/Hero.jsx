@@ -153,10 +153,7 @@ const Hero = () => {
                 isDark ? "text-gray-400" : "text-gray-700"
               }`}
             >
-              I turn ideas into code and chaos into clean commits. Full-stack dev,
-              Java junkie, and 5x hackathoner building real-world tech with a hint
-              of AI. Currently exploring how smart systems can solve not-so-smart
-              problems. Let's connect and create something amazing together!
+              I turn ideas into code and messy problems into clean commits. I’m a full-stack developer, Java enthusiast, and 5x hackathoner who loves building real-world tech with a touch of AI. Right now, I’m exploring how smart systems can solve everyday challenges. Always up for connecting and creating something impactful—let’s build together!
             </p>
 
             {/* CTA Buttons */}
