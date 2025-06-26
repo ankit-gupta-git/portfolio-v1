@@ -218,7 +218,7 @@ const Hero = () => {
               <motion.a
                 whileHover={{ scale: 1.2, y: -5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                href="https://www.linkedin.com/in/iamankitgupta/"
+                href="https://www.linkedin.com/in/iamankit-gupta"
                 target="_blank"
                 rel="noreferrer"
               >
