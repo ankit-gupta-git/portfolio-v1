@@ -199,7 +199,7 @@ const Skills = () => {
                   {group.icon}
                 </motion.div>
                 <h3
-                  className={`text-2xl font-semibold font-heading ${
+                  className={`text-2xl font-semibold font-heading font-dxgrafik ${
                     isDark ? "text-white" : "text-gray-800"
                   }`}
                 >

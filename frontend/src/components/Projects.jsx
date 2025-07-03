@@ -125,7 +125,7 @@ const Projects = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="flex flex-col items-start mb-8 sm:mb-12"
       >
-        <h3 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold flex items-center gap-2 text-left`}>
+        <h3 className="font-dxgrafik text-2xl sm:text-3xl md:text-4xl font-extrabold flex items-center gap-2 text-left">
           <span className={`${isDark 
             ? 'bg-gradient-to-r from-cyan-200 via-pink-200 to-yellow-200' 
             : 'bg-gradient-to-r from-cyan-600 via-pink-500 to-yellow-500'} bg-clip-text text-transparent`}>Yeah, I work hard</span>
