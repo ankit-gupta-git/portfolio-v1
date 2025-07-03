@@ -11,7 +11,7 @@ const projects = [
     description: "AI-powered movie recommender based on user preferences and real-time trends.",
     tech: ["React", "Tailwind", "Node.js", "API"],
     github: "https://github.com/ankit-gupta-git/Napster",
-    live: "https://ankit-gupta-git.github.io/Napster/",
+    live: "https://napster-ebon.vercel.app/",
     image: "/ProjectImg/napster.png",
   },
   {
