@@ -137,7 +137,7 @@ const Hero = () => {
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-col gap-2 text-center md:text-left">
               <span>Hi, I'm</span>
-              <span className={`${isDark ? "text-blue-500" : "text-blue-600"}`}>
+              <span className={`${isDark ? "text-blue-500" : "text-blue-600"} font-dxgrafik`}>
                 Ankit Gupta
               </span>
             </h1>

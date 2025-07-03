@@ -46,3 +46,15 @@ html {
   mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
 }
 
+@font-face {
+  font-family: 'DxGrafik';
+  src: url('/fonts/DxGrafik-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+.font-dxgrafik {
+  font-family: 'DxGrafik', sans-serif;
+  font-weight: 600;
+}
+

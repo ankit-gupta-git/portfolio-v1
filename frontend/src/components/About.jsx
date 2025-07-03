@@ -28,7 +28,7 @@ const About = () => {
     <section
       id="about"
       className={`relative z-10 py-24 px-6 md:px-12 text-center ${
-        !isDark ? "bg-gradient-to-b from-blue-50 to-white" : "bg-transparent"
+        !isDark ? "day-gradient-bg" : "bg-transparent"
       }`}
     >
       {isDark && (
@@ -49,7 +49,7 @@ const About = () => {
           isDark
             ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
             : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"
-        } mb-12`}
+        } mb-12 font-dxgrafik`}
       >
         About Me
       </h2>
@@ -69,7 +69,7 @@ const About = () => {
               isDark
                 ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
                 : "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
-            }`}
+            } font-dxgrafik`}
           >
             Who Am I?
           </h1>
@@ -79,7 +79,7 @@ const About = () => {
         <h3
           className={`text-3xl font-semibold mb-6 ${
             isDark ? "text-white" : "text-gray-800"
-          }`}
+          } font-dxgrafik`}
         >
           I'm a passionate developer and a curious Engineer.
         </h3>
