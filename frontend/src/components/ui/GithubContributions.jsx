@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import GitHubCalendar from 'react-github-calendar';
-import { GitHub } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 const GITHUB_USERNAME = 'ankit-gupta-git';
 
@@ -45,7 +45,7 @@ const GithubContributions = () => {
         rel="noopener noreferrer"
         className="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 bg-[#23272f] text-white text-base sm:text-lg font-semibold rounded-lg shadow-md hover:bg-[#3b3f4a] transition-colors duration-200"
       >
-        <GitHub className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
+        <Github className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
         View GitHub Profile
       </a>
     </section>
