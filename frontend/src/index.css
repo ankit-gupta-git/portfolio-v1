@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 html {
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    @apply bg-black text-white;
-  }
+  scroll-behavior: smooth;
+  font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  @apply bg-black text-white;
+  font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+}
 
   .continuous-swiper .swiper-wrapper {
     transition-timing-function: linear !important;
@@ -56,5 +58,9 @@ html {
 .font-dxgrafik {
   font-family: 'DxGrafik', sans-serif;
   font-weight: 600;
+}
+
+.font-jetbrains {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace !important;
 }
 

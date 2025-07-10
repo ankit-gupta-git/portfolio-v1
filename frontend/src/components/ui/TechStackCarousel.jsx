@@ -82,7 +82,7 @@ const TechStackCarousel = () => {
 
   return (
     <div className={`w-full py-12 bg-transparent`}>
-      <h3 className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-10 bg-clip-text text-transparent ${
+      <h3 className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-10 bg-clip-text text-transparent font-dxgrafik ${
         isDark
           ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
           : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"

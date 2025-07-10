@@ -8,7 +8,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Inter', 'sans-serif'],
+        'sans': ['Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'figtree': ['Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'jetbrains': ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
         'heading': ['Poppins', 'sans-serif'],
       },
       animation: {
