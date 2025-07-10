@@ -151,8 +151,8 @@ const Projects = () => {
             className={`h-auto flex flex-col justify-between ${
               isDark
                 ? "bg-[#101014]"
-                : "bg-[#18181b]"
-            } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer`}
+                : "bg-white shadow-lg border border-gray-200"
+            } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300`}
             onClick={() => setModalProject(project)}
           >
             <div className="w-full h-48 sm:h-56 overflow-hidden relative group">
@@ -170,8 +170,12 @@ const Projects = () => {
             </div>
 
             <div className="flex-1 p-4 sm:p-6">
-              <h3 className={`text-lg sm:text-xl font-semibold line-clamp-1 text-white`}>{project.title}</h3>
-              <p className={`mt-2 sm:mt-3 text-xs sm:text-sm line-clamp-3 text-white font-jetbrains`}>
+              <h3 className={`text-lg sm:text-xl font-semibold line-clamp-1 ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}>{project.title}</h3>
+              <p className={`mt-2 sm:mt-3 text-xs sm:text-sm line-clamp-3 font-jetbrains ${
+                isDark ? "text-gray-300" : "text-gray-600"
+              }`}>
                 {project.description.length > 100
                   ? `${project.description.slice(0, 100)}...`
                   : project.description}
@@ -181,21 +185,29 @@ const Projects = () => {
                 {project.tech.map((techItem, i) => (
                   <span
                     key={i}
-                    className="bg-neutral-800 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm rounded whitespace-nowrap"
+                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded whitespace-nowrap ${
+                      isDark 
+                        ? "bg-neutral-800 text-white" 
+                        : "bg-gray-100 text-gray-700"
+                    }`}
                   >
                     {techItem}
                   </span>
                 ))}
               </div>
 
-              <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5 text-white`}>
+              <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5`}>
                 <motion.a 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   href={project.github} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center bg-[#23232a] hover:bg-[#23232a]/80 text-white border-none`}
+                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
+                    isDark 
+                      ? "bg-[#23232a] hover:bg-[#23232a]/80 text-white" 
+                      : "bg-gray-800 hover:bg-gray-700 text-white"
+                  } border-none`}
                 >
                   <FaGithub className="text-lg sm:text-xl" />
                   <span className="font-medium">GitHub</span>
@@ -229,15 +241,21 @@ const Projects = () => {
             onClick={() => setModalProject(null)}
           >
             <motion.div
-              className="w-full max-w-4xl bg-[#18181b] rounded-2xl flex flex-col md:flex-row overflow-hidden shadow-2xl relative"
+              className={`w-full max-w-4xl rounded-2xl flex flex-col md:flex-row overflow-hidden shadow-2xl relative ${
+                isDark ? "bg-[#18181b]" : "bg-white"
+              }`}
               onClick={e => e.stopPropagation()}
             >
               {/* Left: Project Image */}
-              <div className="md:w-1/2 w-full bg-[#101014] flex items-center justify-center p-6">
+              <div className={`md:w-1/2 w-full flex items-center justify-center p-6 ${
+                isDark ? "bg-[#101014]" : "bg-gray-50"
+              }`}>
                 <img
                   src={modalProject.image}
                   alt={modalProject.title}
-                  className="rounded-xl w-full h-auto max-h-96 object-contain bg-[#18181b]"
+                  className={`rounded-xl w-full h-auto max-h-96 object-contain ${
+                    isDark ? "bg-[#18181b]" : "bg-white"
+                  }`}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = 'https://via.placeholder.com/400x300?text=Project+Image';
@@ -248,20 +266,32 @@ const Projects = () => {
               <div className="md:w-1/2 w-full flex flex-col justify-between p-6 relative">
                 {/* Close Button */}
                 <button
-                  className="absolute top-4 right-4 text-white text-2xl bg-black/30 rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/60 transition"
+                  className={`absolute top-4 right-4 text-2xl rounded-full w-10 h-10 flex items-center justify-center transition ${
+                    isDark 
+                      ? "text-white bg-black/30 hover:bg-black/60" 
+                      : "text-gray-600 bg-gray-200 hover:bg-gray-300"
+                  }`}
                   onClick={() => setModalProject(null)}
                   aria-label="Close"
                 >
                   &times;
                 </button>
                 <div>
-                  <h3 className="text-3xl font-bold font-dxgrafik mb-4 text-white">{modalProject.title}</h3>
-                  <p className="mb-6 text-white font-figtree text-base sm:text-lg leading-relaxed">{modalProject.description}</p>
+                  <h3 className={`text-3xl font-bold font-dxgrafik mb-4 ${
+                    isDark ? "text-white" : "text-gray-900"
+                  }`}>{modalProject.title}</h3>
+                  <p className={`mb-6 font-figtree text-base sm:text-lg leading-relaxed ${
+                    isDark ? "text-gray-300" : "text-gray-600"
+                  }`}>{modalProject.description}</p>
                   <div className="flex flex-wrap gap-2 mb-8">
                     {modalProject.tech.map((tech, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 rounded-full bg-[#23232a] text-white text-xs sm:text-sm font-figtree"
+                        className={`px-3 py-1 rounded-full text-xs sm:text-sm font-figtree ${
+                          isDark 
+                            ? "bg-[#23232a] text-white" 
+                            : "bg-gray-100 text-gray-700"
+                        }`}
                       >
                         {tech}
                       </span>
@@ -275,7 +305,11 @@ const Projects = () => {
                     href={modalProject.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#23232a] text-white border-none font-figtree text-base"
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white border-none font-figtree text-base ${
+                      isDark 
+                        ? "bg-[#23232a]" 
+                        : "bg-gray-800 hover:bg-gray-700"
+                    }`}
                   >
                     <FaGithub className="text-xl" />
                     <span>GitHub</span>
