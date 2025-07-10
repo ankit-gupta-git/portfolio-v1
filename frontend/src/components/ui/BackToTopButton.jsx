@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "./ThemeContext";
 
-const BackToTopButton = ({ lenis }) => {
+const BackToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { isDark } = useTheme();
 
@@ -14,47 +14,22 @@ const BackToTopButton = ({ lenis }) => {
       }
     };
 
-    let handleScroll;
-
-    if (lenis) {
-      lenis.on('scroll', toggleVisibility);
-    } else {
-      handleScroll = () => {
-        if (window.pageYOffset > 100) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      };
-      window.addEventListener("scroll", handleScroll);
-    }
-
+    window.addEventListener('scroll', toggleVisibility);
     return () => {
-      if (lenis) {
-        lenis.off('scroll', toggleVisibility);
-      } else if (handleScroll) {
-        window.removeEventListener("scroll", handleScroll);
-      }
+      window.removeEventListener('scroll', toggleVisibility);
     };
-  }, [lenis]);
+  }, []);
 
   // Scroll to top smoothly
-  const scrollToTop = () => {
-    if (lenis) {
-      lenis.scrollTo(0, { duration: 1.5 });
-    } else {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="fixed bottom-24 right-8 z-50">
       {isVisible && (
         <button
-          onClick={scrollToTop}
+          onClick={handleScrollToTop}
           className={`p-3 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200
             ${isDark
               ? 'bg-gray-800 text-white hover:bg-gray-700 focus:ring-gray-500'

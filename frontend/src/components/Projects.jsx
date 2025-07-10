@@ -26,9 +26,9 @@ const projects = [
     title: "NGO FoodSaver",
     description: "Distributes leftover food from events to NGOs. Built with Firebase + React.",
     tech: ["React", "Firebase", "Framer Motion"],
-    github: "https://github.com/ankitngosaver",
-    live: "https://ngosaver.netlify.app",
-    image: "/ProjectImg/orphan.png",
+    github: "https://github.com/ankit-gupta-git/To-Do_Board",
+    live: "https://to-do-board-chi.vercel.app/",
+    image: "/ProjectImg/to-do.png",
   },
   {
     title: "E-Commerce Store",
@@ -110,7 +110,7 @@ const Projects = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center ${
+        className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik ${
           isDark
             ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
             : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"
@@ -150,8 +150,8 @@ const Projects = () => {
             variants={itemVariants}
             className={`h-auto flex flex-col justify-between ${
               isDark
-                ? "bg-[#171717] border border-white/10"
-                : "bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg"
+                ? "bg-[#101014]" // deeper black shade
+                : "bg-[#18181b]" // dark even in light mode
             } rounded-xl sm:rounded-2xl overflow-hidden`}
           >
             <div className="w-full h-48 sm:h-56 overflow-hidden relative group">
@@ -169,12 +169,8 @@ const Projects = () => {
             </div>
 
             <div className="flex-1 p-4 sm:p-6">
-              <h3 className={`text-lg sm:text-xl font-semibold line-clamp-1 ${
-                isDark ? "text-blue-400" : "text-blue-600"
-              }`}>{project.title}</h3>
-              <p className={`mt-2 sm:mt-3 text-xs sm:text-sm line-clamp-3 ${
-                isDark ? "text-gray-300" : "text-gray-600"
-              }`}>
+              <h3 className={`text-lg sm:text-xl font-semibold line-clamp-1 text-white`}>{project.title}</h3>
+              <p className={`mt-2 sm:mt-3 text-xs sm:text-sm line-clamp-3 text-white font-jetbrains`}>
                 {project.description}
               </p>
               {project.description.length > 100 && (
@@ -192,31 +188,21 @@ const Projects = () => {
                 {project.tech.map((techItem, i) => (
                   <span
                     key={i}
-                    className={`${
-                      isDark
-                        ? "bg-sky-900/50 text-sky-300"
-                        : "bg-blue-50 text-blue-600"
-                    } px-2 sm:px-3 py-1 text-xs sm:text-sm rounded whitespace-nowrap`}
+                    className="bg-neutral-800 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm rounded whitespace-nowrap"
                   >
                     {techItem}
                   </span>
                 ))}
               </div>
 
-              <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5 ${
-                isDark ? "text-sky-300" : "text-blue-600"
-              }`}>
+              <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5 text-white`}>
                 <motion.a 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   href={project.github} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
-                    isDark 
-                      ? "bg-[#171717] hover:bg-[#1f1f1f] text-sky-300 hover:text-white border border-sky-900/50" 
-                      : "bg-gray-100 hover:bg-gray-200 text-blue-600 hover:text-blue-700 border border-gray-200"
-                  }`}
+                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center bg-[#23232a] hover:bg-[#23232a]/80 text-white border-none`}
                 >
                   <FaGithub className="text-lg sm:text-xl" />
                   <span className="font-medium">GitHub</span>
@@ -227,11 +213,7 @@ const Projects = () => {
                   href={project.live} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
-                    isDark 
-                      ? "bg-sky-900/50 hover:bg-sky-800 text-sky-300 hover:text-white" 
-                      : "bg-blue-500 hover:bg-blue-600 text-white hover:text-white"}
-                  }`}
+                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center bg-[#2563eb] hover:bg-[#1d4ed8] text-white`}
                 >
                   <FaExternalLinkAlt className="text-lg sm:text-xl" />
                   <span className="font-medium">Live Demo</span>
@@ -254,26 +236,16 @@ const Projects = () => {
             onClick={() => setModalProject(null)}
           >
             <motion.div
-              className={`max-w-2xl w-full p-6 rounded-xl ${
-                isDark ? "bg-[#171717]" : "bg-white"
-              }`}
+              className={`max-w-2xl w-full p-6 rounded-xl bg-[#101014]`}
               onClick={e => e.stopPropagation()}
             >
-              <h3 className={`text-2xl font-bold mb-4 ${
-                isDark ? "text-blue-400" : "text-blue-600"
-              }`}>{modalProject.title}</h3>
-              <p className={`mb-6 ${
-                isDark ? "text-gray-300" : "text-gray-600"
-              }`}>{modalProject.description}</p>
+              <h3 className={`text-2xl font-bold mb-4 text-white`}>{modalProject.title}</h3>
+              <p className={`mb-6 text-white`}>{modalProject.description}</p>
               <div className="flex flex-wrap gap-2 mb-6">
                 {modalProject.tech.map((tech, index) => (
                   <span
                     key={index}
-                    className={`px-3 py-1 rounded ${
-                      isDark
-                        ? "bg-sky-900/50 text-sky-300"
-                        : "bg-blue-50 text-blue-600"
-                    }`}
+                    className={`px-3 py-1 rounded bg-[#23232a] text-white`}
                   >
                     {tech}
                   </span>
@@ -286,11 +258,7 @@ const Projects = () => {
                   href={modalProject.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg ${
-                    isDark
-                      ? "bg-[#171717] text-sky-300 border border-sky-900/50"
-                      : "bg-gray-100 text-blue-600 border border-gray-200"
-                  }`}
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#23232a] text-white border-none`}
                 >
                   <FaGithub className="text-xl" />
                   <span>GitHub</span>
@@ -301,11 +269,7 @@ const Projects = () => {
                   href={modalProject.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg ${
-                    isDark
-                      ? "bg-sky-900/50 text-sky-300"
-                      : "bg-blue-500 text-white"
-                  }`}
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-white`}
                 >
                   <FaExternalLinkAlt className="text-xl" />
                   <span>Live Demo</span>

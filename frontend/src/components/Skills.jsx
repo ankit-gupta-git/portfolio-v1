@@ -24,7 +24,6 @@ import {
   SiScikitlearn,
   SiPostman,
 } from "react-icons/si";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ui/ThemeContext";
 
 const skills = [
@@ -79,67 +78,29 @@ const skills = [
 const Skills = () => {
   const { isDark } = useTheme();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-      },
-    },
-  };
-
-  const skillItemVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.2,
-      },
-    },
-    hover: {
-      scale: 1.05,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 10,
-      },
-    },
-  };
-
   return (
     <section
       id="skills"
-      className={`py-32 px-10 ${
+      className={`py-32 px-10 font-figtree ${
         !isDark ? "bg-gradient-to-b from-blue-50 to-white" : ""
       }`}
     >
       <div className="max-w-8xl mx-auto">
-        <motion.h2
+        <h2
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-heading ${
+          className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik ${
             isDark
               ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
               : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"
           } bg-clip-text text-transparent mb-8 pb-4`}
         >
           Skills & Technologies
-        </motion.h2>
+        </h2>
 
-        <motion.p
+        <p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -149,20 +110,13 @@ const Skills = () => {
           }`}
         >
           My technical toolkit for building modern and scalable applications
-        </motion.p>
+        </p>
 
         {/* Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="grid gap-12 md:grid-cols-2 lg:grid-cols-4"
-        >
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {skills.map((group, index) => (
-            <motion.div
+            <div
               key={index}
-              variants={cardVariants}
               whileHover={{ 
                 scale: 1.02,
                 transition: { type: "spring", stiffness: 300, damping: 20 }
@@ -185,7 +139,7 @@ const Skills = () => {
                     : "bg-gradient-to-r from-blue-100 to-indigo-100"
                 }`}
               >
-                <motion.div
+                <div
                   whileHover={{ rotate: 360 }}
                   whileTap={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
@@ -197,7 +151,7 @@ const Skills = () => {
                   `}
                 >
                   {group.icon}
-                </motion.div>
+                </div>
                 <h3
                   className={`text-2xl font-semibold font-heading font-dxgrafik ${
                     isDark ? "text-white" : "text-gray-800"
@@ -216,16 +170,10 @@ const Skills = () => {
 
               {/* Card Body */}
               <div className="p-6">
-                <motion.div 
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="flex flex-wrap gap-4"
-                >
+                <div className="flex flex-wrap gap-4">
                   {group.items.map((skill, i) => (
-                    <motion.div
+                    <div
                       key={i}
-                      variants={skillItemVariants}
                       whileHover="hover"
                       whileTap={{ scale: 0.95 }}
                       className={`flex items-center gap-3 px-4 py-2 rounded-md ${
@@ -234,14 +182,14 @@ const Skills = () => {
                           : "bg-gray-50 hover:shadow-md"
                       } transition-all duration-300`}
                     >
-                      <motion.span 
+                      <span 
                         whileHover={{ rotate: 360 }}
                         whileTap={{ rotate: 360 }}
                         transition={{ duration: 0.5 }}
                         className="text-lg"
                       >
                         {skill.icon}
-                      </motion.span>
+                      </span>
                       <span
                         className={`text-base font-sans ${
                           isDark ? "text-gray-200" : "text-gray-700"
@@ -249,20 +197,16 @@ const Skills = () => {
                       >
                         {skill.name}
                       </span>
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Text Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+        <div
           className={`rounded-2xl p-6 mt-12 mx-auto max-w-3xl text-center text-base sm:text-lg font-sans ${
             isDark
               ? "bg-[#181818] text-gray-200 shadow-[0_0_7px_7px_rgba(11,36,51,0.5)]"
@@ -270,7 +214,7 @@ const Skills = () => {
           } transition-all duration-300 flex items-center justify-center`}
         >
           I'm always curious to explore new technologies, constantly expanding my toolkit to tackle challenges more creatively and effectively.
-        </motion.div>
+        </div>
       </div>
     </section>
   );

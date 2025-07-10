@@ -120,7 +120,7 @@ const Experience = () => {
                         {award.tags && award.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2 mt-2">
                             {award.tags.map((tag, tagIndex) => (
-                              <span key={tagIndex} className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-sm sm:text-sm font-medium ${isDark ? "bg-[#1e293b]/70 text-blue-400 border border-gray-700" : "bg-blue-100 text-blue-800"}`}>
+                              <span key={tagIndex} className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-sm sm:text-sm font-medium ${isDark ? "bg-[#1e293b]/70 text-blue-400" : "bg-blue-100 text-blue-800"}`}>
                                 {tag}
                               </span>
                             ))}
