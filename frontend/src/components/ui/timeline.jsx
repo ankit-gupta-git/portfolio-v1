@@ -24,7 +24,7 @@ const Timeline = ({ data }) => {
   const animatedOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
   return (
-    <div ref={scrollContainerRef} className="w-full relative overflow-hidden font-sans">
+    <div ref={scrollContainerRef} className="w-full relative overflow-hidden">
       {/* Heading */}
       <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10 relative z-10">
         <motion.h2
@@ -43,7 +43,7 @@ const Timeline = ({ data }) => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className={`text-sm md:text-base max-w-xl ${
+          className={`text-sm md:text-base max-w-xl font-figtree ${
             isDark ? "text-neutral-400" : "text-gray-600"
           }`}
         >
@@ -94,7 +94,7 @@ const Timeline = ({ data }) => {
               }`}>
                 {item.title}
               </h3>
-              <div className={`prose ${
+              <div className={`prose font-figtree ${
                 isDark ? "prose-invert text-neutral-300" : "text-gray-600"
               }`}>{item.content}</div>
             </div>

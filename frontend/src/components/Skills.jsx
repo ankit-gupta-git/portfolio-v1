@@ -105,7 +105,7 @@ const Skills = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className={`text-center mb-16 text-base sm:text-lg font-sans ${
+          className={`text-center mb-16 text-base sm:text-lg font-figtree ${
             isDark ? "text-gray-400" : "text-gray-600"
           }`}
         >
@@ -191,7 +191,7 @@ const Skills = () => {
                         {skill.icon}
                       </span>
                       <span
-                        className={`text-base font-sans ${
+                        className={`text-base font-figtree ${
                           isDark ? "text-gray-200" : "text-gray-700"
                         }`}
                       >
@@ -207,7 +207,7 @@ const Skills = () => {
 
         {/* Text Box */}
         <div
-          className={`rounded-2xl p-6 mt-12 mx-auto max-w-3xl text-center text-base sm:text-lg font-sans ${
+          className={`rounded-2xl p-6 mt-12 mx-auto max-w-3xl text-center text-base sm:text-lg font-figtree ${
             isDark
               ? "bg-[#181818] text-gray-200 shadow-[0_0_7px_7px_rgba(11,36,51,0.5)]"
               : "bg-white text-gray-700 shadow-lg"

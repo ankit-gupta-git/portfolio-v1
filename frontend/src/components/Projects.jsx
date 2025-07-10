@@ -23,8 +23,8 @@ const projects = [
     image: "/ProjectImg/travel.jpg",
   },
   {
-    title: "NGO FoodSaver",
-    description: "Distributes leftover food from events to NGOs. Built with Firebase + React.",
+    title: "Tudoo - Real-Time Collaborative To-Do Board",
+    description: "A full-stack MERN application featuring a real-time collaborative To-Do board with drag-and-drop functionality, conflict resolution, and smart task assignment.",
     tech: ["React", "Firebase", "Framer Motion"],
     github: "https://github.com/ankit-gupta-git/To-Do_Board",
     live: "https://to-do-board-chi.vercel.app/",
@@ -150,9 +150,10 @@ const Projects = () => {
             variants={itemVariants}
             className={`h-auto flex flex-col justify-between ${
               isDark
-                ? "bg-[#101014]" // deeper black shade
-                : "bg-[#18181b]" // dark even in light mode
-            } rounded-xl sm:rounded-2xl overflow-hidden`}
+                ? "bg-[#101014]"
+                : "bg-[#18181b]"
+            } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer`}
+            onClick={() => setModalProject(project)}
           >
             <div className="w-full h-48 sm:h-56 overflow-hidden relative group">
               <img
@@ -171,18 +172,10 @@ const Projects = () => {
             <div className="flex-1 p-4 sm:p-6">
               <h3 className={`text-lg sm:text-xl font-semibold line-clamp-1 text-white`}>{project.title}</h3>
               <p className={`mt-2 sm:mt-3 text-xs sm:text-sm line-clamp-3 text-white font-jetbrains`}>
-                {project.description}
+                {project.description.length > 100
+                  ? `${project.description.slice(0, 100)}...`
+                  : project.description}
               </p>
-              {project.description.length > 100 && (
-                <button
-                  onClick={() => setModalProject(project)}
-                  className={`text-xs ${
-                    isDark ? "text-blue-400" : "text-blue-600"
-                  } underline mt-1`}
-                >
-                  Show more
-                </button>
-              )}
 
               <div className="flex flex-wrap mt-4 sm:mt-5 gap-2 sm:gap-3">
                 {project.tech.map((techItem, i) => (
@@ -236,44 +229,69 @@ const Projects = () => {
             onClick={() => setModalProject(null)}
           >
             <motion.div
-              className={`max-w-2xl w-full p-6 rounded-xl bg-[#101014]`}
+              className="w-full max-w-4xl bg-[#18181b] rounded-2xl flex flex-col md:flex-row overflow-hidden shadow-2xl relative"
               onClick={e => e.stopPropagation()}
             >
-              <h3 className={`text-2xl font-bold mb-4 text-white`}>{modalProject.title}</h3>
-              <p className={`mb-6 text-white`}>{modalProject.description}</p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {modalProject.tech.map((tech, index) => (
-                  <span
-                    key={index}
-                    className={`px-3 py-1 rounded bg-[#23232a] text-white`}
-                  >
-                    {tech}
-                  </span>
-                ))}
+              {/* Left: Project Image */}
+              <div className="md:w-1/2 w-full bg-[#101014] flex items-center justify-center p-6">
+                <img
+                  src={modalProject.image}
+                  alt={modalProject.title}
+                  className="rounded-xl w-full h-auto max-h-96 object-contain bg-[#18181b]"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://via.placeholder.com/400x300?text=Project+Image';
+                  }}
+                />
               </div>
-              <div className="flex gap-4">
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href={modalProject.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#23232a] text-white border-none`}
+              {/* Right: Project Details */}
+              <div className="md:w-1/2 w-full flex flex-col justify-between p-6 relative">
+                {/* Close Button */}
+                <button
+                  className="absolute top-4 right-4 text-white text-2xl bg-black/30 rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/60 transition"
+                  onClick={() => setModalProject(null)}
+                  aria-label="Close"
                 >
-                  <FaGithub className="text-xl" />
-                  <span>GitHub</span>
-                </motion.a>
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href={modalProject.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-white`}
-                >
-                  <FaExternalLinkAlt className="text-xl" />
-                  <span>Live Demo</span>
-                </motion.a>
+                  &times;
+                </button>
+                <div>
+                  <h3 className="text-3xl font-bold font-dxgrafik mb-4 text-white">{modalProject.title}</h3>
+                  <p className="mb-6 text-white font-figtree text-base sm:text-lg leading-relaxed">{modalProject.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {modalProject.tech.map((tech, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 rounded-full bg-[#23232a] text-white text-xs sm:text-sm font-figtree"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex gap-4 mt-auto">
+                  <motion.a
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    href={modalProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#23232a] text-white border-none font-figtree text-base"
+                  >
+                    <FaGithub className="text-xl" />
+                    <span>GitHub</span>
+                  </motion.a>
+                  <motion.a
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    href={modalProject.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-figtree text-base"
+                  >
+                    <FaExternalLinkAlt className="text-xl" />
+                    <span>Live Demo</span>
+                  </motion.a>
+                </div>
               </div>
             </motion.div>
           </motion.div>
