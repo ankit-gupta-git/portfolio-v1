@@ -5,13 +5,10 @@ import {
   Laptop,
   MapPin,
   SendHorizontal
-} from "lucide-react"; // Removed Certificate as it's not available
+} from "lucide-react"; 
 import Timeline from "./ui/timeline";
 import { useTheme } from "./ui/ThemeContext";
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-
-// Corrected import for FaCircle
 import { FaCircle } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 
@@ -173,7 +170,7 @@ const Experience = () => {
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center ${
+        className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik ${
           isDark
             ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
             : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"
