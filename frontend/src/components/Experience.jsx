@@ -21,9 +21,9 @@ const Experience = () => {
       content: (
         <div className="flex items-start gap-2 sm:gap-3">
           {/* Laptop icon: adjusted size and alignment */}
-          <Laptop className={`w-6 h-6 sm:w-5 sm:h-8 mt-1.5 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
+          <Laptop className={`w-6 h-6 sm:w-5 sm:h-8 mt-1.5 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
           <div className="flex-1 pl-1">
-            <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>Bachelor of Technology in CSE - AIML</h3>
+            <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-[#111827]"}`}>Bachelor of Technology in CSE - AIML</h3>
             <div className="flex items-center gap-1.5 sm:gap-2 mb-2">
               <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${isDark ? "text-gray-400" : "text-gray-600"}`} />
               <p className={`text-sm sm:text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>Quantum University, Roorkee, IN</p>
@@ -40,9 +40,9 @@ const Experience = () => {
       content: (
         <div className="flex items-start gap-2 sm:gap-3">
           {/* Code2 icon: 2x bigger on mobile, normal on desktop */}
-          <Code2 className={`w-8 h-5 sm:w-5 sm:h-7 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
+          <Code2 className={`w-8 h-5 sm:w-5 sm:h-7 mt-1 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
           <div className="flex-1">
-            <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>Hackathon Team Lead</h3>
+            <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-[#111827]"}`}>Hackathon Team Lead</h3>
             <p className={`text-sm sm:text-sm mb-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Aug 2023 - May 2025</p>
             <ul className={`list-none pl-0 space-y-2 ${isDark ? "text-gray-300 text-sm sm:text-sm" : "text-gray-700 text-sm sm:text-sm"}`}>
               <li>Actively participated in multiple hackathons, developing impactful tech solutions and leading cross-functional teams.</li>
@@ -86,9 +86,9 @@ const Experience = () => {
       content: (
         <div className="flex items-start gap-2 sm:gap-3">
           {/* Award icon: smaller on desktop, normal on mobile */}
-          <Award className={`w-5 h-8 sm:w-6 sm:h-6 mt-1 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
+          <Award className={`w-5 h-8 sm:w-6 sm:h-6 mt-1 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
           <div className="flex-1">
-            <h3 className={`text-base sm:text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>Hackathon Achievements</h3>
+            <h3 className={`text-base sm:text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-[#111827]"}`}>Hackathon Achievements</h3>
             {(() => {
               const hackathonAwardsData = [
                 {
@@ -109,15 +109,15 @@ const Experience = () => {
                 <ul className="space-y-6">
                   {hackathonAwardsData.map((award, index) => (
                     <li key={index} className="flex items-start gap-2 sm:gap-3">
-                      <FaCircle className={`w-3 h-3 sm:w-2.5 sm:h-2.5 mt-2 flex-shrink-0 ${isDark ? "text-blue-500" : "text-blue-600"}`} />
+                      <FaCircle className={`w-3 h-3 sm:w-2.5 sm:h-2.5 mt-2 flex-shrink-0 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
                       <div>
-                        <h4 className={`text-base sm:text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>{award.title}</h4>
+                        <h4 className={`text-base sm:text-lg font-semibold ${isDark ? "text-white" : "text-[#111827]"}`}>{award.title}</h4>
                         <p className={`mt-1 text-sm sm:text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>{award.description}</p>
                         {/* Tags */}
                         {award.tags && award.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2 mt-2">
                             {award.tags.map((tag, tagIndex) => (
-                              <span key={tagIndex} className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-sm sm:text-sm font-medium ${isDark ? "bg-[#1e293b]/70 text-blue-400" : "bg-blue-100 text-blue-800"}`}>
+                              <span key={tagIndex} className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-sm sm:text-sm font-medium ${isDark ? "bg-[#1e293b]/70 text-blue-400" : "bg-[#cceeff] text-[#159ccb]"}`}>
                                 {tag}
                               </span>
                             ))}
@@ -134,14 +134,14 @@ const Experience = () => {
                             className={`inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-lg text-sm transition relative group overflow-hidden ${
                               isDark
                                 ? "bg-black/30 backdrop-blur-md border border-blue-500/50"
-                                : "bg-white/30 backdrop-blur-md border border-blue-600"
+                                : "bg-white/80 backdrop-blur-md border border-[#159ccb]/30 shadow-sm"
                             }`}
                           >
                             <span
-                              className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300`}
+                              className={`absolute inset-0 bg-gradient-to-r from-[#159ccb] to-[#0f7a9e] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300`}
                             ></span>
                             <span className={`relative z-10 flex items-center gap-2 ${
-                              isDark ? "text-white" : "text-blue-600 group-hover:text-white group-active:text-white"
+                              isDark ? "text-white" : "text-[#159ccb] group-hover:text-white group-active:text-white"
                             }`}>
                               View Certificate <HiOutlineDocumentArrowDown className="text-sm" />
                             </span>
@@ -163,7 +163,7 @@ const Experience = () => {
     <section
       id="experience"
       className={`relative py-20 px-2 sm:px-4 md:px-10 overflow-hidden ${
-        !isDark ? "bg-gradient-to-b from-blue-50 to-white" : ""
+        !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
       }`}
     >
       <motion.h2
@@ -173,7 +173,7 @@ const Experience = () => {
         className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik ${
           isDark
             ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
-            : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"
+            : "text-[#111827]"
         } mb-12 sm:mb-16 pb-4 sm:pb-8`}
       >
         Experience

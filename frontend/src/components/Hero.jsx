@@ -40,7 +40,7 @@ const Hero = () => {
         style={{
           background: isDark
             ? "linear-gradient(to right, #2563eb, #9333ea, #db2777)"
-            : "linear-gradient(to right, #60a5fa, #a78bfa, #f472b6)",
+            : "linear-gradient(to right, #159ccb, #0f7a9e, #0d5a7a)",
           transform: `scaleX(${scrollProgress})`,
           transformOrigin: "0%",
         }}
@@ -49,7 +49,7 @@ const Hero = () => {
       <section
         id="home"
         className={`min-h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-20 relative transition duration-300 ${
-          !isDark ? "bg-gradient-to-br from-blue-50 to-white" : ""
+          !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
         } ${isDark ? "mt-16 sm:mt-20 md:mt-0" : "mt-20 sm:mt-24 md:mt-0"}`}
       >
         {/* Theme Toggle Switch */}
@@ -60,7 +60,7 @@ const Hero = () => {
           className={`absolute top-6 right-6 z-50 w-12 h-6 sm:w-16 sm:h-8 rounded-full p-1 transition-colors duration-300 ease-in-out ${
             isDark 
               ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600" 
-              : "bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"
+              : "bg-gradient-to-r from-[#159ccb] to-[#0f7a9e]"
           }`}
         >
           <motion.div
@@ -106,7 +106,7 @@ const Hero = () => {
               className={`relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full p-1 shadow-lg ${
                 isDark
                   ? "bg-gradient-to-tr from-blue-600 to-purple-600"
-                  : "bg-gradient-to-tr from-blue-400 to-purple-400"
+                  : "bg-gradient-to-tr from-[#159ccb] to-[#0f7a9e]"
               }`}
             >
               <div
@@ -132,12 +132,12 @@ const Hero = () => {
             variants={fadeIn}
             transition={{ duration: 0.3 }}
             className={`space-y-6 order-2 md:order-1 ${
-              isDark ? "text-white" : "text-gray-800"
+              isDark ? "text-white" : "text-[#111827]"
             } transition duration-300`}
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-col gap-2 text-center md:text-left">
               <span>Hi, I'm</span>
-              <span className={`${isDark ? "text-blue-500" : "text-blue-600"} font-dxgrafik`}>
+              <span className={`${isDark ? "text-blue-500" : "text-[#159ccb]"} font-dxgrafik`}>
                 Ankit Gupta
               </span>
             </h1>
@@ -153,7 +153,7 @@ const Hero = () => {
                 isDark ? "text-gray-400" : "text-gray-700"
               }`}
             >
-              I turn ideas into code and messy problems into clean commits. I’m a full-stack developer, Java enthusiast, and 5x hackathoner who loves building real-world tech with a touch of AI. Right now, I’m exploring how smart systems can solve everyday challenges. Always up for connecting and creating something impactful—let’s build together!
+              I turn ideas into code and messy problems into clean commits. I'm a full-stack developer, Java enthusiast, and 5x hackathoner who loves building real-world tech with a touch of AI. Right now, I'm exploring how smart systems can solve everyday challenges. Always up for connecting and creating something impactful—let's build together!
             </p>
 
             {/* CTA Buttons */}
@@ -165,14 +165,14 @@ const Hero = () => {
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
                   isDark
                     ? "bg-black/30 backdrop-blur-md border-2 border-blue-500/50"
-                    : "bg-white/30 backdrop-blur-md border-2 border-blue-600"
+                    : "bg-white/80 backdrop-blur-md border-2 border-[#159ccb]/30 shadow-sm"
                 }`}
               >
                 <span
-                  className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300`}
+                  className={`absolute inset-0 bg-gradient-to-r from-[#159ccb] to-[#0f7a9e] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300`}
                 ></span>
                 <span className={`relative z-10 flex items-center gap-2 ${
-                  isDark ? "text-white" : "text-blue-600 group-hover:text-white group-active:text-white"
+                  isDark ? "text-white" : "text-[#159ccb] group-hover:text-white group-active:text-white"
                 }`}>
                   View CV <HiOutlineDocumentArrowDown className="text-lg" />
                 </span>
@@ -186,7 +186,7 @@ const Hero = () => {
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
                   isDark
                     ? "bg-black/30 backdrop-blur-md border-2 border-orange-500/50"
-                    : "bg-white/30 backdrop-blur-md border-2 border-orange-600"
+                    : "bg-white/80 backdrop-blur-md border-2 border-orange-600/30 shadow-sm"
                 }`}
               >
                 <span
@@ -200,38 +200,49 @@ const Hero = () => {
               </motion.a>
             </div>
 
-            {/* Social Icons */}
-            <div
-              className={`flex gap-5 pt-4 text-2xl justify-center md:justify-start ${
-                isDark ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
+            {/* Social Links */}
+            <div className="flex gap-4 pt-2 justify-center md:justify-start">
               <motion.a
                 whileHover={{ scale: 1.2, y: -5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                whileTap={{ scale: 0.95 }}
                 href="https://github.com/ankit-gupta-git"
                 target="_blank"
                 rel="noreferrer"
+                className={`p-3 rounded-full transition-all duration-300 ${
+                  isDark
+                    ? "bg-white/10 hover:bg-white/20 text-white"
+                    : "bg-white/80 backdrop-blur-md shadow-sm hover:shadow-md text-[#111827]"
+                }`}
               >
-                <FaGithub className="hover:text-blue-700 transition" />
+                <FaGithub className="text-xl" />
               </motion.a>
               <motion.a
-                whileHover={{ scale: 1.2, y: -5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                href="https://www.linkedin.com/in/iamankit-gupta"
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                href="https://linkedin.com/in/ankit-gupta-17"
                 target="_blank"
                 rel="noreferrer"
+                className={`p-3 rounded-full transition-all duration-300 ${
+                  isDark
+                    ? "bg-white/10 hover:bg-white/20 text-white"
+                    : "bg-white/80 backdrop-blur-md shadow-sm hover:shadow-md text-[#111827]"
+                }`}
               >
-                <FaLinkedin className="hover:text-blue-700 transition" />
+                <FaLinkedin className="text-xl" />
               </motion.a>
               <motion.a
-                whileHover={{ scale: 1.2, y: -5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                href="https://x.com/ankitgupta_79"
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                href="https://twitter.com/ankitguptaa17"
                 target="_blank"
                 rel="noreferrer"
+                className={`p-3 rounded-full transition-all duration-300 ${
+                  isDark
+                    ? "bg-white/10 hover:bg-white/20 text-white"
+                    : "bg-white/80 backdrop-blur-md shadow-sm hover:shadow-md text-[#111827]"
+                }`}
               >
-                <FaXTwitter className="hover:text-blue-700 transition" />
+                <FaXTwitter className="text-xl" />
               </motion.a>
             </div>
           </motion.div>

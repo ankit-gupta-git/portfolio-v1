@@ -20,7 +20,7 @@ const MyTooltip = ({ content, children, isDark }) => {
           className={`absolute left-1/2 -top-8 -translate-x-1/2 z-50 px-2 py-1 text-xs rounded shadow-lg whitespace-nowrap pointer-events-none ${
             isDark
               ? "bg-gray-900 text-white"
-              : "bg-white text-gray-900"
+              : "bg-white/95 backdrop-blur-md text-[#111827] shadow-lg"
           }`}
         >
           {content}
@@ -50,12 +50,14 @@ const GithubContributions = () => {
   }, []);
 
   return (
-    <section className="w-full min-h-[60vh] flex flex-col items-center justify-center py-10 sm:py-16 px-2">
+    <section className={`w-full min-h-[60vh] flex flex-col items-center justify-center py-10 sm:py-16 px-2 ${
+      !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
+    }`}>
       <h1
         className={`text-3xl sm:text-5xl md:text-7xl font-bold bg-clip-text mb-2 sm:mb-4 text-center font-dxgrafik ${
           isDark
             ? "text-transparent bg-gradient-to-r from-gray-300 to-gray-600"
-            : "text-gray-800"
+            : "text-[#111827]"
         }`}
       >
         GitHub Contributions
@@ -64,14 +66,14 @@ const GithubContributions = () => {
         className={`text-lg sm:text-2xl md:text-3xl font-semibold bg-clip-text mb-4 sm:mb-8 text-center ${
           isDark
             ? "text-transparent bg-gradient-to-r from-purple-400 to-pink-400"
-            : "text-purple-700"
+            : "text-[#159ccb]"
         }`}
       >
         Contribution Activity
       </h2>
       <div
-        className={`rounded-xl p-2 sm:p-4 md:p-6 mb-6 sm:mb-8 w-full max-w-full overflow-x-auto flex justify-center ${
-          isDark ? "bg-opacity-70" : "bg-white"
+        className={`rounded-xl p-2 sm:p-4 md:p-6 mb-6 sm:mb-8 w-full max-w-full overflow-x-auto flex justify-center mx-4 sm:mx-8 md:mx-12 ${
+          isDark ? "bg-opacity-70" : "bg-white/90 backdrop-blur-[20px] shadow-lg border border-white/50"
         }`}
       >
         <div className="min-w-[320px] sm:min-w-[400px] md:min-w-[600px]">
@@ -126,7 +128,7 @@ const GithubContributions = () => {
         className={`inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 text-base sm:text-lg font-semibold rounded-lg shadow-md transition-colors duration-200 ${
           isDark
             ? "bg-[#0e1013] text-white hover:bg-[#3b3f4a]"
-            : "bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-300"
+            : "bg-white/80 backdrop-blur-md text-[#111827] hover:bg-white shadow-lg border border-white/50"
         }`}
       >
         <Github className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
