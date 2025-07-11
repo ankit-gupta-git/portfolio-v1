@@ -82,7 +82,7 @@ const Skills = () => {
     <section
       id="skills"
       className={`py-32 px-10 font-figtree ${
-        !isDark ? "bg-gradient-to-b from-blue-50 to-white" : ""
+        !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
       }`}
     >
       <div className="max-w-8xl mx-auto">
@@ -91,11 +91,11 @@ const Skills = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik ${
+          className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik mb-8 pb-4 ${
             isDark
               ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
-              : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"
-          } bg-clip-text text-transparent mb-8 pb-4`}
+              : "text-[#111827]"
+          }`}
         >
           Skills & Technologies
         </h2>
@@ -128,7 +128,7 @@ const Skills = () => {
               className={`rounded-2xl ${
                 isDark
                   ? "bg-gradient-to-b from-[#181818] to-[#0f0f0f] border border-neutral-800 shadow-[0_0_40px_rgba(255,255,255,0.1)]"
-                  : "bg-white border border-gray-200 shadow-lg hover:shadow-xl"
+                  : "bg-white/90 backdrop-blur-[20px] border border-white/50 shadow-lg hover:shadow-xl"
               } transition-all duration-300`}
             >
               {/* Card Header */}
@@ -136,7 +136,7 @@ const Skills = () => {
                 className={`p-6 rounded-t-2xl flex items-center gap-4 ${
                   isDark
                     ? "bg-gradient-to-r from-teal-800/20 to-purple-800/20 border border-teal-800/30 shadow-[0_0_20px_rgba(56,189,248,0.1)]"
-                    : "bg-gradient-to-r from-blue-100 to-indigo-100"
+                    : "bg-gradient-to-r from-[#cceeff] to-[#eae2ff]"
                 }`}
               >
                 <div
@@ -146,7 +146,7 @@ const Skills = () => {
                   className={`w-16 h-14 rounded-xl flex items-center justify-center
                     ${isDark
                       ? "bg-gradient-to-br from-teal-600/30 to-purple-600/30 border border-teal-400/20 shadow-[0_0_15px_rgba(56,189,248,0.2)]"
-                      : "bg-gradient-to-br from-blue-400/30 to-indigo-600/30 border border-blue-600/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+                      : "bg-gradient-to-br from-[#159ccb]/30 to-[#0f7a9e]/30 border border-[#159ccb]/20 shadow-[0_0_15px_rgba(21,156,203,0.2)]"
                     }
                   `}
                 >
@@ -154,7 +154,7 @@ const Skills = () => {
                 </div>
                 <h3
                   className={`text-2xl font-semibold font-heading font-dxgrafik ${
-                    isDark ? "text-white" : "text-gray-800"
+                    isDark ? "text-white" : "text-[#111827]"
                   }`}
                 >
                   {group.category}
@@ -179,7 +179,7 @@ const Skills = () => {
                       className={`flex items-center gap-3 px-4 py-2 rounded-md ${
                         isDark
                           ? "bg-[#1e1e1e] hover:shadow-[0_0_8px_rgba(255,255,255,0.15)]"
-                          : "bg-gray-50 hover:shadow-md"
+                          : "bg-[#f9f9fb] hover:shadow-md"
                       } transition-all duration-300`}
                     >
                       <span 

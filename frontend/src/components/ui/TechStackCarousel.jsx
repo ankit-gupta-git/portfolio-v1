@@ -17,6 +17,7 @@ const techStack = [
 const Carousel = ({ direction = "left", isDark }) => {
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [tappedIdx, setTappedIdx] = useState(null);
   const listRef = useRef(null);
   const [listWidth, setListWidth] = useState(0);
 
@@ -39,11 +40,9 @@ const Carousel = ({ direction = "left", isDark }) => {
         onMouseLeave={() => { setIsHovered(false); setHoveredIdx(null); }}
       >
         {[...techStack, ...techStack].map((tech, idx) => {
-          // Mobile tap color state
-          const [tapped, setTapped] = useState(false);
-
           // Only apply tap effect on mobile (max-width: 640px)
           const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+          const isTapped = tappedIdx === idx;
 
           return (
             <div
@@ -52,10 +51,10 @@ const Carousel = ({ direction = "left", isDark }) => {
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
               onTouchStart={() => {
-                if (isMobile) setTapped(true);
+                if (isMobile) setTappedIdx(idx);
               }}
               onTouchEnd={() => {
-                if (isMobile) setTimeout(() => setTapped(false), 350);
+                if (isMobile) setTimeout(() => setTappedIdx(null), 350);
               }}
             >
               <img
@@ -64,11 +63,11 @@ const Carousel = ({ direction = "left", isDark }) => {
                 className={`h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain mb-2 transition duration-300
                   ${isDark ? "grayscale hover:grayscale-0 hover:scale-110" : ""}
                   ${hoveredIdx === idx && isDark ? 'z-10' : ''}
-                  ${tapped ? "ring-4 ring-blue-400 bg-white/10" : ""}
+                  ${isTapped ? "ring-4 ring-[#159ccb] bg-white/10" : ""}
                 `}
-                style={tapped ? { filter: "none", background: "linear-gradient(135deg,#3b82f6,#818cf8,#a78bfa)", borderRadius: "9999px" } : {}}
+                style={isTapped ? { filter: "none", background: "linear-gradient(135deg,#159ccb,#0f7a9e,#0d5a7a)", borderRadius: "9999px" } : {}}
               />
-              <span className={`text-xs sm:text-sm md:text-base font-medium ${isDark ? "text-gray-200" : "text-black"}`}>{tech.name}</span>
+              <span className={`text-xs sm:text-sm md:text-base font-medium ${isDark ? "text-gray-200" : "text-[#111827]"}`}>{tech.name}</span>
             </div>
           );
         })}
@@ -81,11 +80,13 @@ const TechStackCarousel = () => {
   const { isDark } = useTheme(); // use theme
 
   return (
-    <div className={`w-full py-12 bg-transparent`}>
-      <h3 className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-10 bg-clip-text text-transparent font-dxgrafik ${
+    <div className={`w-full py-12 bg-transparent ${
+      !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
+    }`}>
+      <h3 className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-10 font-dxgrafik ${
         isDark
           ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
-          : "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-gray-800"
+          : "text-[#111827]"
       }`}>
         Tech Stack
       </h3>

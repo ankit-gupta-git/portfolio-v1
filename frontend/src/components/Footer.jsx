@@ -6,8 +6,8 @@ const Footer = () => {
   const { isDark } = useTheme();
 
   return (
-    <footer className={`py-6 text-center mt-10 ${
-      !isDark ? "bg-gradient-to-b from-blue-50 to-white" : "bg-transparent"
+    <footer className={`py-6 text-center ${
+      !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : "bg-transparent"
     }`}>
       <div className={`${isDark ? "border-t border-gray-700" : ""} w-full pt-6 mb-4`}>
         <div className="max-w-7xl mx-auto px-4">
