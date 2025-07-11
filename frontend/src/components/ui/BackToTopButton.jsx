@@ -6,8 +6,8 @@ const BackToTopButton = () => {
   const { isDark } = useTheme();
 
   useEffect(() => {
-    const toggleVisibility = (e) => {
-      if (e.scroll > 100) {
+    const toggleVisibility = () => {
+      if (window.scrollY > 100) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
