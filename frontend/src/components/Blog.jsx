@@ -10,14 +10,14 @@ const Blog = () => {
   const blogPosts = [
     {
       id: 1,
-      title: "Building Scalable Microservices with Spring Boot",
+      title: "Why Next.js is My Go-To Framework for Building Modern Web Apps",
       description: "Learn how to design and implement robust microservices architecture using Spring Boot, Docker, and Kubernetes for enterprise applications.",
-      topic: "Backend Development",
-      readTime: "8 min read",
-      publishDate: "Dec 15, 2024",
-      image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=250&fit=crop",
-      mediumUrl: "https://medium.com/@yourusername/building-scalable-microservices",
-      tags: ["Spring Boot", "Microservices", "Docker"]
+      topic: "Next.js 13",
+      readTime: "5 min read",
+      publishDate: "July 18, 2025",
+      image: "/BlogImg/next.jpg",
+      mediumUrl: "https://medium.com/@ankitkumargupta752/why-next-js-is-my-go-to-framework-for-building-modern-web-apps-2f03133ff06b",
+      tags: ["Next.js", "React", "Web Development"]
     },
     {
       id: 2,
@@ -111,21 +111,16 @@ const Blog = () => {
               key={post.id}
               variants={fadeInUp}
               whileHover={{ y: -8 }}
-              className={`group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ${
-                isDark 
-                  ? "bg-gray-800 hover:bg-gray-700" 
-                  : "bg-white hover:bg-gray-50"
-              }`}
+              className={"group relative overflow-visible rounded-none transition-all duration-300"}
             >
               {/* Blog Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden rounded-2xl">
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 rounded-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl" />
                 {/* Topic Badge */}
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -136,7 +131,6 @@ const Blog = () => {
                     {post.topic}
                   </span>
                 </div>
-
                 {/* Medium Icon */}
                 <div className="absolute top-4 right-4">
                   <FaMedium className={`text-2xl ${
@@ -144,21 +138,20 @@ const Blog = () => {
                   }`} />
                 </div>
               </div>
-
               {/* Blog Content */}
-              <div className="p-6">
+              <div className="p-0 pt-6">
                 <h3 className={`text-xl font-bold mb-3 line-clamp-2 ${
                   isDark ? "text-white" : "text-gray-900"
                 }`}>
                   {post.title}
                 </h3>
-                
                 <p className={`text-sm mb-4 line-clamp-3 ${
                   isDark ? "text-gray-300" : "text-gray-600"
                 }`}>
-                  {post.description}
+                  {post.id === 1
+                    ? "Discover why Next.js 13 stands out for modern web development—covering SSR, file-based routing, and performance best practices."
+                    : post.description}
                 </p>
-
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map((tag, index) => (
@@ -174,7 +167,6 @@ const Blog = () => {
                     </span>
                   ))}
                 </div>
-
                 {/* Meta Information */}
                 <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
                   <div className="flex items-center gap-2">
@@ -186,7 +178,6 @@ const Blog = () => {
                     <span>{post.readTime}</span>
                   </div>
                 </div>
-
                 {/* Read More Button */}
                 <motion.a
                   href={post.mediumUrl}
@@ -217,7 +208,7 @@ const Blog = () => {
           className="text-center mt-12"
         >
           <motion.a
-            href="https://medium.com/@yourusername"
+            href="https://medium.com/@ankitkumargupta752"
             target="_blank"
             rel="noreferrer"
             whileHover={{ scale: 1.05 }}
@@ -237,4 +228,4 @@ const Blog = () => {
   );
 };
 
-export default Blog; 
+export default Blog;
