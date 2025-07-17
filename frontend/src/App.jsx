@@ -9,6 +9,7 @@ import Experience from "./components/Experience";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
+import Blog from "./components/Blog";
 import AIAssistantWidget from "./components/ui/AIAssistantWidget";
 import TechStackCarousel from "./components/ui/TechStackCarousel";
 import GithubContributions from "./components/ui/GithubContributions";
@@ -26,6 +27,7 @@ const App = () => {
           <Skills />
           <TechStackCarousel />
           <Projects />
+          <Blog />
           <GithubContributions />
           <Contact />
           <Footer />
