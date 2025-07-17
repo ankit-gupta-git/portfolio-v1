@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { useTheme } from "./ui/ThemeContext";
 import { FaMedium, FaExternalLinkAlt, FaCalendarAlt, FaClock } from "react-icons/fa";
 
@@ -54,21 +53,6 @@ const Blog = () => {
     }
   ];
 
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 60 },
-    visible: { opacity: 1, y: 0 }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
   return (
     <section
       id="blog"
@@ -78,11 +62,7 @@ const Blog = () => {
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
+        <div
           className="text-center mb-16"
         >
           <h2 className={`text-4xl md:text-5xl font-bold mb-6 font-dxgrafik ${
@@ -96,21 +76,15 @@ const Blog = () => {
             Sharing knowledge and experiences through technical writing. 
             Explore my thoughts on software development, AI, and emerging technologies.
           </p>
-        </motion.div>
+        </div>
 
         {/* Blog Cards Grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
+        <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
         >
           {blogPosts.map((post) => (
-            <motion.article
+            <article
               key={post.id}
-              variants={fadeInUp}
-              whileHover={{ y: -8 }}
               className={"group relative overflow-visible rounded-none transition-all duration-300"}
             >
               {/* Blog Image */}
@@ -179,12 +153,10 @@ const Blog = () => {
                   </div>
                 </div>
                 {/* Read More Button */}
-                <motion.a
+                <a
                   href={post.mediumUrl}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                     isDark
                       ? "bg-blue-600 hover:bg-blue-700 text-white"
@@ -193,26 +165,20 @@ const Blog = () => {
                 >
                   Read on Medium
                   <FaExternalLinkAlt className="text-sm" />
-                </motion.a>
+                </a>
               </div>
-            </motion.article>
+            </article>
           ))}
-        </motion.div>
+        </div>
 
         {/* View All Blogs CTA */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
+        <div
           className="text-center mt-12"
         >
-          <motion.a
+          <a
             href="https://medium.com/@ankitkumargupta752"
             target="_blank"
             rel="noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
             className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-200 ${
               isDark
                 ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
@@ -221,8 +187,8 @@ const Blog = () => {
           >
             <FaMedium className="text-xl" />
             View All Articles on Medium
-          </motion.a>
-        </motion.div>
+          </a>
+        </div>
       </div>
     </section>
   );
