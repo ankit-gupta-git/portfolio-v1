@@ -42,7 +42,7 @@ const Navbar = () => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`backdrop-blur-md border rounded-2xl flex justify-between items-center px-6 py-2 shadow-lg ${
+        className={`backdrop-blur-md border rounded-xl flex justify-between items-center px-6 py-2 shadow-lg ${
           isDark
             ? "bg-glass-dark border-white/10" // Keep glassmorphic look in dark mode
             : "bg-white/40 border border-transparent backdrop-blur-lg shadow-lg" // Gradient for light mode
