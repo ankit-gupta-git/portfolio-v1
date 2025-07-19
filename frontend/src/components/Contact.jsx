@@ -1,14 +1,24 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { FiUser, FiMail, FiEdit3, FiSend, FiMessageCircle } from "react-icons/fi";
-import { motion, useInView } from "framer-motion";
 import { useForm, ValidationError } from '@formspree/react';
 import { useTheme } from "./ui/ThemeContext";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const { isDark } = useTheme();
+  
+  // Refs for GSAP animations
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const formLeftRef = useRef(null);
+  const formRightRef = useRef(null);
+  const submitButtonRef = useRef(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -25,6 +35,49 @@ const Contact = () => {
   };
 
   const [state, handleSubmit] = useForm("meogakgz");
+
+  // GSAP animations
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        end: "bottom 10%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    // Section entrance animation
+    tl.fromTo(sectionRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8 }
+    )
+    .fromTo(titleRef.current,
+      { opacity: 0, y: 30, scale: 0.9 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+      "-=0.6"
+    )
+    .fromTo(descriptionRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      "-=0.4"
+    )
+    .fromTo(formLeftRef.current,
+      { opacity: 0, x: -50 },
+      { opacity: 1, x: 0, duration: 0.7 },
+      "-=0.4"
+    )
+    .fromTo(formRightRef.current,
+      { opacity: 0, x: 50 },
+      { opacity: 1, x: 0, duration: 0.7 },
+      "-=0.5"
+    );
+
+    // Cleanup
+    return () => {
+      tl.kill();
+    };
+  }, []);
 
   if (state.succeeded) {
     return (
@@ -43,10 +96,8 @@ const Contact = () => {
         !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
       }`}
     >
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+      <h2
+        ref={titleRef}
         className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 ${
           isDark ? "text-white" : "text-[#111827]"
         }`}
@@ -59,19 +110,20 @@ const Contact = () => {
         }`}>
           Connect
         </span>
-      </motion.h2>
-      <p className={`mb-6 sm:mb-8 max-w-xl mx-auto text-sm sm:text-base ${
-        isDark ? "text-gray-400" : "text-gray-600"
-      }`}>
+      </h2>
+      <p 
+        ref={descriptionRef}
+        className={`mb-6 sm:mb-8 max-w-xl mx-auto text-sm sm:text-base ${
+          isDark ? "text-gray-400" : "text-gray-600"
+        }`}
+      >
         Let's connect and build something amazing together. Feel free to reach out!
       </p>
 
       <form onSubmit={handleSubmit} className="mx-w-4xl w-full grid md:grid-cols-2 gap-10 items-start">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className={`p-6 rounded-xl space-y-5 shadow-lg ${
+        <div
+          ref={formLeftRef}
+          className={`p-6 rounded-xl space-y-5 shadow-lg transition-all duration-300 hover:scale-105 ${
             isDark
               ? "bg-black/40 backdrop-blur-md border border-white/10 text-white"
               : "bg-white/90 backdrop-blur-[20px] border border-white/50 text-[#111827] shadow-xl"
@@ -145,13 +197,11 @@ const Contact = () => {
               }`}
             />
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className={`p-6 rounded-xl relative shadow-lg ${
+        <div
+          ref={formRightRef}
+          className={`p-6 rounded-xl relative shadow-lg transition-all duration-300 hover:scale-105 ${
             isDark
               ? "bg-black/50 backdrop-blur-sm border border-white/10 text-white"
               : "bg-white/90 backdrop-blur-[20px] border border-white/50 text-[#111827] shadow-xl"
@@ -177,21 +227,20 @@ const Contact = () => {
           ></textarea>
 
           {formData.email && (
-            <motion.button
+            <button
+              ref={submitButtonRef}
               type="submit"
               disabled={state.submitting}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`absolute top-2 right-6 px-5 py-2 rounded-md flex items-center gap-2 transition-all ${
+              className={`absolute top-2 right-6 px-5 py-2 rounded-md flex items-center gap-2 transition-all hover:scale-105 ${
                 isDark
                   ? "bg-black/30 backdrop-blur-md border border-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.2)]"
                   : "bg-white/80 backdrop-blur-md border border-[#159ccb]/30 text-[#159ccb] shadow-[0_0_10px_rgba(21,156,203,0.2)]"
               }`}
             >
               <FiSend /> {state.submitting ? "Sending..." : "Send"}
-            </motion.button>
+            </button>
           )}
-        </motion.div>
+        </div>
       </form>
     </section>
   );

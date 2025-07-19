@@ -13,6 +13,7 @@ import Blog from "./components/Blog";
 import AIAssistantWidget from "./components/ui/AIAssistantWidget";
 import TechStackCarousel from "./components/ui/TechStackCarousel";
 import GithubContributions from "./components/ui/GithubContributions";
+import CursorAnimation from "./components/ui/CursorAnimation";
 import "./App.css";
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
         </Layout>
       </ThemeProvider>
       <AIAssistantWidget />
+      <CursorAnimation />
     </>
   );
 };

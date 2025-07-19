@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   FaReact,
   FaJs,
@@ -25,6 +27,9 @@ import {
   SiPostman,
 } from "react-icons/si";
 import { useTheme } from "./ui/ThemeContext";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const skills = [
   {
@@ -77,9 +82,126 @@ const skills = [
 
 const Skills = () => {
   const { isDark } = useTheme();
+  
+  // Refs for GSAP animations
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const cardsRef = useRef([]);
+  const textBoxRef = useRef(null);
+
+  // GSAP Animations
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 90%",
+        end: "bottom 10%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    // Section entrance animation
+    tl.fromTo(sectionRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8 }
+    )
+    .fromTo(titleRef.current,
+      { opacity: 0, y: 30, scale: 0.9 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+      "-=0.4"
+    )
+    .fromTo(subtitleRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      "-=0.3"
+    );
+
+    // Stagger animation for skill cards
+    gsap.fromTo(cardsRef.current,
+      { opacity: 0, y: 60, scale: 0.8, rotationY: -15 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotationY: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: cardsRef.current[0],
+          start: "top 95%",
+          end: "bottom 5%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Text box animation
+    gsap.fromTo(textBoxRef.current,
+      { opacity: 0, y: 30, scale: 0.95 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.7,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: textBoxRef.current,
+          start: "top 95%",
+          end: "bottom 5%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Cleanup
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
+  // Hover animations for skill cards
+  const handleCardHover = (index) => {
+    gsap.to(cardsRef.current[index], {
+      scale: 1.02,
+      y: -5,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
+
+  const handleCardLeave = (index) => {
+    gsap.to(cardsRef.current[index], {
+      scale: 1,
+      y: 0,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
+
+  // Hover animations for skill items
+  const handleSkillHover = (skillElement) => {
+    gsap.to(skillElement, {
+      scale: 1.05,
+      y: -2,
+      duration: 0.2,
+      ease: "power2.out"
+    });
+  };
+
+  const handleSkillLeave = (skillElement) => {
+    gsap.to(skillElement, {
+      scale: 1,
+      y: 0,
+      duration: 0.2,
+      ease: "power2.out"
+    });
+  };
 
   return (
     <section
+      ref={sectionRef}
       id="skills"
       className={`py-32 px-10 font-figtree ${
         !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
@@ -87,10 +209,7 @@ const Skills = () => {
     >
       <div className="max-w-8xl mx-auto">
         <h2
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          ref={titleRef}
           className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik mb-8 pb-4 ${
             isDark
               ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
@@ -101,10 +220,7 @@ const Skills = () => {
         </h2>
 
         <p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          ref={subtitleRef}
           className={`text-center mb-16 text-base sm:text-lg font-figtree ${
             isDark ? "text-gray-400" : "text-gray-600"
           }`}
@@ -117,15 +233,10 @@ const Skills = () => {
           {skills.map((group, index) => (
             <div
               key={index}
-              whileHover={{ 
-                scale: 1.02,
-                transition: { type: "spring", stiffness: 300, damping: 20 }
-              }}
-              whileTap={{ 
-                scale: 0.98,
-                transition: { type: "spring", stiffness: 300, damping: 20 }
-              }}
-              className={`rounded-2xl ${
+              ref={(el) => (cardsRef.current[index] = el)}
+              onMouseEnter={() => handleCardHover(index)}
+              onMouseLeave={() => handleCardLeave(index)}
+              className={`rounded-2xl cursor-pointer ${
                 isDark
                   ? "bg-gradient-to-b from-[#181818] to-[#0f0f0f] border border-neutral-800 shadow-[0_0_40px_rgba(255,255,255,0.1)]"
                   : "bg-white/90 backdrop-blur-[20px] border border-white/50 shadow-lg hover:shadow-xl"
@@ -140,9 +251,6 @@ const Skills = () => {
                 }`}
               >
                 <div
-                  whileHover={{ rotate: 360 }}
-                  whileTap={{ rotate: 360 }}
-                  transition={{ duration: 0.5 }}
                   className={`w-16 h-14 rounded-xl flex items-center justify-center
                     ${isDark
                       ? "bg-gradient-to-br from-teal-600/30 to-purple-600/30 border border-teal-400/20 shadow-[0_0_15px_rgba(56,189,248,0.2)]"
@@ -174,18 +282,15 @@ const Skills = () => {
                   {group.items.map((skill, i) => (
                     <div
                       key={i}
-                      whileHover="hover"
-                      whileTap={{ scale: 0.95 }}
-                      className={`flex items-center gap-3 px-4 py-2 rounded-md ${
+                      onMouseEnter={(e) => handleSkillHover(e.currentTarget)}
+                      onMouseLeave={(e) => handleSkillLeave(e.currentTarget)}
+                      className={`flex items-center gap-3 px-4 py-2 rounded-md cursor-pointer ${
                         isDark
                           ? "bg-[#1e1e1e] hover:shadow-[0_0_8px_rgba(255,255,255,0.15)]"
                           : "bg-[#f9f9fb] hover:shadow-md"
                       } transition-all duration-300`}
                     >
                       <span 
-                        whileHover={{ rotate: 360 }}
-                        whileTap={{ rotate: 360 }}
-                        transition={{ duration: 0.5 }}
                         className="text-lg"
                       >
                         {skill.icon}
@@ -207,6 +312,7 @@ const Skills = () => {
 
         {/* Text Box */}
         <div
+          ref={textBoxRef}
           className={`rounded-2xl p-6 mt-12 mx-auto max-w-3xl text-center text-base sm:text-lg font-figtree ${
             isDark
               ? "bg-[#181818] text-gray-200 shadow-[0_0_7px_7px_rgba(11,36,51,0.5)]"
