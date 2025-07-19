@@ -33,14 +33,14 @@ const Blog = () => {
     },
     {
       id: 2,
-      title: "Mastering React Hooks: A Deep Dive",
-      description: "Explore advanced React Hooks patterns, custom hooks, and best practices for building modern React applications with clean, reusable code.",
-      topic: "Frontend Development",
-      readTime: "12 min read",
-      publishDate: "Dec 10, 2024",
-      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop",
-      mediumUrl: "https://medium.com/@yourusername/mastering-react-hooks",
-      tags: ["React", "JavaScript", "Hooks"]
+      title: "How Prompt Engineering Changed the Way I Code (and Think)",
+      description: "Prompt engineering helped me code smarter and faster — I highly recommend everyone to learn this skill.",
+      topic: "Prompt Engineering",
+      readTime: "4 min read",
+      publishDate: "July 20, 2025",
+      image: "/BlogImg/Prompt.webp",
+      mediumUrl: "https://medium.com/@ankitkumargupta752/how-prompt-engineering-changed-the-way-i-code-and-think-6d408a4347a4",
+      tags: ["Prompt Engineering", "AI Tools", "Coding", "Learning", "ChatGPT", "Software Development"]
     },
     {
       id: 3,
