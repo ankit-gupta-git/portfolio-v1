@@ -20,48 +20,64 @@ const CursorAnimation = () => {
     let glowX = 0;
     let glowY = 0;
 
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let isMoving = false;
+    let hideTimeout = null;
+
+    // Show/hide helpers
+    const showCursor = () => {
+      if (cursor) cursor.style.opacity = 1;
+      if (cursorTrail) cursorTrail.style.opacity = 1;
+      if (cursorGlow) cursorGlow.style.opacity = 0.4;
+    };
+    const hideCursor = () => {
+      if (cursor) cursor.style.opacity = 0;
+      if (cursorTrail) cursorTrail.style.opacity = 0;
+      if (cursorGlow) cursorGlow.style.opacity = 0;
+    };
+
     // Mouse move handler
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      if (!isMoving) {
+        isMoving = true;
+        showCursor();
+      }
+      if (hideTimeout) clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(() => {
+        isMoving = false;
+        hideCursor();
+      }, 200);
     };
 
     // Animation loop
     const animateCursor = () => {
-      // Smooth cursor movement with easing
       cursorX += (mouseX - cursorX) * 0.08;
       cursorY += (mouseY - cursorY) * 0.08;
-      
-      // Trail follows with more lag
       trailX += (cursorX - trailX) * 0.12;
       trailY += (cursorY - trailY) * 0.12;
-
-      // Glow follows with even more lag
       glowX += (trailX - glowX) * 0.06;
       glowY += (trailY - glowY) * 0.06;
-
-      // Apply transforms with jelly effect
       if (cursor) {
         gsap.set(cursor, {
           x: cursorX - 25,
           y: cursorY - 25,
         });
       }
-
       if (cursorTrail) {
         gsap.set(cursorTrail, {
           x: trailX - 20,
           y: trailY - 20,
         });
       }
-
       if (cursorGlow) {
         gsap.set(cursorGlow, {
           x: glowX - 30,
           y: glowY - 30,
         });
       }
-
       requestAnimationFrame(animateCursor);
     };
 
@@ -119,7 +135,8 @@ const CursorAnimation = () => {
 
     // Start animation
     animateCursor();
-
+    // Hide cursor initially
+    hideCursor();
     // Cleanup
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
@@ -127,6 +144,7 @@ const CursorAnimation = () => {
         el.removeEventListener("mouseenter", handleMouseEnter);
         el.removeEventListener("mouseleave", handleMouseLeave);
       });
+      if (hideTimeout) clearTimeout(hideTimeout);
     };
   }, []);
 

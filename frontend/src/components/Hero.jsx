@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import {
   FaGithub,
   FaLinkedin,
@@ -9,98 +9,30 @@ import {
 } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 import { useTheme } from "./ui/ThemeContext";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();
-  const [scrollProgress, setScrollProgress] = useState(0);
   
-  // Refs for GSAP animations
-  const heroRef = useRef(null);
-  const imageRef = useRef(null);
-  const textRef = useRef(null);
-  const buttonsRef = useRef(null);
-  const socialRef = useRef(null);
-  const progressBarRef = useRef(null);
-
   useEffect(() => {
-    const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollTop;
-      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scroll = `${totalScroll / windowHeight}`;
-      setScrollProgress(Number(scroll));
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // GSAP Animations
-  useEffect(() => {
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-    // Hero entrance animation - start immediately
-    tl.fromTo(heroRef.current, 
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.8 }
-    )
-    .fromTo(imageRef.current,
-      { opacity: 0, scale: 0.8, rotation: -10 },
-      { opacity: 1, scale: 1, rotation: 0, duration: 1 },
-      "-=0.4"
-    )
-    .fromTo(textRef.current,
-      { opacity: 0, x: -50 },
-      { opacity: 1, x: 0, duration: 0.8 },
-      "-=0.6"
-    )
-    .fromTo(buttonsRef.current,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.6 },
-      "-=0.4"
-    )
-    .fromTo(socialRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6 },
-      "-=0.3"
-    );
-
-    // Progress bar animation
-    gsap.fromTo(progressBarRef.current,
-      { scaleX: 0 },
-      { 
-        scaleX: scrollProgress,
-        duration: 0.1,
-        ease: "none"
-      }
-    );
-
-    // Cleanup
-    return () => {
-      tl.kill();
-    };
+    // No scroll progress logic needed
+    return () => {};
   }, []);
 
   return (
     <>
       {/* Scroll Progress Bar */}
       <div
-        ref={progressBarRef}
         className="fixed top-0 left-0 right-0 h-1 z-50"
         style={{
           background: isDark
             ? "linear-gradient(to right, #2563eb, #9333ea, #db2777)"
             : "linear-gradient(to right, #159ccb, #0f7a9e, #0d5a7a)",
           transformOrigin: "0%",
+          // Optionally, you can set scaleX to scrollProgress if you want to keep the progress bar effect
         }}
       />
       
       <section
-        ref={heroRef}
         id="home"
         className={`min-h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-20 relative transition duration-300 ${
           !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
@@ -133,7 +65,6 @@ const Hero = () => {
         <div className="max-w-7xl w-full grid md:grid-cols-2 gap-10 items-center">
           {/* RIGHT SIDE - IMAGE */}
           <div
-            ref={imageRef}
             className="flex justify-center order-1 md:order-2"
           >
             <div
@@ -161,7 +92,6 @@ const Hero = () => {
 
           {/* LEFT SIDE */}
           <div
-            ref={textRef}
             className={`space-y-6 order-2 md:order-1 ${
               isDark ? "text-white" : "text-[#111827]"
             } transition duration-300`}
@@ -188,7 +118,7 @@ const Hero = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div ref={buttonsRef} className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
+            <div className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
               <a
                 href="/Ankit_Gupta_SDE_Resume.pdf"
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
@@ -228,7 +158,7 @@ const Hero = () => {
             </div>
 
             {/* Social Links */}
-            <div ref={socialRef} className="flex gap-4 pt-2 justify-center md:justify-start">
+            <div className="flex gap-4 pt-2 justify-center md:justify-start">
               <a
                 href="https://github.com/ankit-gupta-git"
                 target="_blank"
