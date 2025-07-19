@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useTheme } from "./ui/ThemeContext";
 import { FaMedium, FaExternalLinkAlt, FaCalendarAlt, FaClock } from "react-icons/fa";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const Blog = () => {
   const { isDark } = useTheme();
+
+  // Refs for GSAP animations
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const blogCardsRef = useRef([]);
+  const ctaRef = useRef(null);
 
   // Sample blog data - replace with your actual Medium blog posts
   const blogPosts = [
@@ -53,8 +66,83 @@ const Blog = () => {
     }
   ];
 
+  // GSAP Animations
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        end: "bottom 10%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    // Section entrance animation
+    tl.fromTo(sectionRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8 }
+    )
+    .fromTo(headerRef.current,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.8 },
+      "-=0.4"
+    )
+    .fromTo(titleRef.current,
+      { opacity: 0, y: 30, scale: 0.9 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+      "-=0.6"
+    )
+    .fromTo(descriptionRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      "-=0.4"
+    );
+
+    // Stagger animation for blog cards
+    gsap.fromTo(blogCardsRef.current,
+      { opacity: 0, y: 50, scale: 0.9 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.7,
+        stagger: 0.15,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: blogCardsRef.current[0],
+          start: "top 95%", // Changed from 85% to 95% - triggers much earlier
+          end: "bottom 5%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // CTA animation
+    gsap.fromTo(ctaRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ctaRef.current,
+          start: "top 95%", // Changed from 90% to 95% - triggers much earlier
+          end: "bottom 5%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Cleanup
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="blog"
       className={`py-20 px-6 md:px-12 lg:px-20 transition duration-300 ${
         isDark ? "" : "bg-gray-50"
@@ -63,16 +151,23 @@ const Blog = () => {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div
+          ref={headerRef}
           className="text-center mb-16"
         >
-          <h2 className={`text-4xl md:text-5xl font-bold mb-6 font-dxgrafik ${
-            isDark ? "text-white" : "text-gray-900"
-          }`}>
+          <h2 
+            ref={titleRef}
+            className={`text-4xl md:text-5xl font-bold mb-6 font-dxgrafik ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}
+          >
             Blog & Insights
           </h2>
-          <p className={`text-lg md:text-xl max-w-3xl mx-auto ${
-            isDark ? "text-gray-300" : "text-gray-600"
-          }`}>
+          <p 
+            ref={descriptionRef}
+            className={`text-lg md:text-xl max-w-3xl mx-auto ${
+              isDark ? "text-gray-300" : "text-gray-600"
+            }`}
+          >
             Sharing knowledge and experiences through technical writing. 
             Explore my thoughts on software development, AI, and emerging technologies.
           </p>
@@ -82,10 +177,11 @@ const Blog = () => {
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
         >
-          {blogPosts.map((post) => (
+          {blogPosts.map((post, index) => (
             <article
               key={post.id}
-              className={"group relative overflow-visible rounded-none transition-all duration-300"}
+              ref={el => blogCardsRef.current[index] = el}
+              className={"group relative overflow-visible rounded-none transition-all duration-300 hover:scale-105"}
             >
               {/* Blog Image */}
               <div className="relative h-48 overflow-hidden rounded-2xl">
@@ -157,7 +253,7 @@ const Blog = () => {
                   href={post.mediumUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
                     isDark
                       ? "bg-blue-600 hover:bg-blue-700 text-white"
                       : "bg-blue-600 hover:bg-blue-700 text-white"
@@ -173,13 +269,14 @@ const Blog = () => {
 
         {/* View All Blogs CTA */}
         <div
+          ref={ctaRef}
           className="text-center mt-12"
         >
           <a
             href="https://medium.com/@ankitkumargupta752"
             target="_blank"
             rel="noreferrer"
-            className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-200 ${
+            className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105 ${
               isDark
                 ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"

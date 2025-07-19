@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Award,
   Code2,
@@ -8,12 +8,21 @@ import {
 } from "lucide-react"; 
 import Timeline from "./ui/timeline";
 import { useTheme } from "./ui/ThemeContext";
-import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaCircle } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
 const Experience = () => {
   const { isDark } = useTheme();
+  
+  // Refs for GSAP animations
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const timelineRef = useRef(null);
 
   const experiences = [
     {
@@ -125,13 +134,11 @@ const Experience = () => {
                         )}
                         {/* Certificate Link */}
                         {award.certificate && (
-                          <motion.a
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                          <a
                             href={award.certificate}
                             target="_blank"
                             rel="noreferrer"
-                            className={`inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-lg text-sm transition relative group overflow-hidden ${
+                            className={`inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-lg text-sm transition-all duration-300 hover:scale-105 relative group overflow-hidden ${
                               isDark
                                 ? "bg-black/30 backdrop-blur-md border border-blue-500/50"
                                 : "bg-white/80 backdrop-blur-md border border-[#159ccb]/30 shadow-sm"
@@ -145,7 +152,7 @@ const Experience = () => {
                             }`}>
                               View Certificate <HiOutlineDocumentArrowDown className="text-sm" />
                             </span>
-                          </motion.a>
+                          </a>
                         )}
                       </div>
                     </li>
@@ -159,17 +166,49 @@ const Experience = () => {
     },
   ];
 
+  // GSAP animations
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        end: "bottom 10%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    // Section entrance animation
+    tl.fromTo(sectionRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8 }
+    )
+    .fromTo(titleRef.current,
+      { opacity: 0, y: 30, scale: 0.9 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+      "-=0.4"
+    )
+    .fromTo(timelineRef.current,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.8 },
+      "-=0.3"
+    );
+
+    // Cleanup
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="experience"
       className={`relative py-20 px-2 sm:px-4 md:px-10 overflow-hidden ${
         !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
       }`}
     >
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+      <h2
+        ref={titleRef}
         className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik ${
           isDark
             ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
@@ -177,9 +216,9 @@ const Experience = () => {
         } mb-12 sm:mb-16 pb-4 sm:pb-8`}
       >
         Experience
-      </motion.h2>
+      </h2>
 
-      <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] mx-auto">
+      <div ref={timelineRef} className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] mx-auto">
         <Timeline data={experiences} />
       </div>
     </section>

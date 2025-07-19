@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   FaGithub,
   FaLinkedin,
@@ -9,11 +9,23 @@ import {
 } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 import { useTheme } from "./ui/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();
   const [scrollProgress, setScrollProgress] = useState(0);
+  
+  // Refs for GSAP animations
+  const heroRef = useRef(null);
+  const imageRef = useRef(null);
+  const textRef = useRef(null);
+  const buttonsRef = useRef(null);
+  const socialRef = useRef(null);
+  const progressBarRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,35 +39,75 @@ const Hero = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 }
-  };
+  // GSAP Animations
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    // Hero entrance animation - start immediately
+    tl.fromTo(heroRef.current, 
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8 }
+    )
+    .fromTo(imageRef.current,
+      { opacity: 0, scale: 0.8, rotation: -10 },
+      { opacity: 1, scale: 1, rotation: 0, duration: 1 },
+      "-=0.4"
+    )
+    .fromTo(textRef.current,
+      { opacity: 0, x: -50 },
+      { opacity: 1, x: 0, duration: 0.8 },
+      "-=0.6"
+    )
+    .fromTo(buttonsRef.current,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      "-=0.4"
+    )
+    .fromTo(socialRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      "-=0.3"
+    );
+
+    // Progress bar animation
+    gsap.fromTo(progressBarRef.current,
+      { scaleX: 0 },
+      { 
+        scaleX: scrollProgress,
+        duration: 0.1,
+        ease: "none"
+      }
+    );
+
+    // Cleanup
+    return () => {
+      tl.kill();
+    };
+  }, []);
 
   return (
     <>
       {/* Scroll Progress Bar */}
-      <motion.div
+      <div
+        ref={progressBarRef}
         className="fixed top-0 left-0 right-0 h-1 z-50"
         style={{
           background: isDark
             ? "linear-gradient(to right, #2563eb, #9333ea, #db2777)"
             : "linear-gradient(to right, #159ccb, #0f7a9e, #0d5a7a)",
-          transform: `scaleX(${scrollProgress})`,
           transformOrigin: "0%",
         }}
       />
       
       <section
+        ref={heroRef}
         id="home"
         className={`min-h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-20 relative transition duration-300 ${
           !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
         } ${isDark ? "mt-16 sm:mt-20 md:mt-0" : "mt-20 sm:mt-24 md:mt-0"}`}
       >
         {/* Theme Toggle Switch */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <button
           onClick={() => setIsDark(!isDark)}
           className={`absolute top-6 right-6 z-50 w-12 h-6 sm:w-16 sm:h-8 rounded-full p-1 transition-colors duration-300 ease-in-out ${
             isDark 
@@ -63,43 +115,25 @@ const Hero = () => {
               : "bg-gradient-to-r from-[#159ccb] to-[#0f7a9e]"
           }`}
         >
-          <motion.div
+          <div
             className="w-4 h-4 sm:w-6 sm:h-6 rounded-full flex items-center justify-center bg-white shadow-lg"
-            animate={{
-              x: isDark ? (window.innerWidth < 640 ? 24 : 32) : 0,
-              transition: { 
-                type: "spring", 
-                stiffness: 400, 
-                damping: 25,
-                mass: 0.8
-              }
+            style={{
+              transform: `translateX(${isDark ? (window.innerWidth < 640 ? 24 : 32) : 0}px)`,
+              transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
             }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={isDark ? "sun" : "moon"}
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                exit={{ scale: 0, rotate: 180 }}
-                transition={{ duration: 0.15 }}
-              >
-                {isDark ? (
-                  <FaSun className="text-yellow-500 text-xs sm:text-sm" />
-                ) : (
-                  <FaMoon className="text-gray-800 text-xs sm:text-sm" />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </motion.button>
+            {isDark ? (
+              <FaSun className="text-yellow-500 text-xs sm:text-sm" />
+            ) : (
+              <FaMoon className="text-gray-800 text-xs sm:text-sm" />
+            )}
+          </div>
+        </button>
 
         <div className="max-w-7xl w-full grid md:grid-cols-2 gap-10 items-center">
           {/* RIGHT SIDE - IMAGE */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeIn}
-            transition={{ duration: 0.3 }}
+          <div
+            ref={imageRef}
             className="flex justify-center order-1 md:order-2"
           >
             <div
@@ -123,14 +157,11 @@ const Hero = () => {
                 />
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* LEFT SIDE */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeIn}
-            transition={{ duration: 0.3 }}
+          <div
+            ref={textRef}
             className={`space-y-6 order-2 md:order-1 ${
               isDark ? "text-white" : "text-[#111827]"
             } transition duration-300`}
@@ -157,10 +188,8 @@ const Hero = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            <div ref={buttonsRef} className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
+              <a
                 href="/Ankit_Gupta_SDE_Resume.pdf"
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
                   isDark
@@ -176,10 +205,8 @@ const Hero = () => {
                 }`}>
                   View CV <HiOutlineDocumentArrowDown className="text-lg" />
                 </span>
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              </a>
+              <a
                 href="https://leetcode.com/ankitguptaa17"
                 target="_blank"
                 rel="noreferrer"
@@ -197,55 +224,49 @@ const Hero = () => {
                 }`}>
                   LeetCode <FaCode className="text-lg" />
                 </span>
-              </motion.a>
+              </a>
             </div>
 
             {/* Social Links */}
-            <div className="flex gap-4 pt-2 justify-center md:justify-start">
-              <motion.a
-                whileHover={{ scale: 1.2, y: -5 }}
-                whileTap={{ scale: 0.95 }}
+            <div ref={socialRef} className="flex gap-4 pt-2 justify-center md:justify-start">
+              <a
                 href="https://github.com/ankit-gupta-git"
                 target="_blank"
                 rel="noreferrer"
-                className={`p-3 rounded-full transition-all duration-300 ${
+                className={`p-3 rounded-full transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
                   isDark
                     ? "bg-white/10 hover:bg-white/20 text-white"
                     : "bg-white/80 backdrop-blur-md shadow-sm hover:shadow-md text-[#111827]"
                 }`}
               >
                 <FaGithub className="text-xl" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+              </a>
+              <a
                 href="https://linkedin.com/in/ankit-gupta-17"
                 target="_blank"
                 rel="noreferrer"
-                className={`p-3 rounded-full transition-all duration-300 ${
+                className={`p-3 rounded-full transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
                   isDark
                     ? "bg-white/10 hover:bg-white/20 text-white"
                     : "bg-white/80 backdrop-blur-md shadow-sm hover:shadow-md text-[#111827]"
                 }`}
               >
                 <FaLinkedin className="text-xl" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+              </a>
+              <a
                 href="https://twitter.com/ankitguptaa17"
                 target="_blank"
                 rel="noreferrer"
-                className={`p-3 rounded-full transition-all duration-300 ${
+                className={`p-3 rounded-full transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
                   isDark
                     ? "bg-white/10 hover:bg-white/20 text-white"
                     : "bg-white/80 backdrop-blur-md shadow-sm hover:shadow-md text-[#111827]"
                 }`}
               >
                 <FaXTwitter className="text-xl" />
-              </motion.a>
+              </a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </>

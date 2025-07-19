@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ui/ThemeContext";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import "swiper/css";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -52,64 +56,80 @@ const Projects = () => {
   const { isDark } = useTheme();
   const [modalProject, setModalProject] = useState(null);
 
-  // Optimized animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
+  // Refs for GSAP animations
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const projectsGridRef = useRef(null);
+  const projectCardsRef = useRef([]);
+
+  // GSAP Animations
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        end: "bottom 10%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    // Section entrance animation
+    tl.fromTo(sectionRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8 }
+    )
+    .fromTo(titleRef.current,
+      { opacity: 0, y: 30, scale: 0.9 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+      "-=0.4"
+    )
+    .fromTo(subtitleRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      "-=0.3"
+    )
+    .fromTo(projectsGridRef.current,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.8 },
+      "-=0.4"
+    );
+
+    // Stagger animation for project cards
+    gsap.fromTo(projectCardsRef.current,
+      { opacity: 0, y: 50, scale: 0.9 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
         duration: 0.6,
-        ease: "easeOut",
-        when: "beforeChildren",
-        staggerChildren: 0.1
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: projectsGridRef.current,
+          start: "top 95%", // Changed from 85% to 95% - triggers much earlier
+          end: "bottom 5%",
+          toggleActions: "play none none reverse"
+        }
       }
-    }
-  };
+    );
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const modalVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut"
-      }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.8,
-      transition: {
-        duration: 0.2,
-        ease: "easeIn"
-      }
-    }
-  };
+    // Cleanup
+    return () => {
+      tl.kill();
+    };
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="projects"
       className={`py-20 px-6 md:px-16 relative ${
         !isDark ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]" : ""
       }`}
     >
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+      <h2
+        ref={titleRef}
         className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik ${
           isDark
             ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
@@ -117,12 +137,9 @@ const Projects = () => {
         } mb-4 pb-2`}
       >
         Projects
-      </motion.h2>
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+      </h2>
+      <div 
+        ref={subtitleRef}
         className="flex flex-col items-start mb-8 sm:mb-12"
       >
         <h3 className="font-dxgrafik text-2xl sm:text-3xl md:text-4xl font-extrabold flex items-center gap-2 text-left">
@@ -134,25 +151,22 @@ const Projects = () => {
         <p className={`mt-3 sm:mt-4 text-sm sm:text-md text-left ${isDark ? "text-gray-300" : "text-gray-600"}`}>
           Each project is unique. Here are some of my works.
         </p>
-      </motion.div>
+      </div>
 
       {/* Projects Grid */}
-      <motion.div 
+      <div 
+        ref={projectsGridRef}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
       >
         {projects.map((project, index) => (
-          <motion.div
+          <div
             key={index}
-            variants={itemVariants}
+            ref={el => projectCardsRef.current[index] = el}
             className={`h-auto flex flex-col justify-between ${
               isDark
                 ? "bg-[#101014]"
                 : "bg-white/90 backdrop-blur-[20px] shadow-lg border border-white/50"
-            } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300`}
+            } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105`}
             onClick={() => setModalProject(project)}
           >
             <div className="w-full h-48 sm:h-56 overflow-hidden relative group">
@@ -197,13 +211,11 @@ const Projects = () => {
               </div>
 
               <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5`}>
-                <motion.a 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <a 
                   href={project.github} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center ${
+                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center hover:scale-105 ${
                     isDark 
                       ? "bg-[#23232a] hover:bg-[#23232a]/80 text-white" 
                       : "bg-gray-800 hover:bg-gray-700 text-white"
@@ -211,126 +223,118 @@ const Projects = () => {
                 >
                   <FaGithub className="text-lg sm:text-xl" />
                   <span className="font-medium">GitHub</span>
-                </motion.a>
-                <motion.a 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                </a>
+                <a 
                   href={project.live} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white`}
+                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105`}
                 >
                   <FaExternalLinkAlt className="text-lg sm:text-xl" />
                   <span className="font-medium">Live Demo</span>
-                </motion.a>
+                </a>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
 
       {/* MODAL */}
-      <AnimatePresence>
-        {modalProject && (
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={modalVariants}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-            onClick={() => setModalProject(null)}
+      {modalProject && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          onClick={() => setModalProject(null)}
+        >
+          <div
+            className={`w-full max-w-4xl rounded-2xl flex flex-col md:flex-row overflow-hidden shadow-2xl relative ${
+              isDark ? "bg-[#18181b]" : "bg-white/95 backdrop-blur-[20px]"
+            }`}
+            onClick={e => e.stopPropagation()}
           >
-            <motion.div
-              className={`w-full max-w-4xl rounded-2xl flex flex-col md:flex-row overflow-hidden shadow-2xl relative ${
-                isDark ? "bg-[#18181b]" : "bg-white/95 backdrop-blur-[20px]"
-              }`}
-              onClick={e => e.stopPropagation()}
-            >
-              {/* Left: Project Image */}
-              <div className={`md:w-1/2 w-full flex items-center justify-center p-6 ${
-                isDark ? "bg-[#101014]" : "bg-gray-50"
-              }`}>
-                <img
-                  src={modalProject.image}
-                  alt={modalProject.title}
-                  className={`rounded-xl w-full h-auto max-h-96 object-contain ${
-                    isDark ? "bg-[#18181b]" : "bg-white"
-                  }`}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/400x300?text=Project+Image';
-                  }}
-                />
+            {/* Left: Project Image */}
+            <div className={`md:w-1/2 w-full flex items-center justify-center p-6 ${
+              isDark ? "bg-[#101014]" : "bg-gray-50"
+            }`}>
+              <img
+                src={modalProject.image}
+                alt={modalProject.title}
+                className="w-full h-64 md:h-80 object-cover rounded-lg"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://via.placeholder.com/400x300?text=Project+Image";
+                }}
+              />
+            </div>
+
+            {/* Right: Project Details */}
+            <div className="md:w-1/2 w-full p-6 md:p-8 flex flex-col justify-between">
+              <div>
+                <h3 className={`text-2xl md:text-3xl font-bold mb-4 ${
+                  isDark ? "text-white" : "text-[#111827]"
+                }`}>
+                  {modalProject.title}
+                </h3>
+                <p className={`text-sm md:text-base leading-relaxed mb-6 font-jetbrains ${
+                  isDark ? "text-gray-300" : "text-gray-700"
+                }`}>
+                  {modalProject.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {modalProject.tech.map((tech, index) => (
+                    <span
+                      key={index}
+                      className={`px-3 py-1 text-sm rounded-full ${
+                        isDark 
+                          ? "bg-neutral-800 text-white" 
+                          : "bg-[#cceeff] text-[#159ccb]"
+                      }`}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
-              {/* Right: Project Details */}
-              <div className="md:w-1/2 w-full flex flex-col justify-between p-6 relative">
-                {/* Close Button */}
-                <button
-                  className={`absolute top-4 right-4 text-2xl rounded-full w-10 h-10 flex items-center justify-center transition ${
+
+              <div className="flex gap-3">
+                <a
+                  href={modalProject.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all flex-1 justify-center hover:scale-105 ${
                     isDark 
-                      ? "text-white bg-black/30 hover:bg-black/60" 
-                      : "text-gray-600 bg-gray-200 hover:bg-gray-300"
+                      ? "bg-[#23232a] hover:bg-[#23232a]/80 text-white" 
+                      : "bg-gray-800 hover:bg-gray-700 text-white"
                   }`}
-                  onClick={() => setModalProject(null)}
-                  aria-label="Close"
                 >
-                  &times;
-                </button>
-                <div>
-                  <h3 className={`text-3xl font-bold font-dxgrafik mb-4 ${
-                    isDark ? "text-white" : "text-[#111827]"
-                  }`}>{modalProject.title}</h3>
-                  <p className={`mb-6 font-figtree text-base sm:text-lg leading-relaxed ${
-                    isDark ? "text-gray-300" : "text-gray-700"
-                  }`}>{modalProject.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {modalProject.tech.map((tech, index) => (
-                      <span
-                        key={index}
-                        className={`px-3 py-1 rounded-full text-xs sm:text-sm font-figtree ${
-                          isDark 
-                            ? "bg-[#23232a] text-white" 
-                            : "bg-[#cceeff] text-[#159ccb]"
-                        }`}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex gap-4 mt-auto">
-                  <motion.a
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    href={modalProject.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white border-none font-figtree text-base ${
-                      isDark 
-                        ? "bg-[#23232a]" 
-                        : "bg-gray-800 hover:bg-gray-700"
-                    }`}
-                  >
-                    <FaGithub className="text-xl" />
-                    <span>GitHub</span>
-                  </motion.a>
-                  <motion.a
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    href={modalProject.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#159ccb] hover:bg-[#0f7a9e] text-white font-figtree text-base"
-                  >
-                    <FaExternalLinkAlt className="text-xl" />
-                    <span>Live Demo</span>
-                  </motion.a>
-                </div>
+                  <FaGithub className="text-lg" />
+                  <span className="font-medium">GitHub</span>
+                </a>
+                <a
+                  href={modalProject.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105"
+                >
+                  <FaExternalLinkAlt className="text-lg" />
+                  <span className="font-medium">Live Demo</span>
+                </a>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setModalProject(null)}
+              className={`absolute top-4 right-4 p-2 rounded-full transition-all hover:scale-110 ${
+                isDark ? "bg-[#23232a] text-white" : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

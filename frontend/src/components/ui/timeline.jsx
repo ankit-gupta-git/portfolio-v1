@@ -1,12 +1,22 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useScroll, useTransform, motion } from "framer-motion";
 import { useTheme } from "./ThemeContext";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const Timeline = ({ data }) => {
   const { isDark } = useTheme();
   const timelineRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const [lineHeight, setLineHeight] = useState(0);
+  
+  // Refs for GSAP animations
+  const headingRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const timelineItemsRef = useRef([]);
+  const scrollLineRef = useRef(null);
 
   useEffect(() => {
     if (timelineRef.current) {
@@ -15,22 +25,74 @@ const Timeline = ({ data }) => {
     }
   }, []);
 
-  const { scrollYProgress } = useScroll({
-    target: scrollContainerRef,
-    offset: ["start 10%", "end 50%"],
-  });
+  // GSAP animations
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: scrollContainerRef.current,
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none reverse"
+      }
+    });
 
-  const animatedLineHeight = useTransform(scrollYProgress, [0, 1], [0, lineHeight]);
-  const animatedOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
+    // Heading animations
+    tl.fromTo(headingRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5 }
+    )
+    .fromTo(descriptionRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5 },
+      "-=0.3"
+    );
+
+    // Timeline items stagger animation
+    gsap.fromTo(timelineItemsRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.2,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: timelineRef.current,
+          start: "top 85%",
+          end: "bottom 15%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Scroll line animation
+    gsap.fromTo(scrollLineRef.current,
+      { scaleY: 0, transformOrigin: "top" },
+      {
+        scaleY: 1,
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: timelineRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Cleanup
+    return () => {
+      tl.kill();
+    };
+  }, [data]);
 
   return (
     <div ref={scrollContainerRef} className="w-full relative overflow-hidden">
       {/* Heading */}
       <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10 relative z-10">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+        <h2
+          ref={headingRef}
           className={`text-2xl md:text-4xl font-bold mb-4 ${
             isDark
               ? "text-white bg-clip-text text-transparent bg-gradient-to-r from-neutral-200 to-neutral-400"
@@ -38,27 +100,23 @@ const Timeline = ({ data }) => {
           }`}
         >
           Journey Through Time
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+        </h2>
+        <p
+          ref={descriptionRef}
           className={`text-sm md:text-base max-w-xl font-figtree ${
             isDark ? "text-neutral-400" : "text-gray-600"
           }`}
         >
           A chronicle of my professional evolution and key milestones.
-        </motion.p>
+        </p>
       </div>
 
       {/* Timeline Entries */}
       <div ref={timelineRef} className="relative max-w-7xl mx-auto pb-20">
         {data.map((item, index) => (
-          <motion.div
+          <div
             key={index}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            ref={el => timelineItemsRef.current[index] = el}
             className="flex justify-start pt-10 md:pt-40 md:gap-10"
           >
             {/* Dot & Sticky Title */}
@@ -98,11 +156,12 @@ const Timeline = ({ data }) => {
                 isDark ? "prose-invert text-neutral-300" : "text-gray-600"
               }`}>{item.content}</div>
             </div>
-          </motion.div>
+          </div>
         ))}
 
         {/* Scroll Line */}
         <div
+          ref={scrollLineRef}
           className={`absolute left-8 top-0 w-[2px] ${
             isDark
               ? "bg-gradient-to-b from-transparent via-neutral-800 to-transparent"
@@ -110,13 +169,13 @@ const Timeline = ({ data }) => {
           }`}
           style={{ height: `${lineHeight}px` }}
         >
-          <motion.div
-            style={{ height: animatedLineHeight, opacity: animatedOpacity }}
+          <div
             className={`absolute inset-x-0 top-0 ${
               isDark
                 ? "bg-gradient-to-b from-blue-500 via-purple-500 to-transparent"
                 : "bg-gradient-to-b from-blue-400 via-purple-400 to-transparent"
             } rounded-full`}
+            style={{ height: `${lineHeight}px` }}
           />
         </div>
       </div>
