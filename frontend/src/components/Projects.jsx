@@ -77,22 +77,22 @@ const Projects = () => {
     // Section entrance animation
     tl.fromTo(sectionRef.current,
       { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.8 }
+      { opacity: 1, y: 0, duration: 0.4 }
     )
     .fromTo(titleRef.current,
       { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
-      "-=0.4"
+      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
+      "-=0.2"
     )
     .fromTo(subtitleRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6 },
-      "-=0.3"
+      { opacity: 1, y: 0, duration: 0.3 },
+      "-=0.15"
     )
     .fromTo(projectsGridRef.current,
       { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8 },
-      "-=0.4"
+      { opacity: 1, y: 0, duration: 0.4 },
+      "-=0.2"
     );
 
     // Stagger animation for project cards
@@ -102,8 +102,8 @@ const Projects = () => {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.6,
-        stagger: 0.1,
+        duration: 0.3,
+        stagger: 0.05,
         ease: "power2.out",
         scrollTrigger: {
           trigger: projectsGridRef.current,

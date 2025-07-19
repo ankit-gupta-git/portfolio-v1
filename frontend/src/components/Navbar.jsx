@@ -46,27 +46,26 @@ const Navbar = () => {
     // Navbar entrance animation
     gsap.fromTo(navbarRef.current,
       { opacity: 0, y: -20 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+      { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
     );
 
     // Welcome text animation
     gsap.fromTo(welcomeTextRef.current,
       { opacity: 0, x: -10 },
-      { opacity: 1, x: 0, duration: 0.5, delay: 0.2, ease: "power2.out" }
+      { opacity: 1, x: 0, duration: 0.25, delay: 0.1, ease: "power2.out" }
     );
   }, []);
 
-  // Mobile menu animation
+  // Mobile menu animations
   useEffect(() => {
     if (menuOpen) {
-      gsap.fromTo(mobileMenuRef.current,
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }
-      );
+      gsap.to(mobileMenuRef.current, {
+        y: 0, opacity: 1, duration: 0.2, ease: "power2.out"
+      });
     } else {
-      gsap.to(mobileMenuRef.current,
-        { y: -20, opacity: 0, duration: 0.2, ease: "power2.in" }
-      );
+      gsap.to(mobileMenuRef.current, {
+        y: -20, opacity: 0, duration: 0.15, ease: "power2.in"
+      });
     }
   }, [menuOpen]);
 

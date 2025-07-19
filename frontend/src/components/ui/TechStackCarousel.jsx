@@ -48,8 +48,8 @@ const Carousel = ({ direction = "left", isDark }) => {
         y: 0,
         scale: 1,
         rotation: 0,
-        duration: 0.6,
-        stagger: 0.05,
+        duration: 0.3,
+        stagger: 0.03,
         ease: "power2.out",
         scrollTrigger: {
           trigger: listRef.current,
@@ -89,7 +89,7 @@ const Carousel = ({ direction = "left", isDark }) => {
                 gsap.to(techItemsRef.current[idx], {
                   scale: 1.15,
                   y: -5,
-                  duration: 0.3,
+                  duration: 0.2,
                   ease: "power2.out"
                 });
               }}
@@ -99,7 +99,7 @@ const Carousel = ({ direction = "left", isDark }) => {
                 gsap.to(techItemsRef.current[idx], {
                   scale: 1,
                   y: 0,
-                  duration: 0.3,
+                  duration: 0.2,
                   ease: "power2.out"
                 });
               }}
@@ -153,17 +153,17 @@ const TechStackCarousel = () => {
     // Section entrance animation
     tl.fromTo(sectionRef.current,
       { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.8 }
+      { opacity: 1, y: 0, duration: 0.4 }
     )
     .fromTo(titleRef.current,
       { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
-      "-=0.4"
+      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
+      "-=0.2"
     )
     .fromTo(carouselRef.current,
       { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8 },
-      "-=0.3"
+      { opacity: 1, y: 0, duration: 0.4 },
+      "-=0.15"
     );
 
     // Cleanup

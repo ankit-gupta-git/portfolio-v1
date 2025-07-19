@@ -180,17 +180,17 @@ const Experience = () => {
     // Section entrance animation
     tl.fromTo(sectionRef.current,
       { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.8 }
+      { opacity: 1, y: 0, duration: 0.4 }
     )
     .fromTo(titleRef.current,
       { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
-      "-=0.4"
+      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
+      "-=0.2"
     )
     .fromTo(timelineRef.current,
       { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8 },
-      "-=0.3"
+      { opacity: 1, y: 0, duration: 0.4 },
+      "-=0.2"
     );
 
     // Cleanup

@@ -85,18 +85,18 @@ const CursorAnimation = () => {
     const handleMouseEnter = () => {
       gsap.to(cursor, {
         scale: 2,
-        duration: 0.4,
+        duration: 0.2,
         ease: "elastic.out(1, 0.3)",
       });
       gsap.to(cursorTrail, {
         scale: 1.5,
-        duration: 0.4,
+        duration: 0.2,
         ease: "elastic.out(1, 0.3)",
       });
       gsap.to(cursorGlow, {
         scale: 1.8,
         opacity: 0.8,
-        duration: 0.4,
+        duration: 0.2,
         ease: "power2.out",
       });
     };
@@ -104,18 +104,18 @@ const CursorAnimation = () => {
     const handleMouseLeave = () => {
       gsap.to(cursor, {
         scale: 1,
-        duration: 0.4,
+        duration: 0.2,
         ease: "elastic.out(1, 0.3)",
       });
       gsap.to(cursorTrail, {
         scale: 1,
-        duration: 0.4,
+        duration: 0.2,
         ease: "elastic.out(1, 0.3)",
       });
       gsap.to(cursorGlow, {
         scale: 1,
         opacity: 0.4,
-        duration: 0.4,
+        duration: 0.2,
         ease: "power2.out",
       });
     };

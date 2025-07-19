@@ -80,22 +80,22 @@ const Blog = () => {
     // Section entrance animation
     tl.fromTo(sectionRef.current,
       { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.8 }
+      { opacity: 1, y: 0, duration: 0.4 }
     )
     .fromTo(headerRef.current,
       { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8 },
-      "-=0.4"
+      { opacity: 1, y: 0, duration: 0.4 },
+      "-=0.2"
     )
     .fromTo(titleRef.current,
       { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
-      "-=0.6"
+      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
+      "-=0.3"
     )
     .fromTo(descriptionRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6 },
-      "-=0.4"
+      { opacity: 1, y: 0, duration: 0.3 },
+      "-=0.2"
     );
 
     // Stagger animation for blog cards
@@ -105,8 +105,8 @@ const Blog = () => {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.7,
-        stagger: 0.15,
+        duration: 0.35,
+        stagger: 0.08,
         ease: "power2.out",
         scrollTrigger: {
           trigger: blogCardsRef.current[0],
@@ -123,7 +123,7 @@ const Blog = () => {
       {
         opacity: 1,
         y: 0,
-        duration: 0.6,
+        duration: 0.3,
         ease: "power2.out",
         scrollTrigger: {
           trigger: ctaRef.current,

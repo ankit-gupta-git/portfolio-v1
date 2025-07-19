@@ -50,27 +50,27 @@ const Contact = () => {
     // Section entrance animation
     tl.fromTo(sectionRef.current,
       { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.8 }
+      { opacity: 1, y: 0, duration: 0.4 }
     )
     .fromTo(titleRef.current,
       { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6 },
-      "-=0.6"
+      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
+      "-=0.3"
     )
     .fromTo(descriptionRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6 },
-      "-=0.4"
+      { opacity: 1, y: 0, duration: 0.3 },
+      "-=0.2"
     )
     .fromTo(formLeftRef.current,
       { opacity: 0, x: -50 },
-      { opacity: 1, x: 0, duration: 0.7 },
-      "-=0.4"
+      { opacity: 1, x: 0, duration: 0.35 },
+      "-=0.2"
     )
     .fromTo(formRightRef.current,
       { opacity: 0, x: 50 },
-      { opacity: 1, x: 0, duration: 0.7 },
-      "-=0.5"
+      { opacity: 1, x: 0, duration: 0.35 },
+      "-=0.25"
     );
 
     // Cleanup

@@ -39,12 +39,12 @@ const Timeline = ({ data }) => {
     // Heading animations
     tl.fromTo(headingRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.5 }
+      { opacity: 1, y: 0, duration: 0.25 }
     )
     .fromTo(descriptionRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.5 },
-      "-=0.3"
+      { opacity: 1, y: 0, duration: 0.25 },
+      "-=0.15"
     );
 
     // Timeline items stagger animation
@@ -53,8 +53,8 @@ const Timeline = ({ data }) => {
       {
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        stagger: 0.2,
+        duration: 0.3,
+        stagger: 0.1,
         ease: "power2.out",
         scrollTrigger: {
           trigger: timelineRef.current,
@@ -70,7 +70,7 @@ const Timeline = ({ data }) => {
       { scaleY: 0, transformOrigin: "top" },
       {
         scaleY: 1,
-        duration: 1.5,
+        duration: 0.8,
         ease: "power2.out",
         scrollTrigger: {
           trigger: timelineRef.current,
