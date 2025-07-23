@@ -1,19 +1,14 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const axios = require('axios');
 const NodeCache = require('node-cache');
 
 // Initialize cache with 5 minutes TTL
 const cache = new NodeCache({ stdTTL: 300 });
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({
-  model: "gemini-1.0-pro",
-  generationConfig: {
-    temperature: 0.7,
-    topK: 1,
-    topP: 1,
-    maxOutputTokens: 2048,
-  },
-  systemInstruction: `
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const MODEL = 'mixtral-8x7b-32768';
+
+const systemPrompt = `
 You are Ankit Gupta's personal AI assistant. When responding to queries, follow these guidelines:
 
 **Response Style**
@@ -75,8 +70,7 @@ Let me know if you'd like to hear more about my project approach or tech stack c
 - Maintain a growth-oriented mindset, highlighting how setbacks have shaped your skills.
 - Show a problem-solving attitude and a passion for real-world applications.
 - Emphasize teamwork, collaboration, and a positive mindset towards challenges.
-  `,
-});
+`;
 
 async function generateContent(prompt) {
   // Check cache first
@@ -87,15 +81,30 @@ async function generateContent(prompt) {
   }
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = result.response.text();
-    
+    const response = await axios.post(
+      GROQ_API_URL,
+      {
+        model: MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 2048
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    const aiText = response.data.choices[0].message.content;
     // Cache the response
-    cache.set(cacheKey, response);
-    
-    return response;
+    cache.set(cacheKey, aiText);
+    return aiText;
   } catch (error) {
-    console.error('Error generating content:', error);
+    console.error('Error generating content:', error?.response?.data || error);
     throw error;
   }
 }
