@@ -152,7 +152,12 @@ const AIAssistantWidget = () => {
     updates();
 
     try {
+      console.log('🔄 Frontend: Making request to:', API_URL);
+      console.log('🔄 Frontend: Request payload:', { prompt: messageToSend });
+      
       const response = await axios.post(API_URL, { prompt: messageToSend });
+      
+      console.log('✅ Frontend: Response received:', response.data);
       
       // Batch state updates for response
       const responseUpdates = () => {
@@ -168,7 +173,14 @@ const AIAssistantWidget = () => {
         typeMessage(response.data.response);
       }, 500); // Further reduced from 800ms to 500ms
     } catch (error) {
-      console.error("Error fetching response:", error);
+      console.error("❌ Frontend: Error fetching response:", error);
+      console.error("❌ Frontend: Error details:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        url: API_URL
+      });
+      
       const errorUpdates = () => {
         setIsLoading(false);
         setIsThinking(true);
@@ -226,7 +238,7 @@ const AIAssistantWidget = () => {
                     </span>
                     <div>
                       <span className="font-semibold text-base sm:text-lg text-white">AI Assistant</span>
-                      <div className="text-xs sm:text-sm text-blue-200">Powered by Gemini AI</div>
+                      <div className="text-xs sm:text-sm text-blue-200">Powered by Groq AI</div>
                     </div>
                   </div>
                   <button

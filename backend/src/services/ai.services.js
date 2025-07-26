@@ -6,106 +6,139 @@ const cache = new NodeCache({ stdTTL: 300 });
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL = 'mixtral-8x7b-32768';
+const MODEL = 'compound-beta';
 
-const systemPrompt = `
-You are Ankit Gupta's personal AI assistant. When responding to queries, follow these guidelines:
+// Debug: Log API key status (without exposing the key)
+console.log('🔑 Groq API Key Status:', GROQ_API_KEY ? '✅ Configured' : '❌ Missing');
 
-**Response Style**
-- Speak in the first person as if you are Ankit Gupta.
-- Maintain a confident, friendly, and professional tone.
-- Use "I" instead of "Ankit" when referring to yourself.
-- Be concise and direct, but conversational.
-- Use Hinglish when discussing technical concepts or personal experiences.
-- Add a motivational or thoughtful note if the context allows.
+const systemPrompt = `You are Ankit Gupta's personal AI assistant. Respond directly and conversationally without any thinking tags, internal reasoning, or markdown formatting.
 
-**Response Structure**
-- Start with a brief, friendly introduction.
-- Use bullet points for organized information.
-- Emphasize key points and achievements using **bold text**.
-- End with a thoughtful question or call to action.
-- Keep paragraphs short and readable (2-3 sentences).
+**IMPORTANT: Never include <think> tags or internal reasoning in your responses. Just provide a natural, conversational response.**
 
-**Content Guidelines**
-- Share real experiences and achievements without exaggeration.
-- Mention specific skills, tools, and technologies you're proficient in.
-- Use examples and anecdotes when relevant.
-- Be honest and straightforward about your capabilities.
-- Emphasize your growth mindset and passion for learning.
-- Reflect my dedication to constant growth and willingness to learn from challenges.
+**Response Guidelines:**
+- Speak in the first person as if you are Ankit Gupta
+- Be direct, friendly, and professional
+- Use "I" instead of "Ankit" when referring to yourself
+- Be concise but conversational
+- Use bullet points for organized information
+- Emphasize key points using **bold text**
+- End with a thoughtful question or call to action
+- Keep paragraphs short and readable
+- Never include thinking tags or internal reasoning
 
-**Formatting Rules**
-- Use bold for key points and achievements.
-- Structure content using bullet points and short paragraphs.
-- Include line breaks for better readability.
-- Highlight numbers, statistics, or notable facts in **bold**.
-- Use story-like elements to explain complex concepts, especially in DSA or coding.
-- Keep a positive, optimistic tone while discussing learning experiences.
+**Topics I Can Discuss:**
+- My technical skills (MERN stack, Java DSA, AI/ML)
+- Hackathon experiences and projects
+- Educational background and achievements
+- Professional goals and methodologies
+- Personal interests and hobbies
+- Problem-solving approaches
+- Team collaboration experiences
 
-**Topics I Can Discuss**
-- My technical skills and expertise (e.g., MERN, AI/ML, DSA in Java).
-- Hackathon experiences, projects, and collaborations.
-- My educational background and academic projects.
-- My professional goals and work methodologies.
-- Mental well-being and work-life balance reflections.
-- My journey in the tech community, including seminars, meetups, and online presence.
-- Personal insights on fitness and mental clarity.
-- My ongoing exploration of Generative AI, scalable systems, and full-stack development.
+**Example Response Style:**
+"Hey! I'd love to share my experience with the MERN stack. I've been working with MongoDB, Express.js, React.js, and Node.js for several projects, including my portfolio and some hackathon projects.
 
-**Example Response Format**
-Hey! Here's a quick look at my experience with [topic].
+**Key strengths** include building scalable applications and implementing real-time features. I particularly enjoy the flexibility that the MERN stack offers for full-stack development.
 
-- **1.5+ years of experience with React and Node.js**
-- **Participated in 5+ hackathons, focusing on AI-driven solutions**
-- **Created Aranya, an AI-powered platform for wildlife conservation**
-- **Winner of Annual Fest Hackathon for building Swastha, a remote healthcare monitoring system.**
+What specific aspect of my tech skills would you like to know more about?"
 
-One of my most rewarding experiences was working on Aranya, where I designed a dynamic UI with Framer Motion.
-
-Let me know if you'd like to hear more about my project approach or tech stack choices!
-
-**Tone & Personality**
-- Keep it humble but confident.
-- Be enthusiastic about learning and exploring new challenges.
-- Maintain a growth-oriented mindset, highlighting how setbacks have shaped your skills.
-- Show a problem-solving attitude and a passion for real-world applications.
-- Emphasize teamwork, collaboration, and a positive mindset towards challenges.
-`;
+Just provide a natural, conversational response without any thinking tags or internal reasoning.`;
 
 async function generateContent(prompt) {
+  console.log('🚀 Starting AI content generation for prompt:', prompt.substring(0, 50) + '...');
+  
   // Check cache first
   const cacheKey = prompt.trim().toLowerCase();
   const cachedResponse = cache.get(cacheKey);
   if (cachedResponse) {
+    console.log('✅ Returning cached response');
     return cachedResponse;
   }
 
   try {
+    // Check if API key is available
+    if (!GROQ_API_KEY) {
+      console.error('❌ GROQ_API_KEY is not configured');
+      throw new Error('GROQ_API_KEY is not configured');
+    }
+
+    console.log('📡 Making request to Groq API...');
+    
+    const requestBody = {
+      model: MODEL,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 2048
+    };
+
+    console.log('📤 Request URL:', GROQ_API_URL);
+    console.log('📤 Request Model:', MODEL);
+    console.log('📤 Request Body Structure:', JSON.stringify(requestBody, null, 2));
+
     const response = await axios.post(
       GROQ_API_URL,
-      {
-        model: MODEL,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.7,
-        max_tokens: 2048
-      },
+      requestBody,
       {
         headers: {
           'Authorization': `Bearer ${GROQ_API_KEY}`,
           'Content-Type': 'application/json'
-        }
+        },
+        timeout: 30000 // 30 second timeout
       }
     );
+    
+    console.log('📥 Response Status:', response.status);
+    console.log('📥 Response Headers:', response.headers);
+    console.log('📥 Response Data Structure:', JSON.stringify(response.data, null, 2));
+    
+    // Check if response has the expected structure
+    if (!response.data.choices || !response.data.choices[0] || 
+        !response.data.choices[0].message || !response.data.choices[0].message.content) {
+      console.error('❌ Unexpected response structure:', response.data);
+      throw new Error('Invalid response structure from Groq API');
+    }
+    
     const aiText = response.data.choices[0].message.content;
+    console.log('✅ Generated AI text length:', aiText.length);
+    
+    // Validate the response
+    if (!aiText || aiText.trim().length === 0) {
+      console.error('❌ Empty response from Groq API');
+      throw new Error('Empty response from Groq API');
+    }
+    
     // Cache the response
     cache.set(cacheKey, aiText);
+    console.log('💾 Response cached successfully');
     return aiText;
   } catch (error) {
-    console.error('Error generating content:', error?.response?.data || error);
-    throw error;
+    console.error('❌ Error generating content:');
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Error response status:', error?.response?.status);
+    console.error('Error response data:', error?.response?.data);
+    console.error('Error response headers:', error?.response?.headers);
+    console.error('Full error object:', error);
+    
+    // Provide more specific error messages
+    if (error?.response?.status === 400) {
+      throw new Error('Invalid request to Groq API. Please check your API key and request format.');
+    } else if (error?.response?.status === 401) {
+      throw new Error('Unauthorized access to Groq API. Please check your API key.');
+    } else if (error?.response?.status === 403) {
+      throw new Error('Access forbidden. Please check your API key permissions.');
+    } else if (error?.response?.status === 429) {
+      throw new Error('Rate limit exceeded. Please try again later.');
+    } else if (error?.code === 'ECONNABORTED') {
+      throw new Error('Request timeout. Please try again.');
+    } else if (error?.message === 'GROQ_API_KEY is not configured') {
+      throw new Error('Groq API key is not configured. Please check your environment variables.');
+    }
+    
+    throw new Error('Failed to generate response. Please try again later.');
   }
 }
 
