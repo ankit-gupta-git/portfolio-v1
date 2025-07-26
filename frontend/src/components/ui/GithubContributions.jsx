@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GitHubCalendar from "react-github-calendar";
-import { Github } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 import { useTheme } from "./ThemeContext";
 
 const GITHUB_USERNAME = "ankit-gupta-git";
@@ -131,7 +131,7 @@ const GithubContributions = () => {
             : "bg-white/80 backdrop-blur-md text-[#111827] hover:bg-white shadow-lg border border-white/50"
         }`}
       >
-        <Github className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
+        <FaGithub className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
         View GitHub Profile
       </a>
     </section>

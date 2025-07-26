@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
-import { MessageCircle, Send, Search, Palette, ChevronDown } from 'lucide-react';
+import { FaComments, FaPaperPlane, FaSearch, FaPalette, FaChevronDown, FaRobot, FaTimes } from 'react-icons/fa';
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown';
 
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}/ai/get-response`;
 
 const suggestionChips = [
-  { icon: <Palette size={16} />, text: 'Tell me about your skills' },
-  { icon: <MessageCircle size={16} />, text: 'What projects have you worked on?' },
-  { icon: <MessageCircle size={16} />, text: 'Tell me about your experience' },
+  { icon: <FaPalette size={16} />, text: 'Tell me about your skills' },
+  { icon: <FaComments size={16} />, text: 'What projects have you worked on?' },
+  { icon: <FaComments size={16} />, text: 'Tell me about your experience' },
 ];
 
 // Memoized suggestion chips
