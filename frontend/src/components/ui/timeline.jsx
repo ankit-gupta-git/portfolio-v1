@@ -27,6 +27,11 @@ const Timeline = ({ data }) => {
 
   // GSAP animations
   useEffect(() => {
+    // Check if all refs are available before creating animations
+    if (!scrollContainerRef.current || !headingRef.current || !descriptionRef.current || !timelineRef.current || !scrollLineRef.current) {
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: scrollContainerRef.current,
@@ -48,22 +53,24 @@ const Timeline = ({ data }) => {
     );
 
     // Timeline items stagger animation
-    gsap.fromTo(timelineItemsRef.current,
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.3,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: timelineRef.current,
-          start: "top 85%",
-          end: "bottom 15%",
-          toggleActions: "play none none reverse"
+    if (timelineItemsRef.current && timelineItemsRef.current.length > 0) {
+      gsap.fromTo(timelineItemsRef.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.3,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: timelineRef.current,
+            start: "top 85%",
+            end: "bottom 15%",
+            toggleActions: "play none none reverse"
+          }
         }
-      }
-    );
+      );
+    }
 
     // Scroll line animation
     gsap.fromTo(scrollLineRef.current,
@@ -83,7 +90,9 @@ const Timeline = ({ data }) => {
 
     // Cleanup
     return () => {
-      tl.kill();
+      if (tl) {
+        tl.kill();
+      }
     };
   }, [data]);
 

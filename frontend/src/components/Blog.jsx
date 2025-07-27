@@ -68,6 +68,11 @@ const Blog = () => {
 
   // GSAP Animations
   useEffect(() => {
+    // Check if all refs are available before creating animations
+    if (!sectionRef.current || !headerRef.current || !titleRef.current || !descriptionRef.current || !ctaRef.current) {
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -99,23 +104,25 @@ const Blog = () => {
     );
 
     // Stagger animation for blog cards
-    gsap.fromTo(blogCardsRef.current,
-      { opacity: 0, y: 50, scale: 0.9 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.35,
-        stagger: 0.08,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: blogCardsRef.current[0],
-          start: "top 95%", // Changed from 85% to 95% - triggers much earlier
-          end: "bottom 5%",
-          toggleActions: "play none none reverse"
+    if (blogCardsRef.current && blogCardsRef.current.length > 0) {
+      gsap.fromTo(blogCardsRef.current,
+        { opacity: 0, y: 50, scale: 0.9 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.35,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: blogCardsRef.current[0],
+            start: "top 95%", // Changed from 85% to 95% - triggers much earlier
+            end: "bottom 5%",
+            toggleActions: "play none none reverse"
+          }
         }
-      }
-    );
+      );
+    }
 
     // CTA animation
     gsap.fromTo(ctaRef.current,
@@ -136,7 +143,9 @@ const Blog = () => {
 
     // Cleanup
     return () => {
-      tl.kill();
+      if (tl) {
+        tl.kill();
+      }
     };
   }, []);
 

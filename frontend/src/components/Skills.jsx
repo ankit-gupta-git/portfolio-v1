@@ -92,6 +92,11 @@ const Skills = () => {
 
   // GSAP Animations
   useEffect(() => {
+    // Check if all refs are available before creating animations
+    if (!sectionRef.current || !titleRef.current || !subtitleRef.current || !textBoxRef.current) {
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -118,24 +123,26 @@ const Skills = () => {
     );
 
     // Stagger animation for skill cards
-    gsap.fromTo(cardsRef.current,
-      { opacity: 0, y: 60, scale: 0.8, rotationY: -15 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        rotationY: 0,
-        duration: 0.4,
-        stagger: 0.08,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: cardsRef.current[0],
-          start: "top 95%",
-          end: "bottom 5%",
-          toggleActions: "play none none reverse"
+    if (cardsRef.current && cardsRef.current.length > 0) {
+      gsap.fromTo(cardsRef.current,
+        { opacity: 0, y: 60, scale: 0.8, rotationY: -15 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          rotationY: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: cardsRef.current[0],
+            start: "top 95%",
+            end: "bottom 5%",
+            toggleActions: "play none none reverse"
+          }
         }
-      }
-    );
+      );
+    }
 
     // Text box animation
     gsap.fromTo(textBoxRef.current,
@@ -157,46 +164,56 @@ const Skills = () => {
 
     // Cleanup
     return () => {
-      tl.kill();
+      if (tl) {
+        tl.kill();
+      }
     };
   }, []);
 
   // Hover animations for skill cards
   const handleCardHover = (index) => {
-    gsap.to(cardsRef.current[index], {
-      scale: 1.02,
-      y: -5,
-      duration: 0.2,
-      ease: "power2.out"
-    });
+    if (cardsRef.current && cardsRef.current[index]) {
+      gsap.to(cardsRef.current[index], {
+        scale: 1.02,
+        y: -5,
+        duration: 0.2,
+        ease: "power2.out"
+      });
+    }
   };
 
   const handleCardLeave = (index) => {
-    gsap.to(cardsRef.current[index], {
-      scale: 1,
-      y: 0,
-      duration: 0.2,
-      ease: "power2.out"
-    });
+    if (cardsRef.current && cardsRef.current[index]) {
+      gsap.to(cardsRef.current[index], {
+        scale: 1,
+        y: 0,
+        duration: 0.2,
+        ease: "power2.out"
+      });
+    }
   };
 
   // Hover animations for skill items
   const handleSkillHover = (skillElement) => {
-    gsap.to(skillElement, {
-      scale: 1.05,
-      y: -2,
-      duration: 0.15,
-      ease: "power2.out"
-    });
+    if (skillElement) {
+      gsap.to(skillElement, {
+        scale: 1.05,
+        y: -2,
+        duration: 0.15,
+        ease: "power2.out"
+      });
+    }
   };
 
   const handleSkillLeave = (skillElement) => {
-    gsap.to(skillElement, {
-      scale: 1,
-      y: 0,
-      duration: 0.15,
-      ease: "power2.out"
-    });
+    if (skillElement) {
+      gsap.to(skillElement, {
+        scale: 1,
+        y: 0,
+        duration: 0.15,
+        ease: "power2.out"
+      });
+    }
   };
 
   return (

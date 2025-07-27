@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { FaComments, FaPaperPlane, FaSearch, FaPalette, FaChevronDown, FaRobot, FaTimes } from 'react-icons/fa';
+import { Send } from 'lucide-react';
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown';
 
@@ -331,7 +332,7 @@ const AIAssistantWidget = () => {
                       className="absolute bottom-4 right-4 bg-gradient-to-r from-blue-600 to-purple-600 p-1.5 sm:p-2 rounded-full shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all animate-bounce z-10 pointer-events-auto"
                       aria-label="Scroll to bottom"
                     >
-                      <ChevronDown size={18} className="text-white" />
+                      <FaChevronDown size={18} className="text-white" />
                     </button>
                   )}
                 </div>

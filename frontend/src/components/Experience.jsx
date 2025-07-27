@@ -168,6 +168,11 @@ const Experience = () => {
 
   // GSAP animations
   useEffect(() => {
+    // Check if all refs are available before creating animations
+    if (!sectionRef.current || !titleRef.current || !timelineRef.current) {
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -195,7 +200,9 @@ const Experience = () => {
 
     // Cleanup
     return () => {
-      tl.kill();
+      if (tl) {
+        tl.kill();
+      }
     };
   }, []);
 

@@ -43,6 +43,11 @@ const Navbar = () => {
 
   // GSAP animations
   useEffect(() => {
+    // Check if refs are available before creating animations
+    if (!navbarRef.current || !welcomeTextRef.current) {
+      return;
+    }
+
     // Navbar entrance animation
     gsap.fromTo(navbarRef.current,
       { opacity: 0, y: -20 },
@@ -58,6 +63,10 @@ const Navbar = () => {
 
   // Mobile menu animations
   useEffect(() => {
+    if (!mobileMenuRef.current) {
+      return;
+    }
+
     if (menuOpen) {
       gsap.to(mobileMenuRef.current, {
         y: 0, opacity: 1, duration: 0.2, ease: "power2.out"

@@ -41,6 +41,11 @@ const About = () => {
 
   // GSAP Animations
   useEffect(() => {
+    // Check if all refs are available before creating animations
+    if (!sectionRef.current || !titleRef.current || !contentRef.current || !whoAmIRef.current || !introRef.current || !paragraphsRef.current || !carouselRef.current) {
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -88,7 +93,9 @@ const About = () => {
 
     // Cleanup
     return () => {
-      tl.kill();
+      if (tl) {
+        tl.kill();
+      }
     };
   }, []);
 

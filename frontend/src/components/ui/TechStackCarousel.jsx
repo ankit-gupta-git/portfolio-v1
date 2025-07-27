@@ -35,6 +35,11 @@ const Carousel = ({ direction = "left", isDark }) => {
 
   // GSAP animations for tech items
   useEffect(() => {
+    // Check if refs are available before creating animations
+    if (!listRef.current || !techItemsRef.current || techItemsRef.current.length === 0) {
+      return;
+    }
+
     // Stagger animation for tech items
     gsap.fromTo(techItemsRef.current,
       { 
@@ -86,22 +91,26 @@ const Carousel = ({ direction = "left", isDark }) => {
               onMouseEnter={() => {
                 setHoveredIdx(idx);
                 // GSAP hover animation
-                gsap.to(techItemsRef.current[idx], {
-                  scale: 1.15,
-                  y: -5,
-                  duration: 0.2,
-                  ease: "power2.out"
-                });
+                if (techItemsRef.current && techItemsRef.current[idx]) {
+                  gsap.to(techItemsRef.current[idx], {
+                    scale: 1.15,
+                    y: -5,
+                    duration: 0.2,
+                    ease: "power2.out"
+                  });
+                }
               }}
               onMouseLeave={() => {
                 setHoveredIdx(null);
                 // GSAP reset animation
-                gsap.to(techItemsRef.current[idx], {
-                  scale: 1,
-                  y: 0,
-                  duration: 0.2,
-                  ease: "power2.out"
-                });
+                if (techItemsRef.current && techItemsRef.current[idx]) {
+                  gsap.to(techItemsRef.current[idx], {
+                    scale: 1,
+                    y: 0,
+                    duration: 0.2,
+                    ease: "power2.out"
+                  });
+                }
               }}
               onTouchStart={() => {
                 if (isMobile) setTappedIdx(idx);

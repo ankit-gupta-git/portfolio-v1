@@ -38,6 +38,11 @@ const Contact = () => {
 
   // GSAP animations
   useEffect(() => {
+    // Check if all refs are available before creating animations
+    if (!sectionRef.current || !titleRef.current || !descriptionRef.current || !formLeftRef.current || !formRightRef.current) {
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -75,7 +80,9 @@ const Contact = () => {
 
     // Cleanup
     return () => {
-      tl.kill();
+      if (tl) {
+        tl.kill();
+      }
     };
   }, []);
 
