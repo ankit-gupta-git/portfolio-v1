@@ -3,41 +3,33 @@ const cors = require('cors');
 const aiRoutes = require('./routes/ai.routes')
 const app = express();
 
-// Enable CORS for frontend - more flexible for deployment
+// Enable CORS for frontend
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         
         const allowedOrigins = [
-            'https://portfolio-v1-eta-rosy.vercel.app', 
-            'https://portfolio-v1-1-uc52.onrender.com',
             'https://www.ankitdev.xyz',
-            'https://ankitdev.xyz',
-            'http://localhost:5173',
-            'http://localhost:3000'
+            'http://localhost:5173'
         ];
         
-        // Log all incoming origins for debugging
-        console.log('🌐 CORS: Incoming request from origin:', origin);
+        // Add FRONTEND_URL if it exists and is valid
+        if (process.env.FRONTEND_URL && process.env.FRONTEND_URL.startsWith('http')) {
+            allowedOrigins.push(process.env.FRONTEND_URL);
+        }
         
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            console.log('✅ CORS: Origin allowed:', origin);
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            console.log('❌ CORS: Origin blocked:', origin);
-            console.log('📋 CORS: Allowed origins:', allowedOrigins);
             callback(new Error('Not allowed by CORS'));
         }
     },
-    methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true,
-    optionsSuccessStatus: 200
+    methods: ['GET', 'POST'],
+    credentials: true
 }));
-app.use(express.json())
 
-// Handle preflight requests
-app.options('*', cors());
+app.use(express.json())
 
 app.get('/', (req, res) => {
     res.json({ 
