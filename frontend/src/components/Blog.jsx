@@ -44,14 +44,14 @@ const Blog = () => {
     },
     {
       id: 3,
-      title: "AI-Powered Chatbots: From Concept to Deployment",
-      description: "Build intelligent chatbots using natural language processing and machine learning techniques for enhanced user experiences.",
-      topic: "Artificial Intelligence",
-      readTime: "15 min read",
-      publishDate: "Dec 5, 2024",
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=250&fit=crop",
-      mediumUrl: "https://medium.com/@yourusername/ai-powered-chatbots",
-      tags: ["AI", "NLP", "Chatbots"]
+      title: "Why Every Developer Should Learn Data Structures and Algorithms",
+      description: "Data structures and algorithms are the backbone of efficient coding. Here's why mastering them is crucial for every developer.",
+      topic: "Data Structures & Algorithms",
+      readTime: "4 min read",
+      publishDate: "Aug 15, 2025",
+      image: "https://i.pinimg.com/1200x/c7/fc/02/c7fc020567f7bd15c1ac7dda928dda52.jpg?w=400&h=250&fit=crop",
+      mediumUrl: "https://medium.com/@ankitkumargupta752/why-every-developer-should-learn-data-structures-and-algorithms-f48a2e573bf3",
+      tags: ["Data Structures", "Algorithms", "Coding"]
     },
     {
       id: 4,

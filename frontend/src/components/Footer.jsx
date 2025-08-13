@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "./ui/ThemeContext";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   const { isDark } = useTheme();
@@ -34,7 +34,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="hover:text-blue-500 transition-colors"
             >
-              <FaTwitter />
+              <FaXTwitter />
             </a>
           </div>
         </div>
