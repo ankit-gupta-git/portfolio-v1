@@ -190,7 +190,7 @@ const Hero = () => {
 
               {/* LinkedIn */}
               <a
-                href="https://linkedin.com/in/ankit-gupta-17"
+                href="https://linkedin.com/in/iamankit-gupta"
                 target="_blank"
                 rel="noreferrer"
                 className="transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 hover:-rotate-[6deg] hover:text-blue-500"
@@ -200,7 +200,7 @@ const Hero = () => {
 
               {/* X (Twitter) */}
               <a
-                href="https://twitter.com/ankitguptaa17"
+                href="https://twitter.com/ankitgupta_79"
                 target="_blank"
                 rel="noreferrer"
                 className="transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 hover:rotate-[4deg] hover:text-blue-500"
