@@ -82,7 +82,7 @@ const Hero = () => {
                 }`}
               >
                 <img
-                  src="https://media.licdn.com/dms/image/v2/D5603AQHSqpKxqrjYRw/profile-displayphoto-crop_800_800/B56ZlRPJMMKAAI-/0/1758004556991?e=1761177600&v=beta&t=ZItNjPN5V1zqyksFdQx97yv7nNlgb_aepesHK95Pxyw"
+                  src="/public/myimg.jpeg"
                   alt="Ankit Gupta"
                   className="rounded-full object-cover w-full h-full"
                   loading="eager"
