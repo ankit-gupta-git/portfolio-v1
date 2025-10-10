@@ -82,7 +82,7 @@ const Hero = () => {
                 }`}
               >
                 <img
-                  src="/public/myimg.jpeg"
+                  src="/myimg.jpeg"
                   alt="Ankit Gupta"
                   className="rounded-full object-cover w-full h-full"
                   loading="eager"
