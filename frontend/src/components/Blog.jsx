@@ -55,14 +55,14 @@ const Blog = () => {
     },
     {
       id: 4,
-      title: "Optimizing Database Performance in Production",
-      description: "Discover advanced database optimization techniques, indexing strategies, and query performance tuning for high-traffic applications.",
-      topic: "Database",
-      readTime: "10 min read",
-      publishDate: "Nov 28, 2024",
-      image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=400&h=250&fit=crop",
-      mediumUrl: "https://medium.com/@yourusername/database-optimization",
-      tags: ["Database", "Performance", "SQL"]
+      title: "Monolithic vs Microservices",
+      description: "Monolithic vs Microservices: Which One Should You Choose? Understanding how modern apps are built.",
+      topic: "Microservices",
+      readTime: "5 min read",
+      publishDate: "Oct 12, 2025",
+      image: "/BlogImg/Monolithic vs Microservices.jpeg",
+      mediumUrl: "https://medium.com/@ankitkumargupta752/monolithic-vs-microservices-architecture-understanding-how-modern-apps-are-built-9f8ef76ca40a",
+      tags: ["Microservices", "Monolithic", "Software Architecture"]
     }
   ];
 
