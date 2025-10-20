@@ -64,3 +64,71 @@ body {
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace !important;
 }
 
+/* Glow effects for experience cards */
+.experience-card-glow {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 0 12px rgba(255, 255, 255, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Card content styling */
+.experience-card-content {
+  position: relative;
+  z-index: 1;
+  background: inherit;
+  border-radius: inherit;
+  padding: 16px;
+}
+
+/* Mobile text sizing for better readability */
+.experience-card-content .prose {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5;
+}
+
+.experience-card-content .prose h1,
+.experience-card-content .prose h2,
+.experience-card-content .prose h3,
+.experience-card-content .prose h4 {
+  font-size: 1rem; /* 16px */
+  margin-bottom: 0.5rem;
+}
+
+.experience-card-content .prose p {
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .experience-card-content {
+    padding: 20px;
+  }
+  
+  .experience-card-content .prose {
+    font-size: 1rem; /* 16px */
+  }
+  
+  .experience-card-content .prose h1,
+  .experience-card-content .prose h2,
+  .experience-card-content .prose h3,
+  .experience-card-content .prose h4 {
+    font-size: 1.125rem; /* 18px */
+  }
+}
+
+@media (min-width: 768px) {
+  .experience-card-content {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .experience-card-content {
+    padding: 28px;
+  }
+}
+

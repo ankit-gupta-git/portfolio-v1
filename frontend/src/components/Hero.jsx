@@ -117,7 +117,7 @@ const Hero = () => {
             </h2>
             <p
               className={`max-w-xl text-sm sm:text-base md:text-lg ${
-                isDark ? "text-gray-400" : "text-gray-700"
+                isDark ? "text-gray-500" : "text-gray-700"
               }`}
             >
               I turn ideas into code and messy problems into clean commits. I'm

@@ -17,6 +17,7 @@ const Timeline = ({ data }) => {
   const descriptionRef = useRef(null);
   const timelineItemsRef = useRef([]);
   const scrollLineRef = useRef(null);
+  const cardRefs = useRef([]);
 
   useEffect(() => {
     if (timelineRef.current) {
@@ -24,6 +25,32 @@ const Timeline = ({ data }) => {
       setLineHeight(rect.height);
     }
   }, []);
+  
+  // Ensure line height updates on resize / content changes
+  useEffect(() => {
+    if (!timelineRef.current) return;
+    const ro = new ResizeObserver(() => {
+      const rect = timelineRef.current.getBoundingClientRect();
+      setLineHeight(Math.ceil(rect.height));
+      // refresh ScrollTrigger because size/positions changed
+      ScrollTrigger.refresh();
+    });
+    ro.observe(timelineRef.current);
+
+    // also update once after a short delay for images/font load
+    const t = setTimeout(() => {
+      if (timelineRef.current) {
+        const rect = timelineRef.current.getBoundingClientRect();
+        setLineHeight(Math.ceil(rect.height));
+        ScrollTrigger.refresh();
+      }
+    }, 300);
+
+    return () => {
+      ro.disconnect();
+      clearTimeout(t);
+    };
+  }, [data]);
 
   // GSAP animations
   useEffect(() => {
@@ -31,6 +58,12 @@ const Timeline = ({ data }) => {
     if (!scrollContainerRef.current || !headingRef.current || !descriptionRef.current || !timelineRef.current || !scrollLineRef.current) {
       return;
     }
+
+    // kill any previous triggers/animations attached to these elements to avoid duplicates
+    ScrollTrigger.getAll().forEach(st => {
+      // optional: keep other triggers, but remove ones tied to this timelineRef
+      if (st.vars && st.trigger === timelineRef.current) st.kill();
+    });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -72,29 +105,44 @@ const Timeline = ({ data }) => {
       );
     }
 
-    // Scroll line animation
-    gsap.fromTo(scrollLineRef.current,
-      { scaleY: 0, transformOrigin: "top" },
-      {
-        scaleY: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: timelineRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse"
-        }
+    // Remove individual card glow animations - keeping static glow only
+
+    // Scroll line animation - ensure transformOrigin and scrub so it grows smoothly
+    // set initial state
+    // ensure the element is visually collapsed before the animation starts
+    gsap.set(scrollLineRef.current, { transformOrigin: "top center", scaleY: 0, willChange: "transform" });
+
+    const lineAnim = gsap.to(scrollLineRef.current, {
+      scaleY: 1,
+      ease: "none",
+      // use scrub: true so the line growth is tied 1:1 to scroll (slower & smooth)
+      scrollTrigger: {
+        trigger: timelineRef.current,
+        // start earlier, end later to stretch the animation across more scroll distance
+        start: "top 95%",
+        end: "bottom 10%",
+        scrub: true,
+        // markers: true, // enable to debug if needed
       }
-    );
+    });
 
     // Cleanup
     return () => {
       if (tl) {
         tl.kill();
       }
+      if (lineAnim) {
+        lineAnim.kill();
+      }
+      // Clean up individual card ScrollTriggers
+      const currentCardRefs = cardRefs.current;
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.vars && currentCardRefs.some(cardRef => cardRef === st.trigger)) {
+          st.kill();
+        }
+      });
     };
-  }, [data]);
+  }, [data, lineHeight]);
 
   return (
     <div ref={scrollContainerRef} className="w-full relative overflow-hidden">
@@ -104,7 +152,7 @@ const Timeline = ({ data }) => {
           ref={headingRef}
           className={`text-2xl md:text-4xl font-bold mb-4 ${
             isDark
-              ? "text-white bg-clip-text text-transparent bg-gradient-to-r from-neutral-200 to-neutral-400"
+              ? "bg-clip-text text-transparent bg-gradient-to-r from-neutral-200 to-neutral-400"
               : "text-gray-800"
           }`}
         >
@@ -126,44 +174,55 @@ const Timeline = ({ data }) => {
           <div
             key={index}
             ref={el => timelineItemsRef.current[index] = el}
-            className="flex justify-start pt-10 md:pt-40 md:gap-10"
+            className="flex justify-start pt-8 md:pt-32 lg:pt-40 md:gap-8 lg:gap-10"
           >
             {/* Dot & Sticky Title */}
-            <div className="sticky top-20 z-40 self-start flex flex-col md:flex-row items-center max-w-xs lg:max-w-sm md:w-full">
-              <div className="relative h-10 w-10">
-                <div className={`absolute left-3 w-10 h-10 rounded-full ${
+            <div className="sticky top-12 md:top-20 z-40 self-start flex flex-col md:flex-row items-center max-w-xs lg:max-w-sm md:w-full">
+              <div className="relative h-8 w-8 md:h-10 md:w-10">
+                <div className={`absolute left-2 md:left-3 w-8 h-8 md:w-10 md:h-10 rounded-full ${
                   isDark
-                    ? "bg-neutral-950 border border-neutral-800"
-                    : "bg-white border border-gray-200 shadow-md"
+                    ? "bg-gradient-to-br from-blue-900/80 to-cyan-900/80 border border-blue-500/50"
+                    : "bg-white border border-blue-300 shadow-md"
                 } flex items-center justify-center`}>
-                  <div className={`h-4 w-4 p-2 rounded-full ${
+                  <div className={`h-3 w-3 md:h-4 md:w-4 p-1.5 md:p-2 rounded-full ${
                     isDark
-                      ? "bg-blue-500/50 border border-blue-500"
-                      : "bg-blue-400 border border-blue-500"
+                      ? "bg-gradient-to-br from-blue-400 to-cyan-400 border border-blue-300"
+                      : "bg-gradient-to-br from-blue-500 to-cyan-500 border border-blue-400"
                   }`} />
                 </div>
               </div>
-              <h3 className={`hidden md:block text-xl md:pl-20 md:text-4xl font-bold bg-clip-text text-transparent ${
+              <h3 className={`hidden md:block text-base md:text-xl lg:text-3xl md:pl-12 lg:pl-16 font-bold text-white ${
                 isDark
-                  ? "bg-gradient-to-r from-blue-500/50 to-purple-500/50"
-                  : "bg-gradient-to-r from-blue-600 to-purple-600"
+                  ? "text-white"
+                  : "text-gray-800"
               }`}>
                 {item.title}
               </h3>
             </div>
 
             {/* Content */}
-            <div className="relative w-full pl-20 pr-4 md:pl-4">
-              <h3 className={`md:hidden block text-2xl mb-4 text-left font-bold bg-clip-text text-transparent ${
+            <div className="relative w-full pl-12 md:pl-4 pr-4">
+              <h3 className={`md:hidden block text-lg sm:text-xl mb-3 text-left font-bold text-white ${
                 isDark
-                  ? "bg-gradient-to-r from-blue-500/50 to-purple-500/50"
-                  : "bg-gradient-to-r from-blue-600 to-purple-600"
+                  ? "text-white"
+                  : "text-gray-800"
               }`}>
                 {item.title}
               </h3>
-              <div className={`prose font-figtree ${
-                isDark ? "prose-invert text-neutral-300" : "text-gray-600"
-              }`}>{item.content}</div>
+              <div 
+                ref={el => cardRefs.current[index] = el}
+                className={`experience-card-glow ${
+                  isDark 
+                    ? "bg-white/2 backdrop-blur-xl border border-white/8" 
+                    : "bg-white/10 backdrop-blur-xl border border-white/20"
+                }`}
+              >
+                <div className="experience-card-content">
+                  <div className={`prose font-figtree ${
+                    isDark ? "prose-invert text-neutral-300" : "text-gray-600"
+                  }`}>{item.content}</div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
@@ -171,19 +230,19 @@ const Timeline = ({ data }) => {
         {/* Scroll Line */}
         <div
           ref={scrollLineRef}
-          className={`absolute left-8 top-0 w-[2px] ${
+          className={`absolute left-4 md:left-8 top-0 w-[2px] ${
             isDark
-              ? "bg-gradient-to-b from-transparent via-neutral-800 to-transparent"
-              : "bg-gradient-to-b from-transparent via-gray-300 to-transparent"
+              ? "bg-gradient-to-b from-transparent via-blue-800/30 to-transparent"
+              : "bg-gradient-to-b from-transparent via-blue-200 to-transparent"
           }`}
-          style={{ height: `${lineHeight}px` }}
+          style={{ height: `${lineHeight}px`, transformOrigin: "top center" }}
         >
           <div
-            className={`absolute inset-x-0 top-0 ${
+            className={`absolute inset-x-0 top-0 rounded-full ${
               isDark
-                ? "bg-gradient-to-b from-blue-500 via-purple-500 to-transparent"
-                : "bg-gradient-to-b from-blue-400 via-purple-400 to-transparent"
-            } rounded-full`}
+                ? "bg-gradient-to-b from-blue-400 via-cyan-400 to-transparent"
+                : "bg-gradient-to-b from-blue-500 via-cyan-500 to-transparent"
+            }`}
             style={{ height: `${lineHeight}px` }}
           />
         </div>
