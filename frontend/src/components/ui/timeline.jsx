@@ -186,7 +186,7 @@ const Timeline = ({ data }) => {
           className={`text-2xl md:text-4xl font-bold mb-4 ${
             isDark
               ? "bg-clip-text text-transparent bg-gradient-to-r from-neutral-200 to-neutral-400"
-              : "text-gray-800"
+              : "text-black"
           }`}
         >
           Journey Through Time
@@ -224,10 +224,10 @@ const Timeline = ({ data }) => {
                   }`} />
                 </div>
               </div>
-              <h3 className={`hidden md:block text-base md:text-xl lg:text-3xl md:pl-12 lg:pl-16 font-bold text-white ${
+              <h3 className={`hidden md:block text-base md:text-xl lg:text-3xl md:pl-12 lg:pl-16 font-bold ${
                 isDark
                   ? "text-white"
-                  : "text-gray-800"
+                  : "text-black"
               }`}>
                 {item.title}
               </h3>
@@ -235,10 +235,10 @@ const Timeline = ({ data }) => {
 
             {/* Content */}
             <div className="relative w-full pl-12 md:pl-4 pr-4">
-              <h3 className={`md:hidden block text-lg sm:text-xl mb-3 text-left font-bold text-white ${
+              <h3 className={`md:hidden block text-lg sm:text-xl mb-3 text-left font-bold ${
                 isDark
                   ? "text-white"
-                  : "text-gray-800"
+                  : "text-black"
               }`}>
                 {item.title}
               </h3>
