@@ -11,7 +11,7 @@ const Timeline = ({ data }) => {
   const timelineRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const [lineHeight, setLineHeight] = useState(0);
-  
+
   // Refs for GSAP animations
   const headingRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -25,7 +25,7 @@ const Timeline = ({ data }) => {
       setLineHeight(rect.height);
     }
   }, []);
-  
+
   // Ensure line height updates on resize / content changes
   useEffect(() => {
     if (!timelineRef.current) return;
@@ -179,7 +179,7 @@ const Timeline = ({ data }) => {
             {/* Dot & Sticky Title */}
             <div className="sticky top-12 md:top-20 z-40 self-start flex flex-col md:flex-row items-center max-w-xs lg:max-w-sm md:w-full">
               <div className="relative h-8 w-8 md:h-10 md:w-10">
-                <div className={`absolute left-2 md:left-3 w-8 h-8 md:w-10 md:h-10 rounded-full ${
+                <div className={`absolute left-0 md:left-3 w-8 h-8 md:w-10 md:h-10 rounded-full ${
                   isDark
                     ? "bg-gradient-to-br from-blue-900/80 to-cyan-900/80 border border-blue-500/50"
                     : "bg-white border border-blue-300 shadow-md"
