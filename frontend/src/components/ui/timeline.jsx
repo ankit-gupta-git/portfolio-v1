@@ -59,6 +59,9 @@ const Timeline = ({ data }) => {
       return;
     }
 
+    // Capture card refs for cleanup
+    const cardRefsForCleanup = cardRefs.current;
+
     // kill any previous triggers/animations attached to these elements to avoid duplicates
     ScrollTrigger.getAll().forEach(st => {
       // optional: keep other triggers, but remove ones tied to this timelineRef
@@ -105,7 +108,31 @@ const Timeline = ({ data }) => {
       );
     }
 
-    // Remove individual card glow animations - keeping static glow only
+    // Individual card glow animations on scroll
+    if (cardRefs.current && cardRefs.current.length > 0) {
+      const currentCardRefs = cardRefs.current;
+      currentCardRefs.forEach((cardRef) => {
+        if (cardRef) {
+          ScrollTrigger.create({
+            trigger: cardRef,
+            start: "top 80%",
+            end: "bottom 20%",
+            onEnter: () => {
+              cardRef.classList.add('scroll-glow');
+            },
+            onLeave: () => {
+              cardRef.classList.remove('scroll-glow');
+            },
+            onEnterBack: () => {
+              cardRef.classList.add('scroll-glow');
+            },
+            onLeaveBack: () => {
+              cardRef.classList.remove('scroll-glow');
+            }
+          });
+        }
+      });
+    }
 
     // Scroll line animation - ensure transformOrigin and scrub so it grows smoothly
     // set initial state
@@ -135,10 +162,16 @@ const Timeline = ({ data }) => {
         lineAnim.kill();
       }
       // Clean up individual card ScrollTriggers
-      const currentCardRefs = cardRefs.current;
       ScrollTrigger.getAll().forEach(st => {
-        if (st.vars && currentCardRefs.some(cardRef => cardRef === st.trigger)) {
+        if (st.vars && cardRefsForCleanup.some(cardRef => cardRef === st.trigger)) {
           st.kill();
+        }
+      });
+      
+      // Remove glow classes from cards
+      cardRefsForCleanup.forEach(cardRef => {
+        if (cardRef) {
+          cardRef.classList.remove('scroll-glow');
         }
       });
     };

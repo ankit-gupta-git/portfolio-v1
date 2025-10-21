@@ -74,6 +74,30 @@ body {
     0 0 12px rgba(255, 255, 255, 0.08),
     0 8px 32px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.6s ease;
+}
+
+/* Enhanced glow effect for scroll-triggered state */
+.experience-card-glow.scroll-glow {
+  box-shadow: 
+    0 0 0 1px rgba(59, 130, 246, 0.4),
+    0 0 20px rgba(59, 130, 246, 0.3),
+    0 0 40px rgba(59, 130, 246, 0.2),
+    0 0 60px rgba(59, 130, 246, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* Dark mode enhanced glow */
+.dark .experience-card-glow.scroll-glow {
+  box-shadow: 
+    0 0 0 1px rgba(59, 130, 246, 0.5),
+    0 0 20px rgba(59, 130, 246, 0.4),
+    0 0 40px rgba(59, 130, 246, 0.3),
+    0 0 60px rgba(59, 130, 246, 0.2),
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 /* Card content styling */
