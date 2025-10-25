@@ -47,19 +47,20 @@ const projects = [
     image: "/ProjectImg/ecommerce.png",
   },
   {
-    title: "Aranya - Wildlife Exploration",
+    title: "NeuraChat - Realtime AI Chat",
     description:
-      "AI + blockchain-based wildlife conservation & plantation tracking platform.",
-    tech: ["React", "Three.js", "Aptos", "IPFS"],
-    github: "#",
-    live: "#",
-    image: "/ProjectImg/wildlife.jpg",
+      "A real-time group chat built with Socket.IO and Node.js, featuring AI-powered assistant and smart summaries.",
+    tech: ["React", "Three.js", "OpenAI", "Socket.IO", "Node.js"],
+    github: "https://github.com/ankit-gupta-git/realtime-ai-chat",
+    live: "https://realtime-ai-chat-lilac.vercel.app/",
+    image: "/ProjectImg/Reatime_Chat.png",
   },
 ];
 
 const Projects = () => {
   const { isDark } = useTheme();
   const [modalProject, setModalProject] = useState(null);
+  const [clickedCardRef, setClickedCardRef] = useState(null);
 
   // Refs for GSAP animations
   const sectionRef = useRef(null);
@@ -67,6 +68,8 @@ const Projects = () => {
   const subtitleRef = useRef(null);
   const projectsGridRef = useRef(null);
   const projectCardsRef = useRef([]);
+  const modalRef = useRef(null);
+  const modalContentRef = useRef(null);
 
   // GSAP Animations
   useEffect(() => {
@@ -144,6 +147,88 @@ const Projects = () => {
     };
   }, []);
 
+  // Modal animation effect
+  useEffect(() => {
+    if (modalProject && clickedCardRef && modalRef.current && modalContentRef.current) {
+      // Get clicked card position
+      const cardRect = clickedCardRef.getBoundingClientRect();
+      const viewportCenterX = window.innerWidth / 2;
+      const viewportCenterY = window.innerHeight / 2;
+      
+      // Calculate initial position (card position)
+      const initialX = cardRect.left + cardRect.width / 2;
+      const initialY = cardRect.top + cardRect.height / 2;
+      
+      // Calculate final position (center of viewport)
+      const finalX = viewportCenterX;
+      const finalY = viewportCenterY;
+      
+      // Set initial transform origin
+      modalContentRef.current.style.transformOrigin = `${initialX}px ${initialY}px`;
+      
+      // Animate from card position to center
+      gsap.fromTo(modalContentRef.current, 
+        {
+          scale: 0.1,
+          x: initialX - finalX,
+          y: initialY - finalY,
+          opacity: 0,
+          rotation: 0
+        },
+        {
+          scale: 1,
+          x: 0,
+          y: 0,
+          opacity: 1,
+          rotation: 0,
+          duration: 0.6,
+          ease: "back.out(1.7)"
+        }
+      );
+      
+      // Animate backdrop
+      gsap.fromTo(modalRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3 }
+      );
+    }
+  }, [modalProject, clickedCardRef]);
+
+  // Handle card click with animation
+  const handleCardClick = (project, cardElement) => {
+    setClickedCardRef(cardElement);
+    setModalProject(project);
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Handle modal close with animation
+  const handleModalClose = () => {
+    if (modalContentRef.current) {
+      gsap.to(modalContentRef.current, {
+        scale: 0.1,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          setModalProject(null);
+          setClickedCardRef(null);
+          document.body.style.overflow = 'unset';
+        }
+      });
+      
+      gsap.to(modalRef.current, {
+        opacity: 0,
+        duration: 0.3
+      });
+    } else {
+      setModalProject(null);
+      setClickedCardRef(null);
+      document.body.style.overflow = 'unset';
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -205,7 +290,7 @@ const Projects = () => {
                 ? "bg-[#101014]"
                 : "bg-white/90 backdrop-blur-[20px] shadow-lg border border-white/50"
             } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105`}
-            onClick={() => setModalProject(project)}
+            onClick={(e) => handleCardClick(project, e.currentTarget)}
           >
             <div className="w-full h-48 sm:h-56 overflow-hidden relative group">
               <img
@@ -289,10 +374,12 @@ const Projects = () => {
       {/* MODAL */}
       {modalProject && (
         <div
-          className="fixed inset-0 z-50 flex justify-center items-center bg-black/50 backdrop-blur-sm"
-          onClick={() => setModalProject(null)}
+          ref={modalRef}
+          className="fixed inset-0 z-40 flex justify-center items-center bg-black/60 backdrop-blur-md"
+          onClick={handleModalClose}
         >
           <div
+            ref={modalContentRef}
             className={`relative max-h-[90vh] overflow-y-auto w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col md:flex-row ${
               isDark ? "bg-[#18181b]" : "bg-white/95 backdrop-blur-[20px]"
             }`}
@@ -377,7 +464,7 @@ const Projects = () => {
 
             {/* Close Button */}
             <button
-              onClick={() => setModalProject(null)}
+              onClick={handleModalClose}
               className={`absolute top-4 right-4 p-2 rounded-full transition-all hover:scale-110 ${
                 isDark ? "bg-[#23232a] text-white" : "bg-gray-100 text-gray-600"
               }`}
