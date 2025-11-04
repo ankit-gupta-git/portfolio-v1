@@ -3,10 +3,8 @@ import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import { useTheme } from "./ui/ThemeContext";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import "swiper/css";
 
-// Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
@@ -61,35 +59,30 @@ const Projects = () => {
   const { isDark } = useTheme();
   const [modalProject, setModalProject] = useState(null);
 
-  // Refs for GSAP animations
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const projectsGridRef = useRef(null);
   const projectCardsRef = useRef([]);
 
-  // GSAP Animations
   useEffect(() => {
-    // Check if all refs are available before creating animations
     if (
       !sectionRef.current ||
       !titleRef.current ||
       !subtitleRef.current ||
       !projectsGridRef.current
-    ) {
+    )
       return;
-    }
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        start: "top 90%",
         end: "bottom 10%",
         toggleActions: "play none none reverse",
       },
     });
 
-    // Section entrance animation
     tl.fromTo(
       sectionRef.current,
       { opacity: 0, y: 50 },
@@ -114,8 +107,7 @@ const Projects = () => {
         "-=0.2"
       );
 
-    // Stagger animation for project cards
-    if (projectCardsRef.current && projectCardsRef.current.length > 0) {
+    if (projectCardsRef.current?.length > 0) {
       gsap.fromTo(
         projectCardsRef.current,
         { opacity: 0, y: 50, scale: 0.9 },
@@ -128,7 +120,7 @@ const Projects = () => {
           ease: "power2.out",
           scrollTrigger: {
             trigger: projectsGridRef.current,
-            start: "top 95%", // Changed from 85% to 95% - triggers much earlier
+            start: "top 95%",
             end: "bottom 5%",
             toggleActions: "play none none reverse",
           },
@@ -136,12 +128,7 @@ const Projects = () => {
       );
     }
 
-    // Cleanup
-    return () => {
-      if (tl) {
-        tl.kill();
-      }
-    };
+    return () => tl.kill();
   }, []);
 
   return (
@@ -164,10 +151,8 @@ const Projects = () => {
       >
         Projects
       </h2>
-      <div
-        ref={subtitleRef}
-        className="flex flex-col items-start mb-8 sm:mb-12"
-      >
+
+      <div ref={subtitleRef} className="flex flex-col items-start mb-8 sm:mb-12">
         <h3 className="font-dxgrafik text-2xl sm:text-3xl md:text-4xl font-extrabold flex items-center gap-2 text-left">
           <span
             className={`${
@@ -178,9 +163,7 @@ const Projects = () => {
           >
             Yeah, I work hard
           </span>
-          <span role="img" aria-label="briefcase">
-            💼
-          </span>
+          💼
         </h3>
         <p
           className={`mt-3 sm:mt-4 text-sm sm:text-md text-left ${
@@ -191,28 +174,27 @@ const Projects = () => {
         </p>
       </div>
 
-      {/* Projects Grid */}
+      {/* Project Grid */}
       <div
         ref={projectsGridRef}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
       >
         {projects.map((project, index) => (
           <div
             key={index}
             ref={(el) => (projectCardsRef.current[index] = el)}
-            className={`h-auto flex flex-col justify-between ${
+            className={`h-[460px] flex flex-col justify-between ${
               isDark
                 ? "bg-[#101014]"
                 : "bg-white/90 backdrop-blur-[20px] shadow-lg border border-white/50"
-            } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105`}
+            } rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105`}
             onClick={() => setModalProject(project)}
           >
-            <div className="w-full h-48 sm:h-56 overflow-hidden relative group">
+            {/* Image */}
+            <div className="w-full h-52 overflow-hidden relative group">
               <img
                 src={project.image}
                 alt={project.title}
-                loading="eager"
-                fetchPriority="high"
                 className="w-full h-full object-cover object-center transform transition-all duration-500 group-hover:scale-105"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -222,63 +204,66 @@ const Projects = () => {
               />
             </div>
 
-            <div className="flex-1 p-4 sm:p-6">
-              <h3
-                className={`text-lg sm:text-xl font-semibold line-clamp-1 ${
-                  isDark ? "text-white" : "text-[#111827]"
-                }`}
-              >
-                {project.title}
-              </h3>
-              <p
-                className={`mt-2 sm:mt-3 text-xs sm:text-sm line-clamp-3 font-jetbrains ${
-                  isDark ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                {project.description.length > 100
-                  ? `${project.description.slice(0, 100)}...`
-                  : project.description}
-              </p>
+            {/* Content */}
+            <div className="flex flex-col justify-between flex-1 p-5">
+              <div>
+                <h3
+                  className={`text-lg sm:text-xl font-semibold line-clamp-1 ${
+                    isDark ? "text-white" : "text-[#111827]"
+                  }`}
+                >
+                  {project.title}
+                </h3>
+                <p
+                  className={`mt-2 text-xs sm:text-sm font-jetbrains line-clamp-2 ${
+                    isDark ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  {project.description}
+                </p>
 
-              <div className="flex flex-wrap mt-4 sm:mt-5 gap-2 sm:gap-3">
-                {project.tech.map((techItem, i) => (
-                  <span
-                    key={i}
-                    className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded whitespace-nowrap ${
-                      isDark
-                        ? "bg-neutral-800 text-white"
-                        : "bg-[#cceeff] text-[#159ccb]"
-                    }`}
-                  >
-                    {techItem}
-                  </span>
-                ))}
+                {/* Tech Stack */}
+                <div className="flex flex-wrap mt-4 gap-2">
+                  {project.tech.map((t, i) => (
+                    <span
+                      key={i}
+                      className={`px-3 py-1 text-xs sm:text-sm rounded ${
+                        isDark
+                          ? "bg-neutral-800 text-white"
+                          : "bg-[#cceeff] text-[#159ccb]"
+                      }`}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              <div className={`flex space-x-3 sm:space-x-4 mt-4 sm:mt-5`}>
+              {/* Buttons */}
+              <div className="flex space-x-3 mt-5">
                 <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center hover:scale-105 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg flex-1 justify-center text-sm hover:scale-105 transition-all ${
                     isDark
                       ? "bg-[#23232a] hover:bg-[#23232a]/80 text-white"
                       : "bg-gray-800 hover:bg-gray-700 text-white"
-                  } border-none`}
+                  }`}
                 >
-                  <FaGithub className="text-lg sm:text-xl" />
-                  <span className="font-medium">GitHub</span>
+                  <FaGithub />
+                  GitHub
                 </a>
                 <a
                   href={project.live}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105`}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg flex-1 justify-center text-sm bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105 transition-all"
                 >
-                  <FaExternalLinkAlt className="text-lg sm:text-xl" />
-                  <span className="font-medium">Live Demo</span>
+                  <FaExternalLinkAlt />
+                  Live Demo
                 </a>
               </div>
             </div>
@@ -286,7 +271,7 @@ const Projects = () => {
         ))}
       </div>
 
-      {/* MODAL */}
+      {/* Modal */}
       {modalProject && (
         <div
           className="fixed inset-0 z-50 flex justify-center items-center bg-black/50 backdrop-blur-sm"
@@ -298,7 +283,6 @@ const Projects = () => {
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Left: Project Image */}
             <div
               className={`md:w-1/2 w-full flex items-center justify-center p-6 ${
                 isDark ? "bg-[#101014]" : "bg-gray-50"
@@ -308,15 +292,9 @@ const Projects = () => {
                 src={modalProject.image}
                 alt={modalProject.title}
                 className="w-full h-64 md:h-80 object-cover rounded-lg"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src =
-                    "https://via.placeholder.com/400x300?text=Project+Image";
-                }}
               />
             </div>
 
-            {/* Right: Project Details */}
             <div className="md:w-1/2 w-full p-6 md:p-8 flex flex-col justify-between">
               <div>
                 <h3
@@ -334,16 +312,16 @@ const Projects = () => {
                   {modalProject.description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {modalProject.tech.map((tech, index) => (
+                  {modalProject.tech.map((t, i) => (
                     <span
-                      key={index}
+                      key={i}
                       className={`px-3 py-1 text-sm rounded-full ${
                         isDark
                           ? "bg-neutral-800 text-white"
                           : "bg-[#cceeff] text-[#159ccb]"
                       }`}
                     >
-                      {tech}
+                      {t}
                     </span>
                   ))}
                 </div>
@@ -354,31 +332,30 @@ const Projects = () => {
                   href={modalProject.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all flex-1 justify-center hover:scale-105 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg flex-1 justify-center hover:scale-105 transition-all ${
                     isDark
                       ? "bg-[#23232a] hover:bg-[#23232a]/80 text-white"
                       : "bg-gray-800 hover:bg-gray-700 text-white"
                   }`}
                 >
-                  <FaGithub className="text-lg" />
-                  <span className="font-medium">GitHub</span>
+                  <FaGithub />
+                  GitHub
                 </a>
                 <a
                   href={modalProject.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105 transition-all"
                 >
-                  <FaExternalLinkAlt className="text-lg" />
-                  <span className="font-medium">Live Demo</span>
+                  <FaExternalLinkAlt />
+                  Live Demo
                 </a>
               </div>
             </div>
 
-            {/* Close Button */}
             <button
               onClick={() => setModalProject(null)}
-              className={`absolute top-4 right-4 p-2 rounded-full transition-all hover:scale-110 ${
+              className={`absolute top-4 right-4 p-2 rounded-full hover:scale-110 transition-all ${
                 isDark ? "bg-[#23232a] text-white" : "bg-gray-100 text-gray-600"
               }`}
             >
