@@ -79,7 +79,7 @@ const Navbar = () => {
   }, [menuOpen]);
 
   return (
-    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-xl px-4">
+    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-xl px-4">
       <div
         ref={navbarRef}
         className={`backdrop-blur-md border rounded-xl flex justify-between items-center px-6 py-2 shadow-lg transition-all duration-300 ${
