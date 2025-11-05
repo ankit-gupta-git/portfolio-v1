@@ -272,13 +272,8 @@ const Projects = () => {
               isDark
                 ? "bg-[#101014]"
                 : "bg-white/90 backdrop-blur-[20px] shadow-lg border border-white/50"
-<<<<<<< HEAD
             } rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105`}
             onClick={() => setModalProject(project)}
-=======
-            } rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105`}
-            onClick={(e) => handleCardClick(project, e.currentTarget)}
->>>>>>> 7df7ea2658756138beed3b76ae1fb1d6fba8b669
           >
             {/* Image */}
             <div className="w-full h-52 overflow-hidden relative group">
@@ -446,13 +441,8 @@ const Projects = () => {
             </div>
 
             <button
-<<<<<<< HEAD
               onClick={() => setModalProject(null)}
               className={`absolute top-4 right-4 p-2 rounded-full hover:scale-110 transition-all ${
-=======
-              onClick={handleModalClose}
-              className={`absolute top-4 right-4 p-2 rounded-full transition-all hover:scale-110 ${
->>>>>>> 7df7ea2658756138beed3b76ae1fb1d6fba8b669
                 isDark ? "bg-[#23232a] text-white" : "bg-gray-100 text-gray-600"
               }`}
             >
