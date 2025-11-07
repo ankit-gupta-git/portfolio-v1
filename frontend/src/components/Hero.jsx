@@ -131,7 +131,7 @@ const Hero = () => {
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
               <a
-                href="/Ankit_Gupta_SDE_Resume.pdf"
+                href="/Ankit_Kumar_Gupta_SDE_Resume.pdf"
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
                   isDark
                     ? "bg-black/30 backdrop-blur-md border-2 border-blue-500/50"
