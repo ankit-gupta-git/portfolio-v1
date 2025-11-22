@@ -12,6 +12,7 @@ import {
   FaDatabase,
   FaPython,
   FaGithub,
+  FaAws,
 } from "react-icons/fa";
 import {
   SiNextdotjs,
@@ -25,6 +26,8 @@ import {
   SiPandas,
   SiScikitlearn,
   SiPostman,
+  SiFirebase,
+  SiGithubactions,
 } from "react-icons/si";
 import { useTheme } from "./ui/ThemeContext";
 
@@ -53,6 +56,8 @@ const skills = [
       { name: "Node.js", icon: <FaNodeJs className="text-green-500" /> },
       { name: "Express.js", icon: <SiExpress className="text-gray-400" /> },
       { name: "MongoDB", icon: <SiMongodb className="text-green-400" /> },
+      { name: "PostgreSQL", icon: <FaDatabase className="text-blue-600" /> },
+      { name: "Firebase", icon: <SiFirebase className="text-yellow-400" /> },
       { name: "REST APIs", icon: <FaDatabase className="text-blue-400" /> },
     ],
   },
@@ -76,6 +81,8 @@ const skills = [
       { name: "Linux", icon: <FaLinux className="text-yellow-400" /> },
       { name: "Postman", icon: <SiPostman className="text-orange-600" /> },
       { name: "GitHub", icon: <FaGithub className="text-gray-400" /> },
+      { name: "CI/CD", icon: <SiGithubactions className="text-gray-600" /> },
+      { name: "AWS", icon: <FaAws className="text-orange-600" /> },
     ],
   },
 ];

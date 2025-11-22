@@ -124,7 +124,7 @@ const Hero = () => {
               a full-stack developer, Java enthusiast, and 5x hackathoner who
               loves building real-world tech with a touch of AI. Right now, I'm
               exploring how smart systems can solve everyday challenges. Always
-              up for connecting and creating something impactful—let's build
+              up for connecting and creating something impactful — let's build
               together!
             </p>
 

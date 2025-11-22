@@ -28,14 +28,19 @@ const Experience = () => {
     {
       title: "2023 - Present",
       content: (
-        <div className="flex items-start gap-2 sm:gap-3">
-          {/* Laptop icon: adjusted size and alignment */}
-          <Laptop className={`w-6 h-6 sm:w-5 sm:h-8 mt-1.5 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
-          <div className="flex-1 pl-1">
-            <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-[#111827]"}`}>Bachelor of Technology in CSE - AIML</h3>
-            <div className="flex items-center gap-1.5 sm:gap-2 mb-2">
-              <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${isDark ? "text-gray-400" : "text-gray-600"}`} />
-              <p className={`text-sm sm:text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>Quantum University, Roorkee, IN</p>
+        <div className="flex items-start gap-3 sm:gap-4">
+          <div className="flex-shrink-0 pt-1">
+            <Laptop className={`w-5 h-5 sm:w-6 sm:h-6 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
+          </div>
+          <div className="flex-1">
+            <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-[#111827]"}`}>
+              Bachelor of Technology in CSE - AIML
+            </h3>
+            <div className="flex items-start gap-2 mb-2">
+              <MapPin className={`w-4 h-4 mt-0.5 flex-shrink-0 ${isDark ? "text-gray-400" : "text-gray-600"}`} />
+              <p className={`text-sm sm:text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                Quantum University, Roorkee, IN
+              </p>
             </div>
             <p className={`text-sm sm:text-sm leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
               Pursuing a comprehensive education in Computer Science and Engineering with a specialization in Artificial Intelligence and Machine Learning. Building strong problem-solving skills through core CS fundamentals, algorithms, data structures, machine learning models, and full-stack development, with hands-on projects and real-world applications.
@@ -47,9 +52,10 @@ const Experience = () => {
     {
       title: "Hackathons",
       content: (
-        <div className="flex items-start gap-2 sm:gap-3">
-          {/* Code2 icon: 2x bigger on mobile, normal on desktop */}
-          <Code2 className={`w-8 h-5 sm:w-5 sm:h-7 mt-1 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
+        <div className="flex items-start gap-3 sm:gap-4">
+          <div className="flex-shrink-0 pt-1">
+            <Code2 className={`w-5 h-5 sm:w-6 sm:h-6 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
+          </div>
           <div className="flex-1">
             <h3 className={`text-base sm:text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-[#111827]"}`}>Hackathon Team Lead</h3>
             <p className={`text-sm sm:text-sm mb-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>Aug 2023 - May 2025</p>
@@ -93,9 +99,10 @@ const Experience = () => {
     {
       title: "Awards & Recognition",
       content: (
-        <div className="flex items-start gap-2 sm:gap-3">
-          {/* Award icon: smaller on desktop, normal on mobile */}
-          <Award className={`w-5 h-8 sm:w-6 sm:h-6 mt-1 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
+        <div className="flex items-start gap-3 sm:gap-4">
+          <div className="flex-shrink-0 pt-1">
+            <Award className={`w-5 h-5 sm:w-6 sm:h-6 ${isDark ? "text-blue-500" : "text-[#159ccb]"}`} />
+          </div>
           <div className="flex-1">
             <h3 className={`text-base sm:text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-[#111827]"}`}>Hackathon Achievements</h3>
             {(() => {

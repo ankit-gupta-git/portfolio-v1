@@ -7,7 +7,7 @@ const Navbar = () => {
   const { isDark } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("Home");
-  
+
   // Refs for GSAP animations
   const navbarRef = useRef(null);
   const welcomeTextRef = useRef(null);
@@ -43,19 +43,16 @@ const Navbar = () => {
 
   // GSAP animations
   useEffect(() => {
-    // Check if refs are available before creating animations
-    if (!navbarRef.current || !welcomeTextRef.current) {
-      return;
-    }
+    if (!navbarRef.current || !welcomeTextRef.current) return;
 
-    // Navbar entrance animation
-    gsap.fromTo(navbarRef.current,
+    gsap.fromTo(
+      navbarRef.current,
       { opacity: 0, y: -20 },
       { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
     );
 
-    // Welcome text animation
-    gsap.fromTo(welcomeTextRef.current,
+    gsap.fromTo(
+      welcomeTextRef.current,
       { opacity: 0, x: -10 },
       { opacity: 1, x: 0, duration: 0.25, delay: 0.1, ease: "power2.out" }
     );
@@ -63,17 +60,21 @@ const Navbar = () => {
 
   // Mobile menu animations
   useEffect(() => {
-    if (!mobileMenuRef.current) {
-      return;
-    }
+    if (!mobileMenuRef.current) return;
 
     if (menuOpen) {
       gsap.to(mobileMenuRef.current, {
-        y: 0, opacity: 1, duration: 0.2, ease: "power2.out"
+        y: 0,
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.out",
       });
     } else {
       gsap.to(mobileMenuRef.current, {
-        y: -20, opacity: 0, duration: 0.15, ease: "power2.in"
+        y: -20,
+        opacity: 0,
+        duration: 0.15,
+        ease: "power2.in",
       });
     }
   }, [menuOpen]);
@@ -82,15 +83,15 @@ const Navbar = () => {
     <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-xl px-4">
       <div
         ref={navbarRef}
-        className={`backdrop-blur-md border rounded-xl flex justify-between items-center px-6 py-2 shadow-lg transition-all duration-300 ${
+        className={`backdrop-blur-xl backdrop-saturate-150 border rounded-xl flex justify-between items-center px-6 py-2 shadow-lg transition-all duration-300 ${
           isDark
-            ? "bg-glass-dark border-white/10"
-            : "bg-white/40 border border-transparent backdrop-blur-lg shadow-lg"
+            ? "bg-white/10 border-white/20"
+            : "bg-white/40 border border-transparent shadow-lg"
         }`}
       >
         {/* Mobile Menu Button and Welcome Text */}
         <div className="flex items-center gap-3">
-          <div 
+          <div
             className={`md:hidden text-2xl cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 ${
               isDark ? "text-white hover:text-blue-400" : "text-gray-800 hover:text-blue-600"
             }`}
@@ -98,11 +99,11 @@ const Navbar = () => {
           >
             {menuOpen ? <FiX /> : <FiMenu />}
           </div>
-          <span 
+          <span
             ref={welcomeTextRef}
             className={`md:hidden text-sm font-medium bg-gradient-to-r ${
-              isDark 
-                ? "from-blue-400 to-purple-500 text-transparent bg-clip-text" 
+              isDark
+                ? "from-blue-400 to-purple-500 text-transparent bg-clip-text"
                 : "from-blue-600 to-purple-600 text-transparent bg-clip-text"
             }`}
           >
@@ -117,7 +118,11 @@ const Navbar = () => {
               key={link.name}
               href={link.href}
               className={`text-sm font-medium transition-all duration-300 hover:scale-105 ${
-                active === link.name ? "text-blue-500" : isDark ? "text-white" : "text-black"
+                active === link.name
+                  ? "text-blue-500"
+                  : isDark
+                  ? "text-white"
+                  : "text-black"
               } hover:text-blue-400`}
             >
               {link.name}
@@ -130,8 +135,8 @@ const Navbar = () => {
       {menuOpen && (
         <div
           ref={mobileMenuRef}
-          className={`md:hidden mt-4 backdrop-blur-xl rounded-xl py-6 px-8 flex flex-col items-center gap-6 transition-all duration-300 ${
-            isDark ? "text-white" : "text-black"
+          className={`md:hidden mt-4 backdrop-blur-2xl backdrop-saturate-150 rounded-xl py-6 px-8 flex flex-col items-center gap-6 transition-all duration-300 ${
+            isDark ? "bg-white/10 text-white" : "bg-white/40 text-black"
           }`}
         >
           {navLinks.map((link) => (
