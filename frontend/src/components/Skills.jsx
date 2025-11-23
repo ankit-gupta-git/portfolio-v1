@@ -13,6 +13,9 @@ import {
   FaPython,
   FaGithub,
   FaAws,
+  FaHtml5,
+  FaCss3,
+  FaCode,
 } from "react-icons/fa";
 import {
   SiNextdotjs,
@@ -28,6 +31,9 @@ import {
   SiPostman,
   SiFirebase,
   SiGithubactions,
+  SiSupabase,
+  SiPython,
+  SiOpenai,
 } from "react-icons/si";
 import { useTheme } from "./ui/ThemeContext";
 
@@ -39,33 +45,38 @@ const skills = [
     category: "Frontend Development",
     icon: <FaReact className="text-sky-400 text-3xl" />,
     items: [
-      { name: "React", icon: <FaReact className="text-sky-400" /> },
-      { name: "Next.js", icon: <SiNextdotjs className="text-white" /> },
-      { name: "TypeScript", icon: <SiTypescript className="text-blue-500" /> },
+      { name: "React", icon: <FaReact className="text-sky-400 animate-spin-slow" />, animation: 'animate-spin-slow' },
+      { name: "Next.js", icon: <SiNextdotjs className="text-white group-hover:text-blue-400 transition-colors duration-300" />, animation: 'group-hover:scale-110' },
+      { name: "TypeScript", icon: <SiTypescript className="text-blue-500 group-hover:scale-110 transition-transform duration-300" />, animation: 'group-hover:scale-110' },
+      { name: "HTML5", icon: <FaHtml5 className="text-orange-500 hover:animate-pulse transition-all duration-300" />, animation: 'hover:animate-pulse' },
+      { name: "CSS3", icon: <FaCss3 className="text-blue-500 hover:animate-pulse transition-all duration-300" />, animation: 'hover:animate-pulse' },
       {
         name: "Tailwind CSS",
-        icon: <SiTailwindcss className="text-cyan-400" />,
+        icon: <SiTailwindcss className="text-cyan-400 hover:text-cyan-300 transition-colors duration-300 group-hover:scale-110" />,
+        animation: 'group-hover:scale-110'
       },
-      { name: "JavaScript", icon: <FaJs className="text-yellow-400" /> },
+      { name: "JavaScript", icon: <FaJs className="text-yellow-400 hover:animate-bounce transition-all duration-300" />, animation: 'hover:animate-bounce' },
     ],
   },
   {
     category: "Backend Development",
     icon: <FaNodeJs className="text-green-500 text-3xl" />,
     items: [
-      { name: "Node.js", icon: <FaNodeJs className="text-green-500" /> },
+      { name: "Node.js", icon: <FaNodeJs className="text-green-500 hover:animate-bounce transition-all duration-300" />, animation: 'hover:animate-bounce' },
       { name: "Express.js", icon: <SiExpress className="text-gray-400" /> },
       { name: "MongoDB", icon: <SiMongodb className="text-green-400" /> },
       { name: "PostgreSQL", icon: <FaDatabase className="text-blue-600" /> },
       { name: "Firebase", icon: <SiFirebase className="text-yellow-400" /> },
-      { name: "REST APIs", icon: <FaDatabase className="text-blue-400" /> },
+      { name: "Supabase", icon: <SiSupabase className="text-green-400 hover:animate-pulse transition-all duration-300" />, animation: 'hover:animate-pulse' },
     ],
   },
   {
     category: "AI & ML Technologies",
     icon: <FaProjectDiagram className="text-rose-400 text-3xl" />,
     items: [
-      { name: "Python", icon: <FaPython className="text-blue-500" /> },
+      { name: "Python", icon: <FaPython className="text-blue-500 hover:animate-pulse transition-all duration-300" />, animation: 'hover:animate-pulse' },
+      { name: "LangChain", icon: <SiOpenai className="text-yellow-400 hover:animate-pulse transition-all duration-300" />, animation: 'hover:animate-pulse' },
+      { name: "LangGraph", icon: <FaProjectDiagram className="text-blue-400 hover:animate-pulse transition-all duration-300" />, animation: 'hover:animate-pulse' },
       { name: "NumPy", icon: <SiNumpy className="text-yellow-500" /> },
       { name: "Pandas", icon: <SiPandas className="text-blue-600" /> },
       { name: "Scikit-learn", icon: <SiScikitlearn className="text-orange-500" /> },
@@ -76,16 +87,111 @@ const skills = [
     category: "Tools & Technologies",
     icon: <FaGitAlt className="text-orange-500 text-3xl" />,
     items: [
-      { name: "Git", icon: <FaGitAlt className="text-orange-500" /> },
-      { name: "Docker", icon: <FaDocker className="text-blue-400" /> },
+      { name: "Git", icon: <FaGitAlt className="text-orange-500 hover:rotate-12 transition-transform duration-300" />, animation: 'hover:rotate-12' },
+      { name: "Docker", icon: <FaDocker className="text-blue-400 hover:scale-110 transition-transform duration-300" />, animation: 'hover:scale-110' },
       { name: "Linux", icon: <FaLinux className="text-yellow-400" /> },
       { name: "Postman", icon: <SiPostman className="text-orange-600" /> },
+      { name: "REST APIs", icon: <FaCode className="text-green-500 hover:rotate-12 transition-transform duration-300" />, animation: 'hover:rotate-12' },
       { name: "GitHub", icon: <FaGithub className="text-gray-400" /> },
       { name: "CI/CD", icon: <SiGithubactions className="text-gray-600" /> },
-      { name: "AWS", icon: <FaAws className="text-orange-600" /> },
+      { name: "AWS", icon: <FaAws className="text-orange-600 hover:scale-110 transition-transform duration-300" />, animation: 'hover:scale-110' },
     ],
   },
 ];
+
+// Enhanced animation variants for icons
+const iconVariants = {
+  initial: { 
+    y: 0, 
+    scale: 1,
+    rotate: 0 
+  },
+  hover: (custom) => ({
+    y: -8,
+    scale: 1.15,
+    rotate: custom.rotate || 0,
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 10,
+      duration: 0.3
+    }
+  }),
+  tap: {
+    scale: 0.85,
+    transition: { 
+      type: 'spring',
+      stiffness: 400,
+      damping: 15
+    }
+  },
+  float: {
+    y: [0, -10, 0],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: 'easeInOut'
+    }
+  }
+};
+
+// Enhanced custom animations for specific icons
+const getIconAnimation = (name) => {
+  const baseClasses = 'transition-all duration-300 ease-out transform';
+  
+  switch(name.toLowerCase()) {
+    case 'react':
+      return `${baseClasses} hover:animate-spin-slow hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]`;
+      
+    case 'node.js':
+      return `${baseClasses} hover:animate-bounce hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(74,222,128,0.5)]`;
+      
+    case 'python':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] hover:animate-pulse`;
+      
+    case 'html5':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(249,115,22,0.5)] hover:animate-pulse`;
+      
+    case 'css3':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] hover:animate-pulse`;
+      
+    case 'javascript':
+      return `${baseClasses} hover:animate-bounce hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]`;
+      
+    case 'typescript':
+      return `${baseClasses} hover:scale-110 hover:rotate-6 hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]`;
+      
+    case 'next.js':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(0,0,0,0.3)]`;
+      
+    case 'tailwind css':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(56,189,248,0.5)] hover:animate-pulse`;
+      
+    case 'supabase':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(34,197,94,0.5)] hover:animate-pulse`;
+      
+    case 'langchain':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(234,179,8,0.5)] hover:animate-pulse`;
+      
+    case 'langgraph':
+      return `${baseClasses} hover:scale-110 hover:rotate-6 hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]`;
+      
+    case 'git':
+      return `${baseClasses} hover:scale-110 hover:rotate-12 hover:drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]`;
+      
+    case 'docker':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]`;
+      
+    case 'aws':
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]`;
+      
+    case 'rest apis':
+      return `${baseClasses} hover:scale-110 hover:rotate-12 hover:drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]`;
+      
+    default:
+      return `${baseClasses} hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(156,163,175,0.3)]`;
+  }
+};
 
 const Skills = () => {
   const { isDark } = useTheme();
@@ -177,15 +283,29 @@ const Skills = () => {
     };
   }, []);
 
-  // Hover animations for skill cards
+  // Enhanced hover animations for skill cards
   const handleCardHover = (index) => {
     if (cardsRef.current && cardsRef.current[index]) {
-      gsap.to(cardsRef.current[index], {
-        scale: 1.02,
-        y: -5,
-        duration: 0.2,
-        ease: "power2.out"
-      });
+      const cardHover = {
+        initial: { 
+          y: 0,
+          rotateX: 0,
+          rotateY: 0,
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+        },
+        hover: {
+          y: -8,
+          rotateX: 2,
+          rotateY: 2,
+          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+          transition: { 
+            type: 'spring',
+            stiffness: 300,
+            damping: 15
+          }
+        }
+      };
+      gsap.to(cardsRef.current[index], cardHover.hover);
     }
   };
 
@@ -194,7 +314,8 @@ const Skills = () => {
       gsap.to(cardsRef.current[index], {
         scale: 1,
         y: 0,
-        duration: 0.2,
+        boxShadow: 'none',
+        duration: 0.3,
         ease: "power2.out"
       });
     }
