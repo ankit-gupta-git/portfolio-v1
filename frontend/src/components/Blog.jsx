@@ -282,7 +282,7 @@ const Blog = () => {
           className="text-center mt-12"
         >
           <a
-            href="https://medium.com/@ankitkumargupta752"
+            href="https://medium.com/@ankitguptablogs"
             target="_blank"
             rel="noreferrer"
             className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105 ${
