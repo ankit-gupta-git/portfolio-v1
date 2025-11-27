@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./components/ui/ThemeContext";
 import Navbar from "./components/Navbar";
@@ -13,14 +13,17 @@ import Blog from "./components/Blog";
 import AIAssistantWidget from "./components/ui/AIAssistantWidget";
 import TechStackCarousel from "./components/ui/TechStackCarousel";
 import GithubContributions from "./components/ui/GithubContributions";
+import { Terminal } from "./components/Terminal";
 import "./App.css";
 
 const App = () => {
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+
   return (
     <>
       <ThemeProvider>
         <Layout>
-          <Navbar />
+          <Navbar onTerminalClick={() => setIsTerminalOpen(true)} />
           <Hero />
           <About />
           <Experience />
@@ -34,6 +37,10 @@ const App = () => {
         </Layout>
       </ThemeProvider>
       <AIAssistantWidget />
+      <Terminal 
+        isOpen={isTerminalOpen} 
+        onClose={() => setIsTerminalOpen(false)} 
+      />
     </>
   );
 };
