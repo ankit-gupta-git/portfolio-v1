@@ -2,25 +2,38 @@ import React from 'react';
 import { Terminal as TerminalIcon, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+// Box component for command outputs
+const Box = ({ title, children, className = '' }) => (
+  <div className={`border-2 border-green-400 rounded-md p-4 my-2 ${className}`}>
+    {title && (
+      <div className="text-green-400 font-bold text-lg mb-2 border-b border-green-400 pb-1">
+        {title.toUpperCase()}
+      </div>
+    )}
+    <div className="text-green-300">
+      {children}
+    </div>
+  </div>
+);
+
 // Ankit's integrated contact details
 const CONTACT = {
   email: 'ankitkumargupta752@gmail.com',
   linkedin: 'https://www.linkedin.com/in/iamankit-gupta/',
   github: 'https://github.com/ankit-gupta-git',
+  twitter: 'https://twitter.com/ankitgupta_79'
 };
 
 const ASCII_BANNER = [
-  "  ___        _ _ _   ",
-  " / _ \\\\ _   _(_) (_)_ __  ",
-  "| | | | | | | | | | '_ \\\\ ",
-  "| |_| | |_| | | | | | | |",
-  " \\\\__\\\\_\\\\__,_|_|_|_|_| |_|",
+  "  ╱|、    ",
+  "(˚ˎ 。7   ",
+  " |、˜〵   ",
+  " じしˍ,)ノ",
 ];
 
 const STORAGE_KEY = 'ankit_terminal_cmd_history_v2';
 
 export const Terminal = ({ isOpen, onClose }) => {
-  
   const terminalRef = React.useRef(null);
   const inputRef = React.useRef(null);
 
@@ -43,55 +56,147 @@ export const Terminal = ({ isOpen, onClose }) => {
   const [history, setHistory] = React.useState(defaultWelcome);
   const [input, setInput] = React.useState('');
   const [historyIndex, setHistoryIndex] = React.useState(null);
-  const [suggestions, setSuggestions] = React.useState([]);
-  const [showSuggestions, setShowSuggestions] = React.useState(false);
 
   // Commands definition MOVED OUTSIDE useRef to fix scope issues
   const getCommands = () => ({
     home: {
       execute: () => {
-        router.push('/#home');
-        return 'Navigating to home...';
+        // Don't return anything to prevent duplicate messages
+        // The message is handled by setHistory directly
+        setHistory(prev => [...prev, { type: 'output', content: 'Redirecting to main portfolio...' }]);
+        
+        setTimeout(() => {
+          onClose();
+          if (typeof window !== 'undefined') {
+            window.location.href = '/';
+          }
+        }, 1500);
+        
+        return null; // Prevent default output
       },
       description: 'Return to main portfolio',
     },
 
     exit: {
       execute: () => {
-        onClose();
-        return null;
+        // Show goodbye message first
+        setHistory(prev => [
+          ...prev, 
+          { type: 'output', content: 'Goodbye! 👋' },
+          { type: 'output', content: 'Closing terminal...' }
+        ]);
+        
+        setTimeout(() => {
+          onClose();
+          if (typeof window !== 'undefined') {
+            window.location.href = '/';
+          }
+        }, 1500);
+        
+        return null; // Prevent default output
       },
-      description: 'Exit terminal',
+      description: 'Exit terminal and go home',
     },
 
     about: {
-      execute: () => `About Me\n----------\nI'm Ankit, a passionate developer building modern web apps. Strong CS fundamentals + full-stack experience.`,
+      execute: () => {
+        return `
+╔══════════════════════════════════════════╗
+║               ABOUT ANKIT                ║
+╚══════════════════════════════════════════╝
+
+I'm Ankit, a passionate developer building modern web applications.
+
+With strong CS fundamentals and full-stack experience, I create efficient and scalable solutions.`;
+      },
       description: 'Learn about me',
     },
 
     skills: {
-      execute: () => `Technical Skills\n----------------\nFrontend: React, Next.js, TypeScript, TailwindCSS\nBackend: Node.js, Express, Python\nDatabases: MongoDB, PostgreSQL\nDevOps: Docker, AWS, GitHub Actions`,
+      execute: () => {
+        return `
+╔══════════════════════════════════════════╗
+║             TECHNICAL SKILLS             ║
+╚══════════════════════════════════════════╝
+
+Frontend:
+  • React, Next.js, TypeScript, Tailwind
+
+Backend:
+  • Node.js, Express, Python
+
+Databases:
+  • MongoDB, PostgreSQL
+
+DevOps:
+  • Docker, AWS, GitHub Actions`;
+      },
       description: 'View my technical skills',
     },
 
     projects: {
-      execute: () => `Featured Projects\n----------------\n1. Portfolio Website\n2. E-commerce Platform\n3. Task Manager App`,
+      execute: () => {
+        return `
+╔══════════════════════════════════════════╗
+║            FEATURED PROJECTS             ║
+╚══════════════════════════════════════════╝
+
+1. Portfolio Website
+   Modern portfolio built with React and TailwindCSS
+
+2. E-commerce Platform
+   Full-stack e-commerce solution with payment integration
+
+3. Task Manager App
+   Productivity app with real-time updates`;
+      },
       description: 'See my projects',
     },
 
     experience: {
-      execute: () => `Experience\n----------\n• Full Stack Developer @ WebSolutions\n• Senior Engineer @ TechCorp`,
+      execute: () => {
+        return `
+╔══════════════════════════════════════════╗
+║             WORK EXPERIENCE              ║
+╚══════════════════════════════════════════╝
+
+Full Stack Developer @ WebSolutions
+2020 - Present
+• Building scalable web applications using modern technologies
+
+Senior Engineer @ TechCorp
+2018 - 2020
+• Led frontend development and mentored junior developers`;
+      },
       description: 'My work experience',
     },
 
     contact: {
-      execute: () => `Get In Touch\n------------\nEmail: ${CONTACT.email}\nLinkedIn: ${CONTACT.linkedin}\nGitHub: ${CONTACT.github}`,
-      description: 'Contact details',
-    },
+      execute: () => {
+        return `
+╔══════════════════════════════════════════╗
+║               GET IN TOUCH               ║
+╚══════════════════════════════════════════╝
 
-    book: {
-      execute: () => 'Opening booking calendar...',
-      description: 'Book a meeting',
+📧 Email: ${CONTACT.email}
+📍 Location: Remote - India
+
+🔗 Social Profiles:
+  • LinkedIn: ${CONTACT.linkedin}
+  • GitHub:   ${CONTACT.github}
+  • Twitter:   ${CONTACT.twitter}
+
+
+💬 Available for:
+  • Full-stack development
+  • Frontend development
+  • Technical consultation
+  • UI/UX design
+
+Feel free to reach out for any inquiries or collaboration opportunities!
+I typically respond within 24 hours.`;
+      },
+      description: 'Contact details',
     },
 
     whoami: {
@@ -128,14 +233,28 @@ export const Terminal = ({ isOpen, onClose }) => {
 
     help: {
       execute: () => {
-        let text = "Available commands:\n\n";
-        const cmds = getCommands();
-        for (const key in cmds) {
-          text += `${key.padEnd(12)} - ${cmds[key].description}\n`;
-        }
-        return text;
+        return `Portfolio Commands:
+  about         - Learn about me
+  skills        - View my technical skills
+  projects      - See my project portfolio
+  experience    - My work experience
+  contact       - How to reach me
+
+System Commands:
+  clear         - Clear the terminal
+  whoami        - Show current user info
+  ls            - List available sections
+  sudo          - Try to access restricted areas
+
+Navigation Commands:
+  home          - Return to main portfolio
+  exit          - Exit terminal and go home
+
+Terminal Navigation:
+  ↑/↓ arrows   - Command history
+  Tab          - Insert spaces`;
       },
-      description: 'Help menu',
+      description: 'Show available commands',
     },
 
     time: {
@@ -234,10 +353,23 @@ export const Terminal = ({ isOpen, onClose }) => {
     const cmd = commands[mapped];
     
     if (cmd) {
-      const out = cmd.execute(args);
-      if (out === null) return;
-      const lines = String(out).split('\n');
-      setHistory((prev) => [...prev, ...lines.map((l) => ({ type: 'output', content: l }))]);
+      const result = cmd.execute(args);
+      // If the command returns null, it means it's handling its own output
+      if (result === null) return;
+      
+      // Handle async commands that still return a message
+      if (result && typeof result.then === 'function') {
+        result.then(message => {
+          if (message) {
+            const lines = String(message).split('\n');
+            setHistory(prev => [...prev, ...lines.map(l => ({ type: 'output', content: l }))]);
+          }
+        });
+      } else if (result) {
+        // Handle sync commands that return a message
+        const lines = String(result).split('\n');
+        setHistory(prev => [...prev, ...lines.map(l => ({ type: 'output', content: l }))]);
+      }
     } else {
       // suggestions
       const possible = Object.keys(commands).filter((c) => c.startsWith(base.slice(0, 2)));
@@ -289,40 +421,11 @@ export const Terminal = ({ isOpen, onClose }) => {
       });
     } else if (e.key === 'Tab') {
       e.preventDefault();
-      const tokens = input.trim().split(/\s+/);
-      const token = tokens[0] || '';
-      const commands = getCommands();
-      
-      if (!token) {
-        setSuggestions(Object.keys(commands));
-        setShowSuggestions(true);
-        return;
-      }
-      
-      const matches = Object.keys(commands).filter((c) => c.startsWith(token.toLowerCase()));
-      if (matches.length === 1) {
-        const rest = input.replace(/^\s*\S+/, matches[0]);
-        setInput(rest + (input.endsWith(' ') ? '' : ' '));
-      } else if (matches.length > 1) {
-        setSuggestions(matches);
-        setShowSuggestions(true);
-      }
+      // Tab key will now just add spaces instead of autocompleting
+      setInput(prev => prev + '  ');
     }
   };
 
-  // compute on-change suggestions for UI dropdown
-  React.useEffect(() => {
-    const token = input.trim().split(/\s+/)[0] || '';
-    if (!token) {
-      setSuggestions([]);
-      setShowSuggestions(false);
-      return;
-    }
-    const commands = getCommands();
-    const matches = Object.keys(commands).filter((c) => c.startsWith(token.toLowerCase()));
-    setSuggestions(matches.slice(0, 10));
-    setShowSuggestions(matches.length > 0);
-  }, [input]);
 
   if (!isOpen) return null;
 
@@ -356,33 +459,39 @@ export const Terminal = ({ isOpen, onClose }) => {
         <div ref={terminalRef} className="flex-1 p-4 overflow-y-auto bg-black/90 text-green-400 font-mono text-sm">
           {history.map((item, idx) => {
             const className = item.type === 'error' ? 'text-red-400' : item.type === 'input' ? 'text-green-300' : '';
+            
             return (
               <div key={idx} className={className}>
-                <pre className="whitespace-pre-wrap m-0">{
-                  String(item.content).split('\n').map((p, i) => (
-                    <span key={i}>
-                      {p.split(/(https?:\/\/[^\s]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g).map((seg, si) => {
-                        const urlMatch = seg.match(/^(https?:\/\/[^\s]+)$/);
-                        const emailMatch = seg.match(/^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/);
-                        if (urlMatch) {
-                          return (
-                            <a key={si} href={seg} target="_blank" rel="noopener noreferrer" className="underline">
-                              {seg}
-                            </a>
-                          );
-                        } else if (emailMatch) {
-                          return (
-                            <a key={si} href={`mailto:${seg}`} target="_blank" rel="noopener noreferrer" className="underline">
-                              {seg}
-                            </a>
-                          );
-                        }
-                        return seg;
-                      })}
-                      {i < p.length - 1 ? '\n' : ''}
-                    </span>
-                  ))
-                }</pre>
+                {typeof item.content === 'string' ? (
+                  <pre className="whitespace-pre-wrap m-0">
+                    {item.content.split('\n').map((line, i) => (
+                      <div key={i}>
+                        {line.split(/(https?:\/\/[^\s]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g).map((seg, si) => {
+                          const urlMatch = seg.match(/^(https?:\/\/[^\s]+)$/);
+                          const emailMatch = seg.match(/^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/);
+                          if (urlMatch) {
+                            return (
+                              <a key={si} href={seg} target="_blank" rel="noopener noreferrer" className="underline">
+                                {seg}
+                              </a>
+                            );
+                          } else if (emailMatch) {
+                            return (
+                              <a key={si} href={`mailto:${seg}`} target="_blank" rel="noopener noreferrer" className="underline">
+                                {seg}
+                              </a>
+                            );
+                          }
+                          return seg;
+                        })}
+                      </div>
+                    ))}
+                  </pre>
+                ) : (
+                  <div className="output-content">
+                    {item.content}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -397,19 +506,9 @@ export const Terminal = ({ isOpen, onClose }) => {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               autoFocus
-              placeholder='e.g. "help"'
               aria-label="terminal-input"
             />
           </form>
-
-          {/* Suggestions dropdown */}
-          {showSuggestions && suggestions.length > 0 && (
-            <div className="mt-2 bg-gray-800 p-2 rounded text-sm max-h-48 overflow-y-auto">
-              {suggestions.map((s, i) => (
-                <div key={i} className="py-1 cursor-pointer hover:bg-gray-700 px-2 rounded">{s}</div>
-              ))}
-            </div>
-          )}
         </div>
       </motion.div>
     </motion.div>
