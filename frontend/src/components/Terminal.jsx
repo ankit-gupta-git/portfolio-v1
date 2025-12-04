@@ -21,14 +21,16 @@ const CONTACT = {
   email: 'ankitkumargupta752@gmail.com',
   linkedin: 'https://www.linkedin.com/in/iamankit-gupta/',
   github: 'https://github.com/ankit-gupta-git',
-  twitter: 'https://twitter.com/ankitgupta_79'
+  twitter: 'https://twitter.com/ankitgupta_79',
+  resume: 'https://drive.google.com/file/d/19HHUQSajGr2eHBJ2g9aGxZOoebAFhbbN/view?usp=sharing' // Update with your actual resume link
 };
 
 const ASCII_BANNER = [
-  "  ╱|、    ",
-  "(˚ˎ 。7   ",
-  " |、˜〵   ",
-  " じしˍ,)ノ",
+  "     _    _   _ _    _ _   ",
+  "    / \\  | \\ | | | _(_) |_ ",
+  "   / _ \\ |  \\| | |/ / | __|",
+  "  / ___ \\| |\\  |   <| | |_ ",
+  " /_/   \\_\\_| \\_|_|\\_\\_|_|\\__|",
 ];
 
 const STORAGE_KEY = 'ankit_terminal_cmd_history_v2';
@@ -57,43 +59,47 @@ export const Terminal = ({ isOpen, onClose }) => {
   const [input, setInput] = React.useState('');
   const [historyIndex, setHistoryIndex] = React.useState(null);
 
-  // Commands definition MOVED OUTSIDE useRef to fix scope issues
+  // Block background scroll when terminal opens
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  // Commands definition
   const getCommands = () => ({
     home: {
       execute: () => {
-        // Don't return anything to prevent duplicate messages
-        // The message is handled by setHistory directly
         setHistory(prev => [...prev, { type: 'output', content: 'Redirecting to main portfolio...' }]);
-        
         setTimeout(() => {
           onClose();
           if (typeof window !== 'undefined') {
             window.location.href = '/';
           }
         }, 1500);
-        
-        return null; // Prevent default output
+        return null;
       },
       description: 'Return to main portfolio',
     },
 
     exit: {
       execute: () => {
-        // Show goodbye message first
         setHistory(prev => [
           ...prev, 
-          { type: 'output', content: 'Goodbye! 👋' },
-          { type: 'output', content: 'Closing terminal...' }
+          { type: 'output', content: 'Goodbye! Closing terminal...' }
         ]);
-        
         setTimeout(() => {
           onClose();
           if (typeof window !== 'undefined') {
             window.location.href = '/';
           }
         }, 1500);
-        
-        return null; // Prevent default output
+        return null;
       },
       description: 'Exit terminal and go home',
     },
@@ -101,13 +107,22 @@ export const Terminal = ({ isOpen, onClose }) => {
     about: {
       execute: () => {
         return `
-╔══════════════════════════════════════════╗
-║               ABOUT ANKIT                ║
-╚══════════════════════════════════════════╝
+╔════════════════════════════════════════════╗
+║             ABOUT ANKIT GUPTA              ║
+╚════════════════════════════════════════════╝
 
-I'm Ankit, a passionate developer building modern web applications.
+Full Stack Developer | AIML Specialist | Hackathon Organizer
 
-With strong CS fundamentals and full-stack experience, I create efficient and scalable solutions.`;
+Passionate developer building modern web applications with 
+strong CS fundamentals and full-stack expertise.
+
+Currently Pursuing: B.Tech in CSE with AIML specialization
+                   at Quantum University, Roorkee
+
+Focused on:
+- Full-stack development with React, Node.js & databases
+- AI/ML integration for intelligent applications
+- Hackathon organizing & competitive programming`;
       },
       description: 'Learn about me',
     },
@@ -115,21 +130,62 @@ With strong CS fundamentals and full-stack experience, I create efficient and sc
     skills: {
       execute: () => {
         return `
-╔══════════════════════════════════════════╗
-║             TECHNICAL SKILLS             ║
-╚══════════════════════════════════════════╝
+╔════════════════════════════════════════════╗
+║           TECHNICAL SKILLS                 ║
+╚════════════════════════════════════════════╝
 
-Frontend:
-  • React, Next.js, TypeScript, Tailwind
+FRONTEND DEVELOPMENT:
+- React
+- Next.js
+- TypeScript
+- JavaScript
+- Tailwind CSS
+- HTML5
+- CSS3
+- Framer Motion
 
-Backend:
-  • Node.js, Express, Python
+OTHER FRONTEND TOOLS & LIBRARIES:
+- Zustand
+- React Query
+- State Management
+- Responsive Design
+- Redux
+- React Hook Form
 
-Databases:
-  • MongoDB, PostgreSQL
+BACKEND DEVELOPMENT:
+- Node.js
+- Express.js
+- Python
+- MongoDB
+- MySQL
+- REST APIs
+- Socket.IO
+- GraphQL
 
-DevOps:
-  • Docker, AWS, GitHub Actions`;
+DATABASES:
+- MongoDB
+- PostgreSQL
+- Firebase
+- Supabase
+
+AI/ML TECHNOLOGIES:
+- LangChain
+- LangGraph
+- OpenAI APIs
+- NumPy
+- Pandas
+- Scikit-learn
+- Jupyter
+
+DEVOPS & TOOLS:
+- Docker
+- AWS
+- Git
+- Linux
+- CI/CD
+- Postman
+- GitHub
+- GitHub Actions`;
       },
       description: 'View my technical skills',
     },
@@ -137,18 +193,29 @@ DevOps:
     projects: {
       execute: () => {
         return `
-╔══════════════════════════════════════════╗
-║            FEATURED PROJECTS             ║
-╚══════════════════════════════════════════╝
+╔════════════════════════════════════════════╗
+║          FEATURED PROJECTS                 ║
+╚════════════════════════════════════════════╝
 
-1. Portfolio Website
-   Modern portfolio built with React and TailwindCSS
+1. NAPSTER - Movie Recommendation AI
+   AI-powered movie recommender with real-time trends
+   Tech: React | Tailwind | Node.js | APIs
 
-2. E-commerce Platform
-   Full-stack e-commerce solution with payment integration
+2. WANDERLUST - Airbnb Clone
+   Full-stack rental platform with booking system
+   Tech: MERN | Tailwind | JWT
 
-3. Task Manager App
-   Productivity app with real-time updates`;
+3. TUDOO - Real-Time Collaborative To-Do Board
+   Drag-and-drop task management with Firebase sync
+   Tech: React | Firebase | Framer Motion
+
+4. ANZARA - E-Commerce Store
+   Full-featured e-commerce with Stripe payments
+   Tech: React | Redux | Stripe
+
+5. NEURACHAT - Real-time AI Chat
+   Group chat with Socket.IO & AI assistant
+   Tech: React | Three.js | OpenAI | Socket.IO`;
       },
       description: 'See my projects',
     },
@@ -156,45 +223,69 @@ DevOps:
     experience: {
       execute: () => {
         return `
-╔══════════════════════════════════════════╗
-║             WORK EXPERIENCE              ║
-╚══════════════════════════════════════════╝
+╔════════════════════════════════════════════╗
+║           WORK EXPERIENCE                  ║
+╚════════════════════════════════════════════╝
 
-Full Stack Developer @ WebSolutions
-2020 - Present
-• Building scalable web applications using modern technologies
+HACKATHON TEAM LEAD (Aug 2023 - May 2025)
+- Led cross-functional teams in multiple hackathons
+- Developed AI-powered healthcare systems with chatbots
+- Built blockchain-based platforms for conservation tech
+- Achieved 1st place at Annual Fest Hackathon
+- Achieved 2nd place at Health Track Hackathon
+- Integrated real-time data with Firebase & Arduino
 
-Senior Engineer @ TechCorp
-2018 - 2020
-• Led frontend development and mentored junior developers`;
+EDUCATION IN PROGRESS
+Bachelor of Technology - CSE (AIML)
+Quantum University, Roorkee
+Building expertise in AI, ML & full-stack development`;
       },
       description: 'My work experience',
+    },
+
+    resume: {
+      execute: () => {
+        setHistory(prev => [
+          ...prev, 
+          { type: 'output', content: 'Loading your resume...' }
+        ]);
+        
+        setTimeout(() => {
+          if (typeof window !== 'undefined') {
+            window.open('https://drive.google.com/file/d/19HHUQSajGr2eHBJ2g9aGxZOoebAFhbbN/view?usp=sharing', '_blank');
+          }
+          setHistory(prev => [
+            ...prev, 
+            { type: 'output', content: 'Resume opened in new tab!' }
+          ]);
+        }, 2000);
+        
+        return null;
+      },
+      description: 'Open my resume PDF',
     },
 
     contact: {
       execute: () => {
         return `
-╔══════════════════════════════════════════╗
-║               GET IN TOUCH               ║
-╚══════════════════════════════════════════╝
+╔════════════════════════════════════════════╗
+║             GET IN TOUCH                   ║
+╚════════════════════════════════════════════╝
 
 📧 Email: ${CONTACT.email}
+🔗 LinkedIn: ${CONTACT.linkedin}
+💻 GitHub: ${CONTACT.github}
+🐦 Twitter: ${CONTACT.twitter}
+
 📍 Location: Remote - India
 
-🔗 Social Profiles:
-  • LinkedIn: ${CONTACT.linkedin}
-  • GitHub:   ${CONTACT.github}
-  • Twitter:   ${CONTACT.twitter}
-
-
 💬 Available for:
-  • Full-stack development
-  • Frontend development
-  • Technical consultation
-  • UI/UX design
+- Full-stack development projects
+- Frontend/Backend consulting
+- Technical mentorship
+- AI/ML integration solutions
 
-Feel free to reach out for any inquiries or collaboration opportunities!
-I typically respond within 24 hours.`;
+✉️  Response time: Within 24 hours`;
       },
       description: 'Contact details',
     },
@@ -219,7 +310,7 @@ I typically respond within 24 hours.`;
     },
 
     sudo: {
-      execute: () => `Access Denied. You are not in the sudoers file. This incident will be reported.\nJust kidding! This is a portfolio terminal, not a real system. But I appreciate the curiosity! 🚀`,
+      execute: () => `Access Denied. You are not in the sudoers file. This incident will be reported.\nJust kidding! This is a portfolio terminal, not a real system. But I appreciate the curiosity!`,
       description: 'Fake sudo command',
     },
 
@@ -234,25 +325,26 @@ I typically respond within 24 hours.`;
     help: {
       execute: () => {
         return `Portfolio Commands:
-  about         - Learn about me
-  skills        - View my technical skills
-  projects      - See my project portfolio
-  experience    - My work experience
-  contact       - How to reach me
+- about         Learn about me
+- skills        View my technical skills
+- projects      See my project portfolio
+- experience    My work experience & education
+- contact       How to reach me
+- resume        Download my resume
 
 System Commands:
-  clear         - Clear the terminal
-  whoami        - Show current user info
-  ls            - List available sections
-  sudo          - Try to access restricted areas
+- clear         Clear the terminal
+- whoami        Show current user info
+- ls            List available sections
+- sudo          Try to access restricted areas
 
 Navigation Commands:
-  home          - Return to main portfolio
-  exit          - Exit terminal and go home
+- home          Return to main portfolio
+- exit          Exit terminal and go home
 
 Terminal Navigation:
-  ↑/↓ arrows   - Command history
-  Tab          - Insert spaces`;
+- Up/Down arrows    Command history
+- Tab               Insert spaces`;
       },
       description: 'Show available commands',
     },
@@ -276,6 +368,8 @@ Terminal Navigation:
           'Why do programmers prefer dark mode? Because light attracts bugs.',
           'A SQL query walks into a bar, walks up to two tables and asks: "Can I join you?"',
           "There are 10 types of people in the world: those who understand binary, and those who don't.",
+          'How many programmers does it take to change a light bulb? None, that\'s a hardware problem.',
+          'Why do Java developers wear glasses? Because they don\'t C#!'
         ];
         return jokes[Math.floor(Math.random() * jokes.length)];
       },
@@ -287,6 +381,8 @@ Terminal Navigation:
         const quotes = [
           'Code is like humor. When you have to explain it, it\'s bad. — Cory House',
           'First, solve the problem. Then, write the code. — John Johnson',
+          'The best way to predict the future is to invent it. — Alan Kay',
+          'Simple can be harder than complex. — Steve Jobs'
         ];
         return quotes[Math.floor(Math.random() * quotes.length)];
       },
@@ -294,12 +390,13 @@ Terminal Navigation:
     },
   });
 
-  // aliases map (moved outside)
+  // aliases map
   const aliases = {
     q: 'exit',
     cls: 'clear',
     '?': 'help',
     proj: 'projects',
+    cv: 'resume',
   };
 
   // persist cmdHistory to localStorage
@@ -313,7 +410,7 @@ Terminal Navigation:
     }
   }, [cmdHistory]);
 
-  // persist cmdHistory
+  // show ASCII banner on open
   React.useEffect(() => {
     if (isOpen) {
       setHistory(defaultWelcome);
@@ -337,27 +434,22 @@ Terminal Navigation:
   // Execute Command
   const executeCommand = (raw) => {
     const trimmed = raw.replace(/\s+$/g, '');
-    // echo input
     setHistory((prev) => [...prev, { type: 'input', content: `ankit@portfolio:~$ ${trimmed}` }]);
 
     if (!trimmed) return;
 
-    // alias mapping
     const tokens = trimmed.split(/\s+/);
     const base = tokens[0].toLowerCase();
     const mapped = aliases[base] || base;
     const args = tokens.slice(1);
 
-    // command exists?
     const commands = getCommands();
     const cmd = commands[mapped];
     
     if (cmd) {
       const result = cmd.execute(args);
-      // If the command returns null, it means it's handling its own output
       if (result === null) return;
       
-      // Handle async commands that still return a message
       if (result && typeof result.then === 'function') {
         result.then(message => {
           if (message) {
@@ -366,12 +458,10 @@ Terminal Navigation:
           }
         });
       } else if (result) {
-        // Handle sync commands that return a message
         const lines = String(result).split('\n');
         setHistory(prev => [...prev, ...lines.map(l => ({ type: 'output', content: l }))]);
       }
     } else {
-      // suggestions
       const possible = Object.keys(commands).filter((c) => c.startsWith(base.slice(0, 2)));
       setHistory((prev) => [
         ...prev,
@@ -381,7 +471,6 @@ Terminal Navigation:
       ]);
     }
 
-    // persist typed command
     setCmdHistory((prev) => {
       const next = [...prev, trimmed].slice(-300);
       return next;
@@ -393,10 +482,9 @@ Terminal Navigation:
     e.preventDefault();
     executeCommand(input);
     setInput('');
-    setShowSuggestions(false);
   };
 
-  // keyboard handling: up/down history, tab autocomplete
+  // keyboard handling: up/down history, tab
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -421,49 +509,81 @@ Terminal Navigation:
       });
     } else if (e.key === 'Tab') {
       e.preventDefault();
-      // Tab key will now just add spaces instead of autocompleting
       setInput(prev => prev + '  ');
     }
   };
-
 
   if (!isOpen) return null;
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <motion.div
-        className="w-full max-w-4xl h-[80vh] bg-gray-900 rounded-lg overflow-hidden flex flex-col"
+        className="w-full max-w-4xl h-[80vh] bg-black rounded-lg overflow-hidden flex flex-col border-2 border-green-500 shadow-2xl shadow-green-500/20"
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gray-800 px-4 py-2 flex justify-between items-center">
+        <div className="bg-gray-950 px-4 py-3 flex justify-between items-center border-b-2 border-green-500/50">
           <div className="flex items-center gap-2">
-            <TerminalIcon className="w-4 h-4 text-green-400" />
-            <span className="text-sm text-gray-300">terminal</span>
+            <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+            <TerminalIcon className="w-5 h-5 text-green-400" />
+            <span className="text-green-400 font-mono font-bold">ankit@portfolio</span>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-white" aria-label="Close terminal">
+          <button 
+            onClick={onClose} 
+            className="text-green-400 hover:text-green-300 transition-colors" 
+            aria-label="Close terminal"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Terminal body */}
-        <div ref={terminalRef} className="flex-1 p-4 overflow-y-auto bg-black/90 text-green-400 font-mono text-sm">
+        {/* Terminal body with green scrollbar */}
+        <div 
+          ref={terminalRef} 
+          className="flex-1 p-4 overflow-y-auto bg-black text-green-400 font-mono text-sm"
+          style={{
+            scrollbarColor: '#16a34a #0a0a0a',
+            scrollbarWidth: 'thin'
+          }}
+        >
+          {/* Custom scrollbar styling - SHORTER */}
+          <style>{`
+            div::-webkit-scrollbar {
+              width: 6px;
+            }
+            div::-webkit-scrollbar-track {
+              background: #0a0a0a;
+            }
+            div::-webkit-scrollbar-thumb {
+              background: #16a34a;
+              border-radius: 3px;
+              min-height: 40px;
+            }
+            div::-webkit-scrollbar-thumb:hover {
+              background: #22c55e;
+            }
+          `}</style>
+
           {history.map((item, idx) => {
-            const className = item.type === 'error' ? 'text-red-400' : item.type === 'input' ? 'text-green-300' : '';
+            const className = item.type === 'error' 
+              ? 'text-red-500' 
+              : item.type === 'input' 
+              ? 'text-green-300 font-bold' 
+              : 'text-green-400';
             
             return (
               <div key={idx} className={className}>
                 {typeof item.content === 'string' ? (
-                  <pre className="whitespace-pre-wrap m-0">
+                  <pre className="whitespace-pre-wrap m-0 font-mono text-sm leading-relaxed">
                     {item.content.split('\n').map((line, i) => (
                       <div key={i}>
                         {line.split(/(https?:\/\/[^\s]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g).map((seg, si) => {
@@ -471,42 +591,51 @@ Terminal Navigation:
                           const emailMatch = seg.match(/^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/);
                           if (urlMatch) {
                             return (
-                              <a key={si} href={seg} target="_blank" rel="noopener noreferrer" className="underline">
+                              <a 
+                                key={si} 
+                                href={seg} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="underline text-green-300 hover:text-green-200 transition-colors"
+                              >
                                 {seg}
                               </a>
                             );
                           } else if (emailMatch) {
                             return (
-                              <a key={si} href={`mailto:${seg}`} target="_blank" rel="noopener noreferrer" className="underline">
+                              <a 
+                                key={si} 
+                                href={`mailto:${seg}`} 
+                                className="underline text-green-300 hover:text-green-200 transition-colors"
+                              >
                                 {seg}
                               </a>
                             );
                           }
-                          return seg;
+                          return <span key={si}>{seg}</span>;
                         })}
                       </div>
                     ))}
                   </pre>
                 ) : (
-                  <div className="output-content">
-                    {item.content}
-                  </div>
+                  <div className="font-mono">{item.content}</div>
                 )}
               </div>
             );
           })}
 
           {/* Input Form */}
-          <form onSubmit={handleSubmit} className="flex items-center mt-2" aria-label="terminal-form">
-            <span className="mr-2 text-green-300">ankit@portfolio:~$</span>
+          <form onSubmit={handleSubmit} className="flex items-center mt-3 font-mono" aria-label="terminal-form">
+            <span className="text-green-500 font-bold mr-2">ankit@portfolio:~$</span>
             <input
               ref={inputRef}
-              className="flex-1 bg-transparent outline-none text-green-400 placeholder:text-green-600"
+              className="flex-1 bg-transparent outline-none text-green-300 placeholder:text-green-700 caret-green-400"
+              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               autoFocus
-              aria-label="terminal-input"
+              placeholder="type 'help' for commands"
             />
           </form>
         </div>
@@ -519,7 +648,7 @@ export const TerminalLauncher = ({ onClick }) => (
   <div className="fixed bottom-6 right-6 z-40">
     <button
       onClick={onClick}
-      className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg transition transform hover:scale-105"
+      className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-black font-bold px-4 py-3 rounded-lg shadow-xl shadow-green-500/50 transition transform hover:scale-105 active:scale-95"
       aria-label="Open terminal"
     >
       <TerminalIcon className="w-5 h-5" />
