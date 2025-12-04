@@ -108,21 +108,35 @@ export const Terminal = ({ isOpen, onClose }) => {
       execute: () => {
         return `
 ╔════════════════════════════════════════════╗
-║             ABOUT ANKIT GUPTA              ║
+║                ABOUT ANKIT                 ║
 ╚════════════════════════════════════════════╝
 
-Full Stack Developer | AIML Specialist | Hackathon Organizer
+Name: Ankit Kumar Gupta
+Role: Full Stack Developer | AIML Enthusiast | Aspiring SDE
+Location: India (Remote)
+Currently Pursuing: B.Tech in CSE with AIML specialization at Quantum University, Roorkee
+Status: Open to opportunities & collaborations
+Experience: 2+ years (Projects, hackathons, and real-world development)
+Projects Built: 20+
+Hackathons: 5+ (Winner – Annual Tech Fest Hackathon)
 
-Passionate developer building modern web applications with 
-strong CS fundamentals and full-stack expertise.
+I am a passionate Indian developer who believes in learning by building and solving real-world problems with clean, scalable technology. I enjoy combining full-stack development with AI/ML concepts to create meaningful products that offer real impact and great user experiences.
 
-Currently Pursuing: B.Tech in CSE with AIML specialization
-                   at Quantum University, Roorkee
+My interests span across web development, backend engineering, AI integrations, systems design, and automation, and I love working in environments where innovation meets execution.
 
-Focused on:
-- Full-stack development with React, Node.js & databases
-- AI/ML integration for intelligent applications
-- Hackathon organizing & competitive programming`;
+Available for:
+
+• Full-stack development (MERN)
+• Frontend engineering (React, Tailwind, Next.js)
+• Backend development (Node.js, Express, MongoDB, MySQL)
+• AI & Generative AI integration
+• Automation and scripting
+• REST API development & integration
+• UI/UX design
+• Technical consultation
+• Hackathon & startup collaborations
+
+Feel free to explore my terminal portfolio to learn more about my skills, projects, and experience!` ;
       },
       description: 'Learn about me',
     },
