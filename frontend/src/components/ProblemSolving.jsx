@@ -1,106 +1,109 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "./ui/ThemeContext";
-import { FaCode, FaLink, FaLaptopCode } from "react-icons/fa6";
-import { SiCodeforces, SiGeeksforgeeks } from "react-icons/si";
 
 const profiles = {
   leetcode: {
     username: "ankitguptaa17",
     href: "https://leetcode.com/ankitguptaa17",
+    imgSrc: "https://cdn.iconscout.com/icon/free/png-512/leetcode-3628885-3030025.png",
+    title: "LeetCode",
   },
   codeforces: {
-    username: "",
-    href: "https://codeforces.com/",
+    username: "ankitgupta_16",
+    href: "https://codeforces.com/profile/ankitgupta_16",
+    imgSrc: "https://cdn.iconscout.com/icon/free/png-256/code-forces-3628695-3029920.png",
+    title: "Codeforces",
   },
   geeksforgeeks: {
     username: "ankitxcodes",
     href: "https://www.geeksforgeeks.org/profile/ankitxcodes",
+    // Replaced the broken google content link with a valid GfG logo
+    imgSrc: "https://upload.wikimedia.org/wikipedia/commons/4/43/GeeksforGeeks.svg", 
+    title: "GeeksforGeeks",
   },
   interviewbit: {
     username: "ankit-kumar-gupta_787",
     href: "https://www.interviewbit.com/profile/ankit-kumar-gupta_787/",
+    // Kept your specific link
+    imgSrc: "https://www.startuphrtoolkit.com/wp-content/uploads/2020/12/Interviewbit-logo-150x150.png",
+    title: "InterviewBit",
   },
   codolio: {
     username: "ankit.codes",
     href: "https://codolio.com/profile/ankit.codes",
+    imgSrc: "https://cdn.brandfetch.io/idq8Sf5YMP/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1749196239423",
+    title: "Codolio",
   },
 };
-
-const sampleProblems = [
-  {
-    id: 1,
-    title: "Two Sum",
-    platform: "LeetCode",
-    difficulty: "Easy",
-    href: "https://leetcode.com/problems/two-sum/",
-  },
-  {
-    id: 2,
-    title: "Longest Substring Without Repeating Characters",
-    platform: "LeetCode",
-    difficulty: "Medium",
-    href: "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
-  },
-  {
-    id: 3,
-    title: "A+B Problem",
-    platform: "Codeforces",
-    difficulty: "Easy",
-    href: "https://codeforces.com/",
-  },
-  {
-    id: 4,
-    title: "Binary Tree Inorder Traversal",
-    platform: "LeetCode",
-    difficulty: "Medium",
-    href: "https://leetcode.com/problems/binary-tree-inorder-traversal/",
-  },
-];
 
 export default function ProblemSolving() {
   const { isDark } = useTheme();
   const [leetcodeData, setLeetcodeData] = useState(null);
   const [cfData, setCfData] = useState(null);
-  const carouselRef = useRef(null);
 
   useEffect(() => {
-    // Try load LeetCode stats from a public endpoint (graceful fallback)
-    (async () => {
+    let mounted = true;
+
+    const fetchLeet = async () => {
       try {
         const username = profiles.leetcode.username;
-        if (username) {
-          // Try community API (may fail) - gracefully ignore errors
-          const res = await fetch(`https://leetcode-stats-api.herokuapp.com/${username}`);
-          if (res.ok) {
-            const data = await res.json();
-            setLeetcodeData(data);
-          }
+        if (!username) return;
+        const res = await fetch(`https://leetcode-stats-api.herokuapp.com/${username}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (mounted) setLeetcodeData(data);
         }
       } catch (err) {
         // ignore
       }
+    };
 
+    const fetchCF = async () => {
       try {
         const handle = profiles.codeforces.username;
-        if (handle) {
-          const r = await fetch(`https://codeforces.com/api/user.info?handles=${handle}`);
-          const json = await r.json();
-          if (json.status === "OK") {
-            setCfData(json.result[0]);
-          }
+        if (!handle) return;
+        const r = await fetch(`https://codeforces.com/api/user.info?handles=${handle}`);
+        const json = await r.json();
+        if (json.status === "OK" && mounted) {
+          setCfData(json.result[0]);
         }
       } catch (err) {
         // ignore
       }
-    })();
+    };
+
+    // initial load
+    fetchLeet();
+    fetchCF();
+
+    // refresh LeetCode stats periodically (every 60s)
+    const intervalId = setInterval(fetchLeet, 60_000);
+
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
-  const scroll = (dir = "right") => {
-    const el = carouselRef.current;
-    if (!el) return;
-    const amount = el.clientWidth * 0.7;
-    el.scrollBy({ left: dir === "right" ? amount : -amount, behavior: "smooth" });
-  };
+  // compute leetcode breakdown (fallback to sample counts)
+  const easyCount = leetcodeData?.easySolved ?? leetcodeData?.easy ?? 150;
+  const mediumCount = leetcodeData?.mediumSolved ?? leetcodeData?.medium ?? 200;
+  const hardCount = leetcodeData?.hardSolved ?? leetcodeData?.hard ?? 100;
+  const totalCount = easyCount + mediumCount + hardCount;
+  const pct = (n) => Math.round((n / Math.max(totalCount, 1)) * 100);
+
+  // Helper array to iterate over profiles easily
+  const platformList = [
+    profiles.codeforces,
+    profiles.geeksforgeeks,
+    profiles.interviewbit,
+    profiles.codolio,
+  ];
+
+  const allPlatforms = [
+    profiles.leetcode,
+    ...platformList
+  ];
 
   return (
     <section
@@ -110,6 +113,7 @@ export default function ProblemSolving() {
       }`}
     >
       <div className="space-y-6">
+        {/* Header Section */}
         <div className="flex items-center justify-between">
           <h2
             className={`text-4xl sm:text-5xl md:text-6xl font-bold ${
@@ -120,166 +124,207 @@ export default function ProblemSolving() {
           >
             Problem Solving
           </h2>
+          
+          {/* Desktop Top Buttons */}
           <div className="hidden sm:flex items-center gap-4">
-            <a
-              href={profiles.leetcode.href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition transform hover:scale-105 bg-white/10 border border-white/10"
-            >
-              <FaCode className="text-lg" />
-              <span className="text-sm">LeetCode</span>
-            </a>
-            <a
-              href={profiles.codeforces.href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition transform hover:scale-105 bg-white/10 border border-white/10"
-            >
-              <SiCodeforces className="text-lg" />
-              <span className="text-sm">Codeforces</span>
-            </a>
-            <a
-              href={profiles.geeksforgeeks.href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition transform hover:scale-105 bg-white/10 border border-white/10"
-            >
-              <SiGeeksforgeeks className="text-lg" />
-              <span className="text-sm">GfG</span>
-            </a>
-            <a
-              href={profiles.interviewbit.href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition transform hover:scale-105 bg-white/10 border border-white/10"
-            >
-              <FaLaptopCode className="text-lg" />
-              <span className="text-sm">InterviewBit</span>
-            </a>
-            <a
-              href={profiles.codolio.href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition transform hover:scale-105 bg-white/10 border border-white/10"
-            >
-              <FaLink className="text-lg" />
-              <span className="text-sm">Codolio</span>
-            </a>
+            {allPlatforms.map((platform) => (
+              <a
+                key={platform.title}
+                href={platform.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition transform hover:scale-105 bg-white/10 border border-white/10"
+              >
+                <span
+                  className="w-5 h-5 rounded bg-white/5 flex items-center justify-center overflow-hidden"
+                  aria-hidden
+                >
+                  <img
+                    src={platform.imgSrc}
+                    alt={platform.title}
+                    className="w-4 h-4 object-contain"
+                  />
+                </span>
+                <span className="text-sm">{platform.title === "GeeksforGeeks" ? "GfG" : platform.title}</span>
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className={`grid grid-cols-1 md:grid-cols-3 gap-6`}> 
-          {/* Stats card */}
+        <div className={`grid grid-cols-1 md:grid-cols-6 gap-6`}>
+          {/* LeetCode showcase card */}
           <div
-            className={`p-4 rounded-xl border transition transform hover:-translate-y-1 hover:shadow-xl ${
-              isDark ? "bg-black/40 border-white/10" : "bg-white/80 border-gray-100"
+            className={`md:col-span-4 p-6 rounded-xl border transition transform hover:-translate-y-1 hover:shadow-xl ${
+              isDark
+                ? "bg-black/40 border-white/10"
+                : "bg-white/80 border-gray-100"
             }`}
           >
-            <h4 className="text-sm font-medium text-gray-400">Stats</h4>
-            <div className="mt-3 space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs text-gray-400">LeetCode</div>
-                  <div className="font-semibold text-lg">{leetcodeData ? `${leetcodeData.totalSolved ?? "-"} solved` : "—"}</div>
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {/* LeetCode Logo Here */}
+                    <span
+                      className="w-10 h-10 rounded-md bg-white/5 flex items-center justify-center overflow-hidden"
+                      aria-hidden
+                    >
+                      <img 
+                        src={profiles.leetcode.imgSrc} 
+                        alt="LeetCode" 
+                        className="w-8 h-8 object-contain"
+                      />
+                    </span>
+                    <div>
+                      <h3 className="text-2xl font-bold">LeetCode</h3>
+                      <div className="text-sm text-gray-400 mt-1">{leetcodeData?.totalSolved ?? totalCount} Total Problems Solved</div>
+                    </div>
+                  </div>
+                  <a
+                    href={profiles.leetcode.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-2 rounded-md bg-white/10 border border-white/10 text-sm"
+                  >
+                    View Profile ↗
+                  </a>
                 </div>
-                <a
-                  href={profiles.leetcode.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-400 text-sm"
-                >
-                  View
-                </a>
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs text-gray-400">Codeforces</div>
-                  <div className="font-semibold text-lg">{cfData ? `${cfData.rating ?? "-"}` : "—"}</div>
+                {/* Progress Bars */}
+                <div className="mt-6 space-y-4">
+                  {/* Easy */}
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm font-medium">Easy</div>
+                      <div className="text-sm text-gray-400">
+                        {easyCount}{" "}
+                        <span className="ml-2 text-xs text-gray-400">
+                          {pct(easyCount)}%
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className={`mt-2 h-2 rounded-full overflow-hidden ${
+                        isDark ? "bg-white/5" : "bg-gray-100"
+                      }`}
+                    >
+                      <div
+                        className="h-2 bg-green-400"
+                        style={{ width: `${pct(easyCount)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Medium */}
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm font-medium">Medium</div>
+                      <div className="text-sm text-gray-400">
+                        {mediumCount}{" "}
+                        <span className="ml-2 text-xs text-gray-400">
+                          {pct(mediumCount)}%
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className={`mt-2 h-2 rounded-full overflow-hidden ${
+                        isDark ? "bg-white/5" : "bg-gray-100"
+                      }`}
+                    >
+                      <div
+                        className="h-2 bg-yellow-400"
+                        style={{ width: `${pct(mediumCount)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Hard */}
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm font-medium">Hard</div>
+                      <div className="text-sm text-gray-400">
+                        {hardCount}{" "}
+                        <span className="ml-2 text-xs text-gray-400">
+                          {pct(hardCount)}%
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className={`mt-2 h-2 rounded-full overflow-hidden ${
+                        isDark ? "bg-white/5" : "bg-gray-100"
+                      }`}
+                    >
+                      <div
+                        className="h-2 bg-red-400"
+                        style={{ width: `${pct(hardCount)}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <a
-                  href={profiles.codeforces.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-400 text-sm"
-                >
-                  View
-                </a>
               </div>
-
-              <div className="mt-2 text-xs text-gray-400">Tip: Add your usernames in <code>ProblemSolving.jsx</code> to fetch live stats.</div>
             </div>
           </div>
 
-          {/* Recent solved carousel */}
-          <div className={`md:col-span-2 p-4 rounded-xl border relative ${isDark ? "bg-black/40 border-white/10" : "bg-white/80 border-gray-100"}`}>
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <h4 className="font-semibold">Recent Challenges</h4>
-                <div className="text-xs text-gray-400">A quick look at recent problems</div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => scroll("left")}
-                  className="p-1 rounded-md bg-white/10 hover:bg-white/20"
-                >
-                  ◀
-                </button>
-                <button
-                  onClick={() => scroll("right")}
-                  className="p-1 rounded-md bg-white/10 hover:bg-white/20"
-                >
-                  ▶
-                </button>
-              </div>
-            </div>
-
-            <div
-              ref={carouselRef}
-              className="carousel w-full flex gap-4 overflow-x-auto scroll-smooth py-1 px-1 snap-x snap-mandatory scrollbar-hide"
-              style={{ WebkitOverflowScrolling: "touch" }}
-            >
-              {(sampleProblems || []).map((p) => (
+          {/* Small profile cards (Grid on Desktop) */}
+          <div className="md:col-span-2 grid grid-cols-1 gap-4">
+            {platformList.map((item) => (
+              <div
+                key={item.title}
+                className={`p-4 rounded-xl border flex items-center justify-between ${
+                  isDark
+                    ? "bg-black/30 border-white/5"
+                    : "bg-white/90 border-gray-100"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span
+                    className="w-10 h-10 rounded-md bg-white/5 flex items-center justify-center overflow-hidden"
+                    aria-hidden
+                  >
+                    <img
+                      src={item.imgSrc}
+                      alt={item.title}
+                      className="w-6 h-6 object-contain"
+                    />
+                  </span>
+                  <div>
+                    <div className="text-sm font-semibold">{item.title}</div>
+                    <div className="text-xs text-gray-400 mt-1">
+                      View profile & stats
+                    </div>
+                  </div>
+                </div>
                 <a
-                  key={p.id}
-                  href={p.href}
+                  href={item.href}
                   target="_blank"
                   rel="noreferrer"
-                  className={`snap-start min-w-[220px] max-w-[260px] p-4 rounded-xl border transition transform hover:-translate-y-1 hover:shadow-xl ${
-                    isDark ? "bg-black/30 border-white/5" : "bg-white/90 border-gray-100"
-                  }`}
+                  className="px-3 py-2 rounded-md bg-white/10 text-sm hover:scale-105"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="font-semibold">{p.title}</div>
-                    <div className="text-xs text-gray-400">{p.platform}</div>
-                  </div>
-                  <div className="mt-3 text-sm text-gray-400">Difficulty: {p.difficulty}</div>
+                  View →
                 </a>
-              ))}
-            </div>
-
-            <div className="mt-4 text-xs text-gray-400">Add your API integration to show live recent solves.</div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Mobile platform row */}
         <div className="flex sm:hidden items-center gap-4 overflow-x-auto py-2">
-          <a href={profiles.leetcode.href} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10">
-            <FaCode /> <span className="text-sm">LeetCode</span>
-          </a>
-          <a href={profiles.codeforces.href} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10">
-            <SiCodeforces /> <span className="text-sm">Codeforces</span>
-          </a>
-          <a href={profiles.geeksforgeeks.href} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10">
-            <SiGeeksforgeeks /> <span className="text-sm">GfG</span>
-          </a>
-          <a href={profiles.interviewbit.href} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10">
-            <FaLaptopCode /> <span className="text-sm">InterviewBit</span>
-          </a>
-          <a href={profiles.codolio.href} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10">
-            <FaLink /> <span className="text-sm">Codolio</span>
-          </a>
+          {allPlatforms.map((platform) => (
+            <a
+              key={platform.title}
+              href={platform.href}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 shrink-0"
+            >
+              <span className="w-5 h-5 rounded bg-white/5 flex items-center justify-center overflow-hidden">
+                <img
+                  src={platform.imgSrc}
+                  alt={platform.title}
+                  className="w-4 h-4 object-contain"
+                />
+              </span>
+              <span className="text-sm">{platform.title === "GeeksforGeeks" ? "GfG" : platform.title}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>
