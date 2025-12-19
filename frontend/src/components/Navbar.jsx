@@ -15,6 +15,7 @@ const Navbar = ({ onTerminalClick }) => {
   const navLinks = [
     { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
+    { name: "Problem Solving", href: "#problemsolving" },
     { name: "Projects", href: "#projects" },
     { name: "Skills", href: "#skills" },
     { name: "Experience", href: "#experience" },
@@ -109,12 +110,12 @@ const Navbar = ({ onTerminalClick }) => {
 
         {/* NAVIGATION + TERMINAL BUTTON */}
         <nav className="hidden md:flex items-center justify-center w-full">
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                className={`whitespace-nowrap text-sm font-medium transition-all duration-300 hover:scale-105 ${
                   active === link.name
                     ? "text-blue-500"
                     : isDark
@@ -151,7 +152,7 @@ const Navbar = ({ onTerminalClick }) => {
               key={link.name}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="text-lg font-medium hover:text-blue-400 transition-all duration-300 hover:scale-105"
+              className="text-lg font-medium whitespace-nowrap hover:text-blue-400 transition-all duration-300 hover:scale-105"
             >
               {link.name}
             </a>
