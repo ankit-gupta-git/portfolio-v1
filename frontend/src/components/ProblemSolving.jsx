@@ -115,15 +115,18 @@ export default function ProblemSolving() {
       <div className="space-y-6">
         {/* Header Section */}
         <div className="flex items-center justify-between">
-          <h2
-            className={`text-4xl sm:text-5xl md:text-6xl font-bold ${
-              isDark
-                ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
-                : "text-[#111827]"
-            } mb-12 font-dxgrafik`}
-          >
-            Problem Solving
-          </h2>
+          <div>
+            <h2
+              className={`text-4xl sm:text-5xl md:text-6xl font-bold ${
+                isDark
+                  ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
+                  : "text-[#111827]"
+              } mb-2 font-dxgrafik`}
+            >
+              Problem Solving
+            </h2>
+            <p className="text-sm text-gray-400 mt-2">Track my progress across competitive coding platforms</p>
+          </div>
           
           {/* Desktop Top Buttons */}
           <div className="hidden sm:flex items-center gap-4">
