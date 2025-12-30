@@ -212,7 +212,9 @@ export default function ProblemSolving() {
                     <span className="absolute inset-0 bg-gradient-to-r from-orange-600 to-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                     {/* Content */}
-                    <span className="relative z-10">View Profile ↗</span>
+                    <span className="relative z-10">
+                      View Profile <span className="hidden sm:inline">↗</span>
+                    </span>
                   </a>
                 </div>
 
