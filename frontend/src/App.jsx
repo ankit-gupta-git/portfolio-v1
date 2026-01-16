@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./components/ui/ThemeContext";
+import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
@@ -19,9 +20,15 @@ import "./App.css";
 
 const App = () => {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
 
   return (
     <>
+      {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
       <ThemeProvider>
         <Layout>
           <Navbar onTerminalClick={() => setIsTerminalOpen(true)} />
