@@ -2,7 +2,7 @@
 
 A modern portfolio website built with React and Vite, featuring interactive animations and a responsive design.
 
-## ✨ Features
+## Features
 
 * **Modern UI/UX**: Clean and intuitive interface with smooth animations
 * **Responsive Design**: Seamless experience across all devices
@@ -13,7 +13,7 @@ A modern portfolio website built with React and Vite, featuring interactive anim
 * **Skills Section**: Comprehensive display of technical expertise
 * **Contact Form**: Easy way to get in touch
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer        | Technologies                                    |
 |--------------|------------------------------------------------|
@@ -25,7 +25,7 @@ A modern portfolio website built with React and Vite, featuring interactive anim
 | **Routing**  | React Router                                   |
 | **Linting**  | ESLint & Prettier                              |
 
-## 🚀 Getting Started
+## Getting Started
 
 1. Clone and install:
 
@@ -43,7 +43,7 @@ npm run dev
 
 3. Open [http://localhost:5173](http://localhost:5173)
 
-## 📝 Project Structure
+## Project Structure
 
 ```
 portfolio-v1/
@@ -66,7 +66,7 @@ portfolio-v1/
 └── package.json       # Project dependencies and scripts
 ```
 
-## 🎨 Customization
+## Customization
 
 The portfolio can be easily customized by:
 
@@ -75,23 +75,23 @@ The portfolio can be easily customized by:
 3. Adding new sections in the `App.jsx` file
 4. Customizing animations in the components using Framer Motion
 
-## 🔒 Security Features
+## Security Features
 
 * CORS protection for API routes
 * Email validation to prevent spam
 * Rate limiting on sensitive endpoints
 
-## 📄 License
+## License
 
 This project is open source under the MIT License.
 
-## 🙋‍♂️ Author
+## Author
 
 **Ankit Kumar Gupta**  
 🔗 [ankitdev.xyz](https://ankitdev.xyz)  
 📧 [ankitkumargupta752@gmail.com](mailto:ankitkumargupta752@gmail.com)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 * Thanks to all the open-source projects that made this portfolio possible
 * Special thanks to the React and Vite communities for their excellent documentation
