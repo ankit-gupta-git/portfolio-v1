@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import { useTheme } from "./ui/ThemeContext";
 import { gsap } from "gsap";
@@ -9,6 +9,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
+    title: "Hirrd – AI-Powered Job Portal ",
+    description:
+      "A modern job portal that leverages AI to connect job seekers with relevant opportunities. Features include AI-powered resume analysis, personalized job recommendations, and smart matching algorithms.",
+    tech: ["React.js", "Supabase (PostgreSQL)", "Clerk", "LLM APIs"],
+    github: "https://github.com/ankit-gupta-git/ai-job-portal",
+    live: "https://job-portal-dun-chi.vercel.app/",
+    image: "/ProjectImg/Hirrd.png",
+  },
+  {
     title: "NAPSTER - Movie Recommendation",
     description:
       "AI-powered movie recommender based on user preferences and real-time trends.",
@@ -18,13 +27,13 @@ const projects = [
     image: "/ProjectImg/napster.png",
   },
   {
-    title: "Wanderlust - Airbnb Clone",
+    title: "Roamara - Airbnb Clone",
     description:
       "A full-stack rental platform with booking and listing features.",
-    tech: ["MERN", "Tailwind", "JWT"],
-    github: "https://github.com/ankitwanderlust",
-    live: "https://wanderlustbnb.netlify.app",
-    image: "/ProjectImg/travel.jpg",
+    tech: ["MongoDB", "Express.js", "React.js", "Node.js", "Tailwind", "JWT"],
+    github: "https://github.com/ankit-gupta-git/Roamara",
+    live: "https://roamara-six.vercel.app/",
+    image: "/ProjectImg/Romara.png",
   },
   {
     title: "Tudoo - Real-Time Collaborative To-Do Board",
@@ -34,15 +43,6 @@ const projects = [
     github: "https://github.com/ankit-gupta-git/To-Do_Board",
     live: "https://to-do-board-chi.vercel.app/",
     image: "/ProjectImg/to-do.png",
-  },
-  {
-    title: "ANZARA - E-Commerce Store",
-    description:
-      "A fully functional e-commerce platform with payment integration.",
-    tech: ["React", "Redux", "Stripe"],
-    github: "https://github.com/ankit-gupta-git/E-commerce-main",
-    live: "https://ankit-gupta-git.github.io/E-commerce-main/",
-    image: "/ProjectImg/ecommerce.png",
   },
   {
     title: "NeuraChat - Realtime AI Chat",
@@ -58,7 +58,7 @@ const projects = [
 const Projects = () => {
   const { isDark } = useTheme();
   const [modalProject, setModalProject] = useState(null);
-  const [clickedCardRef, setClickedCardRef] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
@@ -134,74 +134,46 @@ const Projects = () => {
     return () => tl.kill();
   }, []);
 
-  // Modal animation effect
+  // Handle modal open/close animations
   useEffect(() => {
-    if (modalProject && clickedCardRef && modalRef.current && modalContentRef.current) {
-      // Get clicked card position
-      const cardRect = clickedCardRef.getBoundingClientRect();
-      const viewportCenterX = window.innerWidth / 2;
-      const viewportCenterY = window.innerHeight / 2;
-      
-      // Calculate initial position (card position)
-      const initialX = cardRect.left + cardRect.width / 2;
-      const initialY = cardRect.top + cardRect.height / 2;
-      
-      // Calculate final position (center of viewport)
-      const finalX = viewportCenterX;
-      const finalY = viewportCenterY;
-      
-      // Set initial transform origin
-      modalContentRef.current.style.transformOrigin = `${initialX}px ${initialY}px`;
-      
-      // Animate from card position to center
-      gsap.fromTo(modalContentRef.current, 
-        {
-          scale: 0.1,
-          x: initialX - finalX,
-          y: initialY - finalY,
-          opacity: 0,
-          rotation: 0
-        },
-        {
-          scale: 1,
-          x: 0,
-          y: 0,
-          opacity: 1,
-          rotation: 0,
-          duration: 0.6,
-          ease: "back.out(1.7)"
-        }
-      );
+    if (modalOpen && modalRef.current && modalContentRef.current) {
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
       
       // Animate backdrop
       gsap.fromTo(modalRef.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.3 }
       );
-    }
-  }, [modalProject, clickedCardRef]);
-
-  // Handle card click with animation
-  const handleCardClick = (project, cardElement) => {
-    setClickedCardRef(cardElement);
-    setModalProject(project);
-    
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
-  };
-
-  // Handle modal close with animation
-  const handleModalClose = () => {
-    if (modalContentRef.current) {
+      
+      // Animate modal content from center
+      gsap.fromTo(modalContentRef.current, 
+        {
+          scale: 0.8,
+          opacity: 0,
+          y: 20
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "back.out(1.2)"
+        }
+      );
+    } else if (!modalOpen && modalContentRef.current) {
+      // Animate modal close
       gsap.to(modalContentRef.current, {
-        scale: 0.1,
+        scale: 0.8,
         opacity: 0,
+        y: 20,
         duration: 0.3,
         ease: "power2.in",
         onComplete: () => {
           setModalProject(null);
-          setClickedCardRef(null);
           document.body.style.overflow = 'unset';
+          document.documentElement.style.overflow = 'unset';
         }
       });
       
@@ -209,12 +181,48 @@ const Projects = () => {
         opacity: 0,
         duration: 0.3
       });
-    } else {
-      setModalProject(null);
-      setClickedCardRef(null);
-      document.body.style.overflow = 'unset';
     }
-  };
+  }, [modalOpen]);
+
+  // Handle card click
+  const handleCardClick = useCallback((project) => {
+    setModalProject(project);
+    setModalOpen(true);
+  }, []);
+
+  // Handle modal close
+  const handleModalClose = useCallback(() => {
+    setModalOpen(false);
+  }, []);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleEscKey = (e) => {
+      if (e.key === 'Escape' && modalOpen) {
+        handleModalClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => window.removeEventListener('keydown', handleEscKey);
+  }, [modalOpen, handleModalClose]);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (modalOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [modalOpen]);
 
   return (
     <section
@@ -273,7 +281,16 @@ const Projects = () => {
                 ? "bg-[#101014]"
                 : "bg-white/90 backdrop-blur-[20px] shadow-lg border border-white/50"
             } rounded-2xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105`}
-            onClick={() => setModalProject(project)}
+            onClick={() => handleCardClick(project)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleCardClick(project);
+              }
+            }}
+            aria-label={`View details for ${project.title}`}
           >
             {/* Image */}
             <div className="w-full h-52 overflow-hidden relative group">
@@ -360,94 +377,104 @@ const Projects = () => {
       {modalProject && (
         <div
           ref={modalRef}
-          className="fixed inset-0 z-40 flex justify-center items-center bg-black/60 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/70 backdrop-blur-sm"
           onClick={handleModalClose}
+          aria-modal="true"
+          role="dialog"
+          aria-labelledby="modal-title"
         >
           <div
             ref={modalContentRef}
-            className={`relative max-h-[90vh] overflow-y-auto w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col md:flex-row ${
+            className={`relative w-full max-w-4xl max-h-[85vh] overflow-hidden rounded-2xl shadow-2xl ${
               isDark ? "bg-[#18181b]" : "bg-white/95 backdrop-blur-[20px]"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className={`md:w-1/2 w-full flex items-center justify-center p-6 ${
-                isDark ? "bg-[#101014]" : "bg-gray-50"
-              }`}
-            >
-              <img
-                src={modalProject.image}
-                alt={modalProject.title}
-                className="w-full h-64 md:h-80 object-cover rounded-lg"
-              />
-            </div>
-
-            <div className="md:w-1/2 w-full p-6 md:p-8 flex flex-col justify-between">
-              <div>
-                <h3
-                  className={`text-2xl md:text-3xl font-bold mb-4 ${
-                    isDark ? "text-white" : "text-[#111827]"
-                  }`}
-                >
-                  {modalProject.title}
-                </h3>
-                <p
-                  className={`text-sm md:text-base leading-relaxed mb-6 font-jetbrains ${
-                    isDark ? "text-gray-300" : "text-gray-700"
-                  }`}
-                >
-                  {modalProject.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {modalProject.tech.map((t, i) => (
-                    <span
-                      key={i}
-                      className={`px-3 py-1 text-sm rounded-full ${
-                        isDark
-                          ? "bg-neutral-800 text-white"
-                          : "bg-[#cceeff] text-[#159ccb]"
-                      }`}
-                    >
-                      {t}
-                    </span>
-                  ))}
+            {/* Modal Content */}
+            <div className="flex flex-col md:flex-row">
+              <div
+                className={`md:w-1/2 w-full flex items-center justify-center p-6 ${
+                  isDark ? "bg-[#101014]" : "bg-gray-50"
+                }`}
+              >
+                <div className="w-full h-64 md:h-80 overflow-hidden rounded-lg">
+                  <img
+                    src={modalProject.image}
+                    alt={modalProject.title}
+                    className="w-full h-full object-cover object-center"
+                  />
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <a
-                  href={modalProject.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg flex-1 justify-center hover:scale-105 transition-all ${
-                    isDark
-                      ? "bg-[#23232a] hover:bg-[#23232a]/80 text-white"
-                      : "bg-gray-800 hover:bg-gray-700 text-white"
-                  }`}
-                >
-                  <FaGithub />
-                  GitHub
-                </a>
-                <a
-                  href={modalProject.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105 transition-all"
-                >
-                  <FaExternalLinkAlt />
-                  Live Demo
-                </a>
+              <div className="md:w-1/2 w-full p-6 md:p-8 flex flex-col">
+                <div className="flex-1 overflow-y-auto max-h-[calc(85vh-200px)]">
+                  <h3
+                    id="modal-title"
+                    className={`text-2xl md:text-3xl font-bold mb-4 ${
+                      isDark ? "text-white" : "text-[#111827]"
+                    }`}
+                  >
+                    {modalProject.title}
+                  </h3>
+                  <p
+                    className={`text-sm md:text-base leading-relaxed mb-6 font-jetbrains ${
+                      isDark ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    {modalProject.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {modalProject.tech.map((t, i) => (
+                      <span
+                        key={i}
+                        className={`px-3 py-1 text-sm rounded-full ${
+                          isDark
+                            ? "bg-neutral-800 text-white"
+                            : "bg-[#cceeff] text-[#159ccb]"
+                        }`}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <a
+                    href={modalProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex items-center gap-2 px-4 py-3 rounded-lg flex-1 justify-center hover:scale-105 transition-all ${
+                      isDark
+                        ? "bg-[#23232a] hover:bg-[#23232a]/80 text-white"
+                        : "bg-gray-800 hover:bg-gray-700 text-white"
+                    }`}
+                  >
+                    <FaGithub />
+                    GitHub
+                  </a>
+                  <a
+                    href={modalProject.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-3 rounded-lg flex-1 justify-center bg-[#159ccb] hover:bg-[#0f7a9e] text-white hover:scale-105 transition-all"
+                  >
+                    <FaExternalLinkAlt />
+                    Live Demo
+                  </a>
+                </div>
               </div>
             </div>
 
             <button
-              onClick={() => setModalProject(null)}
+              onClick={handleModalClose}
               className={`absolute top-4 right-4 p-2 rounded-full hover:scale-110 transition-all ${
                 isDark ? "bg-[#23232a] text-white" : "bg-gray-100 text-gray-600"
               }`}
+              aria-label="Close modal"
             >
               <svg
-                className="w-5 h-5"
+                className="w-6 h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
