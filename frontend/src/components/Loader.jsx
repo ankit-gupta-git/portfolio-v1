@@ -1,9 +1,28 @@
+// In Loader.jsx
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Loader = ({ onLoadingComplete }) => {
   const fullText = "hello.";
   const [text, setText] = useState("");
   const [fadeOut, setFadeOut] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+  // Progress bar animation
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        return prev + 1;
+      });
+    }, 30);
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Typing effect
   useEffect(() => {
@@ -21,6 +40,7 @@ const Loader = ({ onLoadingComplete }) => {
 
     // End loader
     const endTimer = setTimeout(() => {
+      setShowLoader(false);
       onLoadingComplete();
     }, 1600);
 
@@ -30,32 +50,83 @@ const Loader = ({ onLoadingComplete }) => {
     };
   }, [text, onLoadingComplete]);
 
+  // Interactive elements
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black overflow-hidden">
-      {/* Blob-like splashes */}
-      <div className="absolute inset-0">
-        <div className="absolute w-[350px] h-[350px] bg-pink-500 opacity-30 blur-[60px] top-[-80px] right-[-80px] rounded-full animate-blob"></div>
-        <div className="absolute w-[280px] h-[280px] bg-sky-400 opacity-20 blur-[60px] top-[40%] left-[-100px] rounded-full animate-blob delay-2000"></div>
-        <div className="absolute w-[280px] h-[280px] bg-purple-600 opacity-20 blur-[60px] top-[50%] right-[-100px] rounded-full animate-blob delay-3000"></div>
-        <div className="absolute w-[300px] h-[300px] bg-orange-400 opacity-20 blur-[60px] bottom-[-100px] left-1/2 transform -translate-x-1/2 rounded-full animate-blob delay-4000"></div>
-      </div>
-      <div
-        className={`
-          text-[125px]
-          transition-all duration-700 ease-out
-          ${fadeOut ? "opacity-0 scale-95" : "opacity-100 scale-100"}
-        `}
-        style={{
-          fontFamily: '"Sacramento", cursive',
-          background: 'linear-gradient(45deg, #ff69b4, #ff1493, #dc143c)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          textShadow: '2px 2px 4px rgba(255, 105, 180, 0.5)',
-        }}
-      >
-        {text}
-      </div>
-    </div>
+    <AnimatePresence>
+      {showLoader && (
+        <motion.div
+          className={`fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center transition-all duration-1000 ${
+            fadeOut ? "opacity-0" : "opacity-100"
+          }`}
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <motion.div
+              className="text-6xl font-bold text-white mb-8 relative"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ 
+                y: 0, 
+                opacity: 1,
+                scale: isHovered ? 1.05 : 1,
+                rotate: isHovered ? [0, -5, 5, -5, 0] : 0
+              }}
+              transition={{ 
+                duration: 0.6,
+                rotate: { 
+                  duration: 0.8,
+                  repeat: isHovered ? Infinity : 0,
+                  repeatType: "reverse"
+                }
+              }}
+            >
+              {text}
+              <motion.span
+                className="inline-block w-1 h-12 bg-blue-500 ml-1"
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ 
+                  duration: 0.8,
+                  repeat: Infinity,
+                  repeatType: "loop"
+                }}
+              />
+            </motion.div>
+
+            {/* Animated progress bar */}
+            <motion.div 
+              className="h-1 bg-gray-700 rounded-full overflow-hidden mt-4 w-64"
+              initial={{ width: 0 }}
+              animate={{ width: 256 }}
+              transition={{ duration: 3, ease: "easeInOut" }}
+            >
+              <motion.div 
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                initial={{ width: "0%" }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+
+            {/* Interactive message */}
+            <motion.p 
+              className="text-gray-400 mt-4 text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+              {progress < 100 ? "Loading your experience..." : "Ready to go!"}
+            </motion.p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

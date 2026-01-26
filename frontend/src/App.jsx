@@ -45,7 +45,7 @@ const App = () => {
           <Footer />
         </Layout>
       </ThemeProvider>
-      <AIAssistantWidget />
+      {!isLoading && <AIAssistantWidget />}
       <Terminal 
         isOpen={isTerminalOpen} 
         onClose={() => setIsTerminalOpen(false)} 

@@ -125,6 +125,18 @@ const AIAssistantWidget = () => {
     }
   }, [messages, open, currentTypingMessage]);
 
+  // Scroll lock effect
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open]);
+
   const handleOpenModal = () => {
     setIsInitialLoading(true);
     setOpen(true);
@@ -213,7 +225,12 @@ const AIAssistantWidget = () => {
 
       {/* Modal UI */}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setOpen(false);
+          }}
+        >
           <div className="relative w-full max-w-4xl mx-auto rounded-xl sm:rounded-2xl bg-[#181c23] shadow-2xl border border-[#23283a] flex flex-col h-[85vh] sm:h-[600px]">
             {isInitialLoading ? (
               // Initial Loading State UI
