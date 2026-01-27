@@ -90,4 +90,8 @@ Follow these steps to set up the project locally.
 -   **Email**: [ankitkumargupta752@gmail.com](mailto:ankitkumargupta752@gmail.com)
 
 ---
+<<<<<<< HEAD
 © 2024 Ankit Kumar Gupta. All Rights Reserved.
+=======
+© 2024 Ankit Kumar Gupta. All Rights Reserved.
+>>>>>>> 0989d24cece787d8c20ea02e7dd46a5675e62a6b
