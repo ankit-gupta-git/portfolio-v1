@@ -7,7 +7,7 @@ export default function Layout({ children }) {
 
   return (
     <div
-      className={`relative min-h-screen overflow-hidden transition duration-300 ${
+      className={`relative min-h-screen overflow-x-hidden transition duration-300 ${
         isDark ? "bg-black text-white" : "bg-white text-black"
       }`}
     >

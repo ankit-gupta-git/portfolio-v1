@@ -1,98 +1,93 @@
-# Ankit Kumar Gupta's Portfolio
+# Ankit Kumar Gupta - Software Development Engineer Portfolio
 
-A modern portfolio website built with React and Vite, featuring interactive animations and a responsive design.
+A high-performance, interactive portfolio website engineered to showcase technical expertise, projects, and problem-solving capabilities. Built with modern web technologies, this project demonstrates proficiency in full-stack development, UI/UX design, and clean code architecture.
 
-## Features
+## Live Demo
 
-* **Modern UI/UX**: Clean and intuitive interface with smooth animations
-* **Responsive Design**: Seamless experience across all devices
-* **Dark/Light Mode**: Eye-friendly interface with elegant theme transitions
-* **Interactive Components**: Engaging UI elements with Framer Motion animations
-* **Smooth Scrolling**: Enhanced user experience with Lenis scroll
-* **Project Showcase**: Interactive displays of projects and contributions
-* **Skills Section**: Comprehensive display of technical expertise
-* **Contact Form**: Easy way to get in touch
+[View Portfolio](https://ankitbuilds.vercel.app/)
 
-## Tech Stack
+## Key Features
 
-| Layer        | Technologies                                    |
-|--------------|------------------------------------------------|
-| **Frontend** | React.js, Tailwind CSS, Framer Motion |
-| **Build**    | Vite                                           |
-| **Styling**  | Tailwind CSS                                   |
-| **Animation**| Framer Motion                                  |
-| **Scrolling**| Lenis                                          |
-| **Routing**  | React Router                                   |
-| **Linting**  | ESLint & Prettier                              |
+-   **Immersive User Experience**:
+    -   **Dynamic Theme System**: Seamless light/dark mode transitions with persistent state preference.
+    -   **Interactive Terminal**: A functional, command-line interface simulation allowing users to interact with the portfolio via commands.
+    -   **Scroll Progress Indicator**: Visual feedback for reading progress across long sections.
+    -   **Custom Animations**: Smooth, performant animations using Framer Motion and GSAP.
 
-## Getting Started
+-   **Technical Showcase**:
+    -   **Problem Solving Hub**: Dedicated section displaying LeetCode stats and coding achievements.
+    -   **Project Gallery**: Detailed case studies of personal and commercial projects.
+    -   **Skills Matrix**: Categorized display of technical competencies.
+    -   **Professional Blog**: Integrated markdown-based blog for sharing technical insights.
 
-1. Clone and install:
+-   **Engineering Best Practices**:
+    -   **Responsive Design**: Mobile-first approach ensuring perfect rendering on all device sizes.
+    -   **Performance Optimized**: Fast load times, optimized assets, and best-practice coding standards.
+    -   **Clean Architecture**: Modular component structure for scalability and maintainability.
 
-```bash
-git clone https://github.com/ankit-gupta-git/portfolio-v1.git
-cd portfolio-v1
-npm install
-```
+## Technical Stack
 
-2. Run development server:
+### Frontend Core
+-   **React 19**: Leveraging the latest features for robust component logic.
+-   **Vite**: Ultra-fast build tool and development server.
+-   **React Router v7**: Advanced client-side routing.
 
-```bash
-npm run dev
-```
+### Styling & UI
+-   **Tailwind CSS v4**: Utility-first CSS framework for rapid, responsive design.
+-   **Framer Motion**: Production-ready animation library for React.
+-   **GSAP**: GreenSock Animation Platform for complex, high-performance animations.
+-   **Lucide React & React Icons**: Comprehensive icon libraries.
 
-3. Open [http://localhost:5173](http://localhost:5173)
+### Utilities & Integration
+-   **GitHub Calendar**: Visualization of coding activity.
+-   **Formspree**: Backend service for handling contact form submissions.
+-   **Axios**: Promise-based HTTP client.
 
 ## Project Structure
 
 ```
-portfolio-v1/
-├── src/
-│   ├── components/     # Reusable UI components
-│   │   ├── ui/        # UI components (buttons, cards, etc.)
-│   │   └── layout/    # Layout components
-│   ├── pages/         # Page components
-│   ├── assets/        # Images, fonts, and other static assets
-│   ├── styles/        # Global styles and Tailwind config
-│   ├── utils/         # Utility functions and helpers
-│   ├── hooks/         # Custom React hooks
-│   ├── context/       # React context providers
-│   └── App.tsx        # Main App component
-├── public/            # Static files
-├── index.html         # Entry HTML file
-├── vite.config.ts     # Vite configuration
-├── tailwind.config.js # Tailwind CSS configuration
-├── tsconfig.json      # TypeScript configuration
-└── package.json       # Project dependencies and scripts
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # Atomic design elements (Cards, Buttons)
+│   ├── layout/         # Layout wrappers
+│   ├── Terminal.jsx    # Interactive terminal implementation
+│   └── ...
+├── context/            # Global state management (ThemeContext)
+├── hooks/              # Custom React hooks
+├── data/               # Static content and configuration
+└── utils/              # Helper functions
 ```
 
-## Customization
+## Getting Started
 
-The portfolio can be easily customized by:
+Follow these steps to set up the project locally.
 
-1. Modifying the content in the respective component files
-2. Updating the theme colors in `tailwind.config.js`
-3. Adding new sections in the `App.jsx` file
-4. Customizing animations in the components using Framer Motion
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/ankit-gupta-git/portfolio-v1.git
+    cd portfolio-v1
+    ```
 
-## Security Features
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
-* CORS protection for API routes
-* Email validation to prevent spam
-* Rate limiting on sensitive endpoints
+3.  **Run the development server**
+    ```bash
+    npm run dev
+    ```
 
-## License
+4.  **Build for production**
+    ```bash
+    npm run build
+    ```
 
-This project is open source under the MIT License.
+## 📫 Contact
 
-## Author
+-   **Website**: [ankitdev.xyz](https://ankitbuilds.vercel.app)
+-   **LinkedIn**: [Ankit Kumar Gupta](https://linkedin.com/in/iamankit-gupta)
+-   **Email**: [ankitkumargupta752@gmail.com](mailto:ankitkumargupta752@gmail.com)
 
-**Ankit Kumar Gupta**  
-🔗 [ankitdev.xyz](https://ankitdev.xyz)  
-📧 [ankitkumargupta752@gmail.com](mailto:ankitkumargupta752@gmail.com)
-
-## Acknowledgments
-
-* Thanks to all the open-source projects that made this portfolio possible
-* Special thanks to the React and Vite communities for their excellent documentation
-* Inspired by modern web design trends and best practices
+---
+© 2024 Ankit Kumar Gupta. All Rights Reserved.

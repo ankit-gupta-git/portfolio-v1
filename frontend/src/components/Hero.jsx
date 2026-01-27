@@ -16,17 +16,16 @@ const Hero = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollTop;
+      const totalScroll = window.scrollY || document.documentElement.scrollTop;
       const windowHeight =
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight;
-      const scroll = `${totalScroll / windowHeight}`;
-      const scrolled = Number(scroll);
 
       if (windowHeight === 0) {
         setScrollProgress(0);
       } else {
-        setScrollProgress(scrolled);
+        const scroll = totalScroll / windowHeight;
+        setScrollProgress(scroll);
       }
     };
 
