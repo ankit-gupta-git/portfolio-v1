@@ -12,10 +12,26 @@ import { useTheme } from "./ui/ThemeContext";
 
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();
+  const [scrollProgress, setScrollProgress] = React.useState(0);
 
   useEffect(() => {
-    // No scroll progress logic needed
-    return () => {};
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scroll = `${totalScroll / windowHeight}`;
+      const scrolled = Number(scroll);
+
+      if (windowHeight === 0) {
+        setScrollProgress(0);
+      } else {
+        setScrollProgress(scrolled);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -28,7 +44,7 @@ const Hero = () => {
             ? "linear-gradient(to right, #2563eb, #9333ea, #db2777)"
             : "linear-gradient(to right, #159ccb, #0f7a9e, #0d5a7a)",
           transformOrigin: "0%",
-          // Optionally, you can set scaleX to scrollProgress if you want to keep the progress bar effect
+          transform: `scaleX(${scrollProgress})`,
         }}
       />
 
