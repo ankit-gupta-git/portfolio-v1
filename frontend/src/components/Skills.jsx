@@ -37,7 +37,7 @@ import {
 } from "react-icons/si";
 import { useTheme } from "./ui/ThemeContext";
 
-// Register ScrollTrigger plugin
+// Register ScrollTrigger plugi
 gsap.registerPlugin(ScrollTrigger);
 
 const skills = [
