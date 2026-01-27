@@ -38,7 +38,7 @@ import {
 import { useTheme } from "./ui/ThemeContext";
 
 // Register ScrollTrigger plugi
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger)
 
 const skills = [
   {
