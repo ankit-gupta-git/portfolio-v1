@@ -39,6 +39,11 @@ app.get('/', (req, res) => {
     });
 });
 
+// Warm-up endpoint for cold start optimization
+app.get('/api/warmup', (req, res) => {
+    res.status(200).json({ message: "Warmed up" });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ 

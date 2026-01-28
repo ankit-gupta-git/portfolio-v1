@@ -26,6 +26,38 @@ const App = () => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    // Warm-up backend on initial load to reduce cold start latency
+    const warmUpBackend = async () => {
+      // 1. Check session storage to ensure we only run this once per session
+      if (sessionStorage.getItem("warmup_done")) return;
+      
+      // Mark as done immediately
+      sessionStorage.setItem("warmup_done", "true");
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
+        // 2. Fire and forget request with timeout
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/warmup`, {
+          method: "GET",
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
+        console.log("Backend warmed up");
+      } catch (error) {
+        // Silently fail - this shouldn't affect the UX
+        if (error.name === 'AbortError') {
+           console.log("Warmup timed out");
+        }
+      }
+    };
+
+    warmUpBackend();
+  }, []);
+
   return (
     <>
       {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
