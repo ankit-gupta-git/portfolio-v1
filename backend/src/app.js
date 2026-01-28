@@ -10,7 +10,7 @@ app.use(cors({
         if (!origin) return callback(null, true);
         
         const allowedOrigins = [
-            'https://www.ankitbuilds.vercel.app',
+            'https://ankitbuilds.vercel.app',
             'http://localhost:5173'
         ];
         
