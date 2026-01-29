@@ -4,12 +4,12 @@ const NodeCache = require('node-cache');
 // Initialize cache with 5 minutes TTL
 const cache = new NodeCache({ stdTTL: 300 });
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL = 'compound-beta';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const MODEL = 'gemini-1.5-flash';
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
 // Debug: Log API key status (without exposing the key)
-console.log('🔑 Groq API Key Status:', GROQ_API_KEY ? '✅ Configured' : '❌ Missing');
+console.log('🔑 Gemini API Key Status:', GEMINI_API_KEY ? '✅ Configured' : '❌ Missing');
 
 const systemPrompt = `You are Ankit Gupta's personal AI assistant. Respond directly and conversationally without any thinking tags, internal reasoning, or markdown formatting.
 
@@ -57,33 +57,35 @@ async function generateContent(prompt) {
 
   try {
     // Check if API key is available
-    if (!GROQ_API_KEY) {
-      console.error('❌ GROQ_API_KEY is not configured');
-      throw new Error('GROQ_API_KEY is not configured');
+    if (!GEMINI_API_KEY) {
+      console.error('❌ GEMINI_API_KEY is not configured');
+      throw new Error('GEMINI_API_KEY is not configured');
     }
 
-    console.log('📡 Making request to Groq API...');
+    console.log('📡 Making request to Gemini API...');
     
     const requestBody = {
-      model: MODEL,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.7,
-      max_tokens: 2048
+      contents: [{
+        parts: [{ text: prompt }]
+      }],
+      systemInstruction: {
+        parts: [{ text: systemPrompt }]
+      },
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 2048
+      }
     };
 
-    console.log('📤 Request URL:', GROQ_API_URL);
+    console.log('📤 Request URL:', API_URL.replace(GEMINI_API_KEY, 'HIDDEN_KEY'));
     console.log('📤 Request Model:', MODEL);
-    console.log('📤 Request Body Structure:', JSON.stringify(requestBody, null, 2));
-
+    
+    // Note: API key is in the URL, so no auth header needed for this endpoint style
     const response = await axios.post(
-      GROQ_API_URL,
+      API_URL,
       requestBody,
       {
         headers: {
-          'Authorization': `Bearer ${GROQ_API_KEY}`,
           'Content-Type': 'application/json'
         },
         timeout: 30000 // 30 second timeout
@@ -91,23 +93,25 @@ async function generateContent(prompt) {
     );
     
     console.log('📥 Response Status:', response.status);
-    console.log('📥 Response Headers:', response.headers);
-    console.log('📥 Response Data Structure:', JSON.stringify(response.data, null, 2));
     
     // Check if response has the expected structure
-    if (!response.data.choices || !response.data.choices[0] || 
-        !response.data.choices[0].message || !response.data.choices[0].message.content) {
-      console.error('❌ Unexpected response structure:', response.data);
-      throw new Error('Invalid response structure from Groq API');
+    // Gemini response structure: candidates[0].content.parts[0].text
+    if (!response.data.candidates || !response.data.candidates[0] ||
+        !response.data.candidates[0].content || 
+        !response.data.candidates[0].content.parts || 
+        !response.data.candidates[0].content.parts[0].text) {
+          
+      console.error('❌ Unexpected response structure:', JSON.stringify(response.data, null, 2));
+      throw new Error('Invalid response structure from Gemini API');
     }
     
-    const aiText = response.data.choices[0].message.content;
+    const aiText = response.data.candidates[0].content.parts[0].text;
     console.log('✅ Generated AI text length:', aiText.length);
     
     // Validate the response
     if (!aiText || aiText.trim().length === 0) {
-      console.error('❌ Empty response from Groq API');
-      throw new Error('Empty response from Groq API');
+      console.error('❌ Empty response from Gemini API');
+      throw new Error('Empty response from Gemini API');
     }
     
     // Cache the response
@@ -118,24 +122,23 @@ async function generateContent(prompt) {
     console.error('❌ Error generating content:');
     console.error('Error type:', error.constructor.name);
     console.error('Error message:', error.message);
-    console.error('Error response status:', error?.response?.status);
-    console.error('Error response data:', error?.response?.data);
-    console.error('Error response headers:', error?.response?.headers);
-    console.error('Full error object:', error);
+    
+    if (error.response) {
+       console.error('Error response status:', error.response.status);
+       console.error('Error response data:', JSON.stringify(error.response.data, null, 2));
+    }
     
     // Provide more specific error messages
     if (error?.response?.status === 400) {
-      throw new Error('Invalid request to Groq API. Please check your API key and request format.');
-    } else if (error?.response?.status === 401) {
-      throw new Error('Unauthorized access to Groq API. Please check your API key.');
-    } else if (error?.response?.status === 403) {
-      throw new Error('Access forbidden. Please check your API key permissions.');
+      throw new Error('Invalid request to Gemini API. Please check your request format.');
+    } else if (error?.response?.status === 401 || error?.response?.status === 403) {
+      throw new Error('Unauthorized access to Gemini API. Please check your API key.');
     } else if (error?.response?.status === 429) {
       throw new Error('Rate limit exceeded. Please try again later.');
     } else if (error?.code === 'ECONNABORTED') {
       throw new Error('Request timeout. Please try again.');
-    } else if (error?.message === 'GROQ_API_KEY is not configured') {
-      throw new Error('Groq API key is not configured. Please check your environment variables.');
+    } else if (error?.message === 'GEMINI_API_KEY is not configured') {
+      throw new Error('Gemini API key is not configured. Please check your environment variables.');
     }
     
     throw new Error('Failed to generate response. Please try again later.');

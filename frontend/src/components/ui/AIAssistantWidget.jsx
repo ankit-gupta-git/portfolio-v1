@@ -256,7 +256,7 @@ const AIAssistantWidget = () => {
                     </span>
                     <div>
                       <span className="font-semibold text-base sm:text-lg text-white">AI Assistant</span>
-                      <div className="text-xs sm:text-sm text-blue-200">Powered by Groq AI</div>
+                      <div className="text-xs sm:text-sm text-blue-200">Powered by Gemini AI</div>
                     </div>
                   </div>
                   <button
