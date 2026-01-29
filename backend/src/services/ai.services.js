@@ -138,4 +138,31 @@ async function generateContent(prompt) {
   }
 }
 
-module.exports = generateContent;
+const warmUpAI = async () => {
+  console.log("🔥 Triggering background AI warm-up...");
+  try {
+    if (!ai) {
+        if (process.env.GEMINI_API_KEY) {
+            ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+        } else {
+             console.warn("⚠️ Cannot warm up AI: API key missing");
+             return;
+        }
+    }
+
+    // specific model for warmup - inexpensive
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: [{ role: "user", parts: [{ text: "ping" }] }],
+      config: {
+        maxOutputTokens: 1, // Minimize cost/latency
+      },
+    });
+    
+    console.log("✅ AI Warm-up successful. Model is hot.");
+  } catch (error) {
+    console.error("⚠️ AI Warm-up failed (non-critical):", error.message);
+  }
+};
+
+module.exports = { generateContent, warmUpAI };

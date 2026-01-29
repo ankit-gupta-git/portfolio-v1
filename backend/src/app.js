@@ -41,6 +41,11 @@ app.get('/', (req, res) => {
 
 // Warm-up endpoint for cold start optimization
 app.get('/api/warmup', (req, res) => {
+    // Fire and forget - don't wait for it
+    const { warmUpAI } = require('./services/ai.services');
+    warmUpAI();
+    console.log("Warm-up signal received, triggering AI background init");
+    
     res.status(200).json({ message: "Warmed up" });
 });
 

@@ -1,4 +1,4 @@
-const aiService = require('../services/ai.services');
+const { generateContent } = require('../services/ai.services');
 
 module.exports.getResponse = async (req, res) => {
     try {
@@ -8,7 +8,7 @@ module.exports.getResponse = async (req, res) => {
             return res.status(400).json({ error: "Prompt is required" });
         }
 
-        const response = await aiService(prompt);
+        const response = await generateContent(prompt);
         res.json({ response });
     } catch (error) {
         console.error('Error in AI controller:', error);
