@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useTheme } from "./ui/ThemeContext";
-import { FaMedium, FaExternalLinkAlt, FaCalendarAlt, FaClock } from "react-icons/fa";
+import { FaMedium } from "react-icons/fa";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -186,37 +186,43 @@ const Blog = () => {
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
         >
-          {blogPosts.map((post, index) => (
+          {blogPosts.map((post, index) => {
+             // Define colors for each card based on index
+             const colors = [
+               { light: "text-red-600 hover:text-red-700", dark: "text-red-400 hover:text-red-300" },
+               { light: "text-blue-600 hover:text-blue-700", dark: "text-blue-400 hover:text-blue-300" },
+               { light: "text-yellow-600 hover:text-yellow-700", dark: "text-yellow-400 hover:text-yellow-300" },
+               { light: "text-pink-600 hover:text-pink-700", dark: "text-pink-400 hover:text-pink-300" },
+             ];
+             const color = colors[index % colors.length];
+             
+             return (
             <article
               key={post.id}
               ref={el => blogCardsRef.current[index] = el}
               className={"group relative overflow-visible rounded-none transition-all duration-300 hover:scale-105"}
             >
               {/* Blog Image */}
-              <div className="relative h-48 overflow-hidden rounded-2xl">
+              <a 
+                href={post.mediumUrl}
+                target="_blank" 
+                rel="noreferrer"
+                className="block relative h-48 overflow-hidden rounded-2xl cursor-pointer"
+              >
                 <img
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 rounded-2xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl" />
-                {/* Topic Badge */}
-                <div className="absolute top-4 left-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    isDark 
-                      ? "bg-blue-600/90 text-white" 
-                      : "bg-blue-600 text-white"
-                  }`}>
-                    {post.topic}
-                  </span>
-                </div>
+
                 {/* Medium Icon */}
                 <div className="absolute top-4 right-4">
                   <FaMedium className={`text-2xl ${
                     isDark ? "text-white" : "text-white"
                   }`} />
                 </div>
-              </div>
+              </a>
               {/* Blog Content */}
               <div className="p-0 pt-6">
                 <h3 className={`text-xl font-bold mb-3 line-clamp-2 ${
@@ -231,49 +237,25 @@ const Blog = () => {
                     ? "Discover why Next.js 13 stands out for modern web development—covering SSR, file-based routing, and performance best practices."
                     : post.description}
                 </p>
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {post.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className={`px-2 py-1 rounded-md text-xs font-medium ${
-                        isDark 
-                          ? "bg-gray-700 text-gray-300" 
-                          : "bg-gray-200 text-gray-700"
-                      }`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                {/* Meta Information */}
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                  <div className="flex items-center gap-2">
-                    <FaCalendarAlt />
-                    <span>{post.publishDate}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FaClock />
-                    <span>{post.readTime}</span>
-                  </div>
-                </div>
+
                 {/* Read More Button */}
                 <a
                   href={post.mediumUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
-                    isDark
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : "bg-blue-600 hover:bg-blue-700 text-white"
+                  className={`inline-flex items-center text-lg font-semibold group ${
+                    isDark ? color.dark : color.light
                   }`}
                 >
-                  Read on Medium
-                  <FaExternalLinkAlt className="text-sm" />
+                  Read
+                  <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">
+                    →
+                  </span>
                 </a>
               </div>
             </article>
-          ))}
+             );
+          })}
         </div>
 
         {/* View All Blogs CTA */}
@@ -285,10 +267,10 @@ const Blog = () => {
             href="https://medium.com/@ankitguptablogs"
             target="_blank"
             rel="noreferrer"
-            className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105 ${
+            className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 bg-no-repeat ${
               isDark
-                ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg hover:shadow-blue-500/40 hover:brightness-110 text-white"
+                : "bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg hover:shadow-blue-500/40 hover:brightness-110 text-white"
             }`}
           >
             <FaMedium className="text-xl" />

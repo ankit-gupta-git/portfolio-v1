@@ -115,7 +115,7 @@ const Contact = () => {
             ? "bg-gradient-to-r from-sky-400 via-purple-500 to-pink-500"
             : "bg-gradient-to-r from-[#159ccb] to-[#0f7a9e]"
         }`}>
-          Connect
+          get in touch!
         </span>
       </h2>
       <p 
