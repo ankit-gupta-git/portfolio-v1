@@ -42,13 +42,20 @@ const projects = [
     status: "Fullstack",
   },
   {
-    title: "Tudoo - Real-Time Collaborative To-Do Board",
+    title: "AllySupport - AI Customer Support SaaS",
     description:
-      "A full-stack MERN application featuring a real-time collaborative To-Do board with drag-and-drop functionality, conflict resolution, and smart task assignment.",
-    tech: ["React", "Firebase", "Framer Motion"],
-    github: "https://github.com/ankit-gupta-git/To-Do_Board",
-    live: "https://to-do-board-chi.vercel.app/",
-    image: "/ProjectImg/to-do.png",
+      "A SaaS-based AI customer support chatbot that allows businesses to train an AI assistant on their own data and embed it into any website using a simple script tag. Includes authentication, dashboard management, and real-time AI responses.",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "MongoDB",
+      "Google Gemini AI",
+      "Scalekit",
+      "Tailwind CSS",
+    ],
+    github: "https://github.com/ankit-gupta-git/ally-support",
+    live: "https://ally-support.vercel.app/",
+    image: "/ProjectImg/AllySupport.png",
     status: "Fullstack",
   },
   {
