@@ -23,12 +23,11 @@ const ProjectCard = ({ project }) => {
     >
       <div className="
         relative h-full flex flex-col 
-        bg-gradient-to-br from-gray-50 to-white 
-        dark:from-gray-900/80 dark:to-black/80 
+        bg-white dark:bg-gray-900/80 
         backdrop-blur-md 
-        border border-gray-200 dark:border-white/10 
+        border border-gray-200/50 dark:border-white/10 
         rounded-2xl overflow-hidden 
-        shadow-lg hover:shadow-xl transition-all duration-300
+        shadow-sm hover:shadow-xl transition-all duration-300
       ">
         {/* Project Image */}
         <div className="relative h-48 w-full overflow-hidden">
@@ -69,10 +68,10 @@ const ProjectCard = ({ project }) => {
                 key={idx}
                 className="
                   text-xs font-medium 
-                  bg-gray-100/90 text-gray-800 
-                  dark:bg-white/10 dark:text-gray-200 
+                  bg-gray-50 text-gray-600 
+                  dark:bg-white/5 dark:text-gray-300 
                   px-3 py-1.5 rounded-full 
-                  border border-gray-200/70 dark:border-white/5
+                  border border-gray-100 dark:border-white/5
                 "
               >
                 {tech}
@@ -89,8 +88,9 @@ const ProjectCard = ({ project }) => {
                 rel="noopener noreferrer"
                 className="
                   p-2.5 rounded-xl 
-                  bg-gray-100/80 hover:bg-gray-200/80 
+                  bg-gray-50 hover:bg-gray-100 
                   dark:bg-white/10 dark:hover:bg-white/20 
+                  border border-gray-200 dark:border-white/5 
                   transition-all duration-300 shadow-sm hover:shadow
                 "
                 aria-label="GitHub Repository"
@@ -103,8 +103,9 @@ const ProjectCard = ({ project }) => {
                 rel="noopener noreferrer"
                 className="
                   p-2.5 rounded-xl 
-                  bg-gray-100/80 hover:bg-gray-200/80 
+                  bg-gray-50 hover:bg-gray-100 
                   dark:bg-white/10 dark:hover:bg-white/20 
+                  border border-gray-200 dark:border-white/5 
                   transition-all duration-300 shadow-sm hover:shadow
                 "
                 aria-label="Live Demo"

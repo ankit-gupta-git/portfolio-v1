@@ -10,11 +10,11 @@ body {
   font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
 }
 
-  .continuous-swiper .swiper-wrapper {
-    transition-timing-function: linear !important;
-  }
+.continuous-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
 
-  /* Custom Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -39,8 +39,10 @@ body {
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .mask-fade-edges {
@@ -61,6 +63,18 @@ body {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'GystBold';
+  src: url('/fonts/gyst-bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-gyst {
+  font-family: 'GystBold', sans-serif;
+  font-weight: bold;
+}
+
 
 
 
@@ -78,7 +92,7 @@ body {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.15),
     0 0 12px rgba(255, 255, 255, 0.08),
     0 8px 32px rgba(0, 0, 0, 0.1),
@@ -88,7 +102,7 @@ body {
 
 /* Enhanced glow effect for scroll-triggered state */
 .experience-card-glow.scroll-glow {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(59, 130, 246, 0.4),
     0 0 20px rgba(59, 130, 246, 0.3),
     0 0 40px rgba(59, 130, 246, 0.2),
@@ -100,7 +114,7 @@ body {
 
 /* Dark mode enhanced glow */
 .dark .experience-card-glow.scroll-glow {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(59, 130, 246, 0.5),
     0 0 20px rgba(59, 130, 246, 0.4),
     0 0 40px rgba(59, 130, 246, 0.3),
@@ -120,7 +134,8 @@ body {
 
 /* Mobile text sizing for better readability */
 .experience-card-content .prose {
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
+  /* 14px */
   line-height: 1.5;
 }
 
@@ -128,7 +143,8 @@ body {
 .experience-card-content .prose h2,
 .experience-card-content .prose h3,
 .experience-card-content .prose h4 {
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
+  /* 16px */
   margin-bottom: 0.5rem;
 }
 
@@ -140,16 +156,18 @@ body {
   .experience-card-content {
     padding: 20px;
   }
-  
+
   .experience-card-content .prose {
-    font-size: 1rem; /* 16px */
+    font-size: 1rem;
+    /* 16px */
   }
-  
+
   .experience-card-content .prose h1,
   .experience-card-content .prose h2,
   .experience-card-content .prose h3,
   .experience-card-content .prose h4 {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
+    /* 18px */
   }
 }
 

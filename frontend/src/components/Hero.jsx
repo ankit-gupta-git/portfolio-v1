@@ -118,7 +118,7 @@ const Hero = () => {
               <span
                 className={`${
                   isDark ? "text-blue-500" : "text-[#159ccb]"
-                } font-dxgrafik`}
+                } font-gyst`}
               >
                 Ankit Gupta
               </span>

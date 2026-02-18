@@ -70,7 +70,7 @@ const Loader = ({ onLoadingComplete }) => {
             onMouseLeave={() => setIsHovered(false)}
           >
             <motion.div
-              className="text-6xl font-bold text-white mb-8 relative"
+              className="text-6xl font-gyst text-white mb-8 relative"
               initial={{ y: 20, opacity: 0 }}
               animate={{ 
                 y: 0, 
