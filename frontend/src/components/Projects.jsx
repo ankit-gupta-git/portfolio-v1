@@ -32,13 +32,13 @@ const projects = [
     status: "Full Stack",
   },
   {
-    title: "Roamara - Airbnb Clone",
+    title: "InterviewIQ – AI-Powered Interview Preparation Platform",
     description:
-      "A full-stack rental platform with booking and listing features.",
-    tech: ["MongoDB", "Express.js", "React.js", "Node.js", "Tailwind", "JWT"],
-    github: "https://github.com/ankit-gupta-git/Roamara",
-    live: "https://roamara-six.vercel.app/",
-    image: "/ProjectImg/Romara.png",
+      "A full-stack AI video interview simulator with role-specific questions, resume-based personalization, analytics dashboards, and automated reports.",
+    tech: ["MongoDB", "Express.js", "React.js", "Node.js", "Firebase", "Stripe", "Redux Toolkit", "Gemini API", "Recharts"],
+    github: "https://github.com/ankit-gupta-git/AI-Interview-Agent",
+    live: "https://interviewiq-ai.vercel.app/",
+    image: "/ProjectImg/InterviewIQ.png",
     status: "Fullstack",
   },
   {
@@ -100,11 +100,10 @@ const Projects = () => {
   return (
     <section
       id="projects"
-      className={`py-32 px-10 font-figtree ${
-        !isDark
+      className={`py-32 px-10 font-figtree ${!isDark
           ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]"
           : ""
-      }`}
+        }`}
     >
       <div className="max-w-8xl mx-auto">
         {/* Heading */}
@@ -112,11 +111,10 @@ const Projects = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik mb-4 ${
-            isDark
+          className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik mb-4 ${isDark
               ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
               : "text-[#111827]"
-          }`}
+            }`}
         >
           Projects
         </motion.h2>
@@ -127,9 +125,8 @@ const Projects = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className={`text-center max-w-2xl mx-auto mb-16 text-base sm:text-lg ${
-            isDark ? "text-gray-400" : "text-gray-600"
-          }`}
+          className={`text-center max-w-2xl mx-auto mb-16 text-base sm:text-lg ${isDark ? "text-gray-400" : "text-gray-600"
+            }`}
         >
           Yeah, I work hard 💼 <br />
           Each project is unique. Here are some of my works.
