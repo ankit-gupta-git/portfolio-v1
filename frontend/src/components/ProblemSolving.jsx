@@ -29,7 +29,7 @@ const profiles = {
     href: "https://www.interviewbit.com/profile/ankit-kumar-gupta_787/",
     // Kept your specific link
     imgSrc:
-      "https://www.startuphrtoolkit.com/wp-content/uploads/2020/12/Interviewbit-logo-150x150.png",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYjBQQeARNswV7iC1K6kA4m6ZMUzp3jtx6qg&s",
     title: "InterviewBit",
   },
   codolio: {
