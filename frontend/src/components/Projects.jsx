@@ -29,7 +29,7 @@ const projects = [
     github: "https://github.com/ankit-gupta-git/napster-recommendation-system",
     live: "https://napster-recommendation-system.vercel.app/",
     image: "/ProjectImg/napster.png",
-    status: "Full Stack",
+    status: "Fullstack",
   },
   {
     title: "InterviewIQ – AI-Powered Interview Preparation Platform",

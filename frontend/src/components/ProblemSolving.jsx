@@ -19,7 +19,6 @@ const profiles = {
   geeksforgeeks: {
     username: "ankitxcodes",
     href: "https://www.geeksforgeeks.org/profile/ankitxcodes",
-    // Replaced the broken google content link with a valid GfG logo
     imgSrc:
       "https://upload.wikimedia.org/wikipedia/commons/4/43/GeeksforGeeks.svg",
     title: "GeeksforGeeks",
@@ -54,7 +53,7 @@ export default function ProblemSolving() {
         const username = profiles.leetcode.username;
         if (!username) return;
         const res = await fetch(
-          `https://leetcode-stats-api.herokuapp.com/${username}`
+          `https://leetcode-api-faisalshohag.vercel.app/${username}`
         );
         if (res.ok) {
           const data = await res.json();
