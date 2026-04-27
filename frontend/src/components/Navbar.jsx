@@ -15,10 +15,11 @@ const Navbar = ({ onTerminalClick }) => {
   const navLinks = [
     { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
+    { name: "Experience", href: "#experience" },
+    { name: "Skills", href: "#skills" },
     { name: "Problem Solving", href: "#problemsolving" },
     { name: "Projects", href: "#projects" },
-    { name: "Skills", href: "#skills" },
-    { name: "Experience", href: "#experience" },
+    { name: "Blog", href: "#blog" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -76,7 +77,7 @@ const Navbar = ({ onTerminalClick }) => {
   }, [menuOpen]);
 
   return (
-    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-3xl px-2">
+    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-5xl px-2">
       <div
         ref={navbarRef}
         className={`backdrop-blur-xl backdrop-saturate-150 border rounded-xl flex items-center px-6 py-3 shadow-lg transition-all duration-300 ${
@@ -110,7 +111,7 @@ const Navbar = ({ onTerminalClick }) => {
 
         {/* NAVIGATION + TERMINAL BUTTON */}
         <nav className="hidden md:flex items-center justify-center w-full">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6 xl:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.name}
