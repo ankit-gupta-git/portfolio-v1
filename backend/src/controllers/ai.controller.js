@@ -12,6 +12,6 @@ module.exports.getResponse = async (req, res) => {
         res.json({ response });
     } catch (error) {
         console.error('Error in AI controller:', error);
-        res.status(500).json({ error: "Failed to generate response" });
+        res.status(500).json({ error: "I'm sorry, I couldn't process that query. Could we focus on topics related to Ankit's professional work, skills, and projects?" });
     }
 };
