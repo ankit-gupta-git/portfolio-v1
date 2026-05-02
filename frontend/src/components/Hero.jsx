@@ -53,7 +53,7 @@ const Hero = () => {
           !isDark
             ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]"
             : ""
-        } ${isDark ? "mt-16 sm:mt-20 md:mt-0" : "mt-20 sm:mt-24 md:mt-0"}`}
+        } ${isDark ? "pt-16 sm:pt-20 md:pt-24 lg:pt-28" : "pt-20 sm:pt-24 md:pt-24 lg:pt-28"}`}
       >
         {/* Theme Toggle Switch */}
         <button
@@ -128,19 +128,14 @@ const Hero = () => {
                 isDark ? "text-gray-400" : "text-gray-600"
               }`}
             >
-              Full Stack Developer | Aspiring SDE
+              Full-Stack Developer | MERN | Generative AI
             </h2>
             <p
               className={`max-w-xl text-sm sm:text-base md:text-lg ${
                 isDark ? "text-gray-500" : "text-gray-700"
               }`}
             >
-              I turn ideas into code and messy problems into clean commits. I'm
-              a full-stack developer, Java enthusiast, and 5x hackathoner who
-              loves building real-world tech with a touch of AI. Right now, I'm
-              exploring how smart systems can solve everyday challenges. Always
-              up for connecting and creating something impactful — let's build
-              together!
+              I build scalable full-stack products — from system design and APIs to responsive, high-performance frontends. With experience shipping production applications, winning hackathons, and solving 500+ DSA problems, I focus on writing code that scales and performs in real-world environments. Currently exploring Generative AI and intelligent agents to build smarter, more efficient systems. Always open to opportunities where I can contribute and create meaningful impact.
             </p>
 
             {/* CTA Buttons */}
