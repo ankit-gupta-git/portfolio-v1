@@ -53,12 +53,12 @@ const Hero = () => {
           !isDark
             ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]"
             : ""
-        } ${isDark ? "pt-16 sm:pt-20 md:pt-24 lg:pt-28" : "pt-20 sm:pt-24 md:pt-24 lg:pt-28"}`}
+        } ${isDark ? "pt-32 sm:pt-20 md:pt-24 lg:pt-28" : "pt-32 sm:pt-24 md:pt-24 lg:pt-28"}`}
       >
         {/* Theme Toggle Switch */}
         <button
           onClick={() => setIsDark(!isDark)}
-          className={`absolute top-6 right-6 z-50 w-12 h-6 sm:w-16 sm:h-8 rounded-full p-1 transition-colors duration-300 ease-in-out ${
+          className={`absolute top-24 sm:top-6 right-6 z-50 w-12 h-6 sm:w-16 sm:h-8 rounded-full p-1 transition-colors duration-300 ease-in-out ${
             isDark
               ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
               : "bg-gradient-to-r from-[#159ccb] to-[#0f7a9e]"
