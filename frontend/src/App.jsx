@@ -16,6 +16,7 @@ import AIAssistantWidget from "./components/ui/AIAssistantWidget";
 import TechStackCarousel from "./components/ui/TechStackCarousel";
 import GithubContributions from "./components/ui/GithubContributions";
 import { Terminal } from "./components/Terminal";
+import FluidCursor from "./components/FluidCursor";
 import "./App.css";
 
 const App = () => {
@@ -60,6 +61,7 @@ const App = () => {
 
   return (
     <>
+      <FluidCursor />
       {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
       <ThemeProvider>
         <Layout>
