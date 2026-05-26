@@ -123,11 +123,11 @@ const Carousel = ({ direction = "left", isDark }) => {
                 src={tech.logo}
                 alt={tech.name}
                 className={`h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 object-contain mb-2 transition-all duration-300
-                  ${isDark ? "grayscale hover:grayscale-0" : ""}
+                  ${isDark ? "opacity-70 hover:opacity-100" : ""}
                   ${hoveredIdx === idx && isDark ? 'z-10' : ''}
                   ${isTapped ? "ring-4 ring-[#159ccb] bg-white/10" : ""}
                 `}
-                style={isTapped ? { filter: "none", background: "linear-gradient(135deg,#159ccb,#0f7a9e,#0d5a7a)", borderRadius: "9999px" } : {}}
+                style={isTapped ? { opacity: 1, background: "linear-gradient(135deg,#159ccb,#0f7a9e,#0d5a7a)", borderRadius: "9999px" } : {}}
               />
               <span className={`text-xs sm:text-sm md:text-base font-medium transition-colors duration-300 ${
                 isDark ? "text-gray-200" : "text-[#111827]"
