@@ -7,16 +7,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const techStack = [
-  { name: "React", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" },
-  { name: "Node.js", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" },
-  { name: "MongoDB", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" },
-  { name: "Express", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg" },
-  { name: "Java", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" },
-  { name: "MySQL", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" },
-  { name: "Firebase", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-plain.svg" },
-  { name: "Git", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" },
-  { name: "Tailwind CSS", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
-  { name: "Vite", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" },
+  { name: "React", logo: "/Icons/tech/react.svg" },
+  { name: "Node.js", logo: "/Icons/tech/nodejs.svg" },
+  { name: "MongoDB", logo: "/Icons/tech/mongodb.svg" },
+  { name: "Express", logo: "/Icons/tech/express.svg" },
+  { name: "Java", logo: "/Icons/tech/java.svg" },
+  { name: "MySQL", logo: "/Icons/tech/mysql.svg" },
+  { name: "Firebase", logo: "/Icons/tech/firebase.svg" },
+  { name: "Git", logo: "/Icons/tech/git.svg" },
+  { name: "Tailwind CSS", logo: "/Icons/tech/tailwindcss.svg" },
+  { name: "Vite", logo: "/Icons/tech/vite.svg" },
 ];
 
 const Carousel = ({ direction = "left", isDark }) => {

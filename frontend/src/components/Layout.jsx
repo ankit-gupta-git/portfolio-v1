@@ -1,9 +1,13 @@
+import React from "react";
 import BlobBackground from "./ui/BlobBackground";  // Blob Background component
 import { useTheme } from "./ui/ThemeContext";  // Theme context to get theme state
 import BackToTopButton from "./ui/BackToTopButton"; // Import the BackToTopButton
+import useSmoothScroll from "../hooks/useSmoothScroll";
 
 export default function Layout({ children }) {
   const { isDark } = useTheme(); // Get current theme from context
+
+  useSmoothScroll();
 
   return (
     <div
