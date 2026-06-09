@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   FaGithub,
   FaLinkedin,
@@ -9,10 +9,11 @@ import {
 } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 import { useTheme } from "./ui/ThemeContext";
+import myProfileImg from "../assets/myimg.webp";
 
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();
-  const [scrollProgress, setScrollProgress] = React.useState(0);
+  const progressBarRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,29 +22,40 @@ const Hero = () => {
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight;
 
-      if (windowHeight === 0) {
-        setScrollProgress(0);
-      } else {
-        const scroll = totalScroll / windowHeight;
-        setScrollProgress(scroll);
+      const scroll = windowHeight === 0 ? 0 : totalScroll / windowHeight;
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${scroll})`;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    // Initialize scroll progress on mount
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <>
+      {/* Preload Hero Image */}
+      <link
+        rel="preload"
+        href={myProfileImg}
+        as="image"
+        fetchPriority="high"
+        type="image/webp"
+      />
+
       {/* Scroll Progress Bar */}
       <div
+        ref={progressBarRef}
         className="fixed top-0 left-0 right-0 h-1 z-50"
         style={{
           background: isDark
             ? "linear-gradient(to right, #2563eb, #9333ea, #db2777)"
             : "linear-gradient(to right, #159ccb, #0f7a9e, #0d5a7a)",
           transformOrigin: "0%",
-          transform: `scaleX(${scrollProgress})`,
+          transform: "scaleX(0)",
         }}
       />
 
@@ -97,10 +109,11 @@ const Hero = () => {
                 }`}
               >
                 <img
-                  src="/myimg.jpeg"
+                  src={myProfileImg}
                   alt="Ankit Gupta"
                   className="rounded-full object-cover w-full h-full"
-                  loading="eager"
+                  width={288}
+                  height={288}
                   fetchPriority="high"
                 />
               </div>
