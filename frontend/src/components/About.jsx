@@ -13,7 +13,7 @@ const About = () => {
   const [animate, setAnimate] = useState(true);
   
   // Refs for GSAP animations
-  const sectionRef = useRef(null);
+  const sectionRef = useRef(null)
   const titleRef = useRef(null);
   const contentRef = useRef(null);
   const whoAmIRef = useRef(null);
