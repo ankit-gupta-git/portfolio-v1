@@ -29,11 +29,15 @@ const Timeline = ({ data }) => {
   // Ensure line height updates on resize / content changes
   useEffect(() => {
     if (!timelineRef.current) return;
+    let refreshTimeout;
     const ro = new ResizeObserver(() => {
       const rect = timelineRef.current.getBoundingClientRect();
       setLineHeight(Math.ceil(rect.height));
-      // refresh ScrollTrigger because size/positions changed
-      ScrollTrigger.refresh();
+      // Debounce refresh to avoid layout thrashing
+      clearTimeout(refreshTimeout);
+      refreshTimeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
     });
     ro.observe(timelineRef.current);
 
@@ -49,6 +53,7 @@ const Timeline = ({ data }) => {
     return () => {
       ro.disconnect();
       clearTimeout(t);
+      clearTimeout(refreshTimeout);
     };
   }, [data]);
 

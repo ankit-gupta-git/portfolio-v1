@@ -60,31 +60,29 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <ThemeProvider>
       <FluidCursor />
       {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
-      <ThemeProvider>
-        <Layout>
-          <Navbar onTerminalClick={() => setIsTerminalOpen(true)} />
-          <Hero />
-          <About />
-          <Experience />
-          <Skills />
-          <ProblemSolving />
-          <TechStackCarousel />
-          <Projects />
-          <Blog />
-          <GithubContributions />
-          <Contact />
-          <Footer />
-        </Layout>
-      </ThemeProvider>
+      <Layout>
+        <Navbar onTerminalClick={() => setIsTerminalOpen(true)} />
+        <Hero />
+        <About />
+        <Experience />
+        <Skills />
+        <ProblemSolving />
+        <TechStackCarousel />
+        <Projects />
+        <Blog />
+        <GithubContributions />
+        <Contact />
+        <Footer />
+      </Layout>
       {!isLoading && <AIAssistantWidget />}
       <Terminal 
         isOpen={isTerminalOpen} 
         onClose={() => setIsTerminalOpen(false)} 
       />
-    </>
+    </ThemeProvider>
   );
 };
 

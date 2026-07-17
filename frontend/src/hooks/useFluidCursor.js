@@ -30,7 +30,7 @@ const useFluidCursor = () => {
     this.deltaY = 0;
     this.down = false;
     this.moved = false;
-    this.color = [0, 0, 0];
+    this.color = { r: 0.15, g: 0.15, b: 0.15 };
   }
   const pointers = [];
   pointers.push(new pointerPrototype());
@@ -826,7 +826,23 @@ const useFluidCursor = () => {
   initFramebuffers();
   let lastUpdateTime = Date.now();
   let colorUpdateTimer = 0.0;
+  let lastInputTime = Date.now();
+  let isAnimating = false;
+
+  function wakeUp() {
+    lastInputTime = Date.now();
+    if (!isAnimating) {
+      isAnimating = true;
+      lastUpdateTime = Date.now();
+      update();
+    }
+  }
+
   function update() {
+    if (Date.now() - lastInputTime > 2000) {
+      isAnimating = false;
+      return;
+    }
     const dt = calcDeltaTime();
     if (resizeCanvas()) initFramebuffers();
     updateColors(dt);
@@ -1026,44 +1042,28 @@ const useFluidCursor = () => {
     if (aspectRatio > 1) radius *= aspectRatio;
     return radius;
   }
-  window.addEventListener('mousedown', (e) => {
+  const handleMouseDown = (e) => {
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
     let posY = scaleByPixelRatio(e.clientY);
     updatePointerDownData(pointer, -1, posX, posY);
     clickSplat(pointer);
-  });
-  document.body.addEventListener('mousemove', function handleFirstMouseMove(e) {
-    let pointer = pointers[0];
-    let posX = scaleByPixelRatio(e.clientX);
-    let posY = scaleByPixelRatio(e.clientY);
-    let color = generateColor();
-    update();
-    updatePointerMoveData(pointer, posX, posY, color);
-    document.body.removeEventListener('mousemove', handleFirstMouseMove);
-  });
-  window.addEventListener('mousemove', (e) => {
+    wakeUp();
+  };
+
+  const handleMouseMove = (e) => {
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
     let posY = scaleByPixelRatio(e.clientY);
     let color = pointer.color;
-    updatePointerMoveData(pointer, posX, posY, color);
-  });
-  document.body.addEventListener(
-    'touchstart',
-    function handleFirstTouchStart(e) {
-      const touches = e.targetTouches;
-      let pointer = pointers[0];
-      for (let i = 0; i < touches.length; i++) {
-        let posX = scaleByPixelRatio(touches[i].clientX);
-        let posY = scaleByPixelRatio(touches[i].clientY);
-        update();
-        updatePointerDownData(pointer, touches[i].identifier, posX, posY);
-      }
-      document.body.removeEventListener('touchstart', handleFirstTouchStart);
+    if (color.r === 0.15 && color.g === 0.15 && color.b === 0.15) {
+      color = generateColor();
     }
-  );
-  window.addEventListener('touchstart', (e) => {
+    updatePointerMoveData(pointer, posX, posY, color);
+    wakeUp();
+  };
+
+  const handleTouchStart = (e) => {
     const touches = e.targetTouches;
     let pointer = pointers[0];
     for (let i = 0; i < touches.length; i++) {
@@ -1071,27 +1071,41 @@ const useFluidCursor = () => {
       let posY = scaleByPixelRatio(touches[i].clientY);
       updatePointerDownData(pointer, touches[i].identifier, posX, posY);
     }
-  });
-  window.addEventListener(
-    'touchmove',
-    (e) => {
-      const touches = e.targetTouches;
-      let pointer = pointers[0];
-      for (let i = 0; i < touches.length; i++) {
-        let posX = scaleByPixelRatio(touches[i].clientX);
-        let posY = scaleByPixelRatio(touches[i].clientY);
-        updatePointerMoveData(pointer, posX, posY, pointer.color);
-      }
-    },
-    false
-  );
-  window.addEventListener('touchend', (e) => {
+    wakeUp();
+  };
+
+  const handleTouchMove = (e) => {
+    const touches = e.targetTouches;
+    let pointer = pointers[0];
+    for (let i = 0; i < touches.length; i++) {
+      let posX = scaleByPixelRatio(touches[i].clientX);
+      let posY = scaleByPixelRatio(touches[i].clientY);
+      updatePointerMoveData(pointer, posX, posY, pointer.color);
+    }
+    wakeUp();
+  };
+
+  const handleTouchEnd = (e) => {
     const touches = e.changedTouches;
     let pointer = pointers[0];
     for (let i = 0; i < touches.length; i++) {
       updatePointerUpData(pointer);
     }
-  });
+  };
+
+  window.addEventListener('mousedown', handleMouseDown);
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('touchstart', handleTouchStart);
+  window.addEventListener('touchmove', handleTouchMove, { passive: true });
+  window.addEventListener('touchend', handleTouchEnd);
+
+  return () => {
+    window.removeEventListener('mousedown', handleMouseDown);
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('touchstart', handleTouchStart);
+    window.removeEventListener('touchmove', handleTouchMove);
+    window.removeEventListener('touchend', handleTouchEnd);
+  };
   function updatePointerDownData(pointer, id, posX, posY) {
     pointer.id = id;
     pointer.down = true;
