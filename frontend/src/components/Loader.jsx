@@ -4,12 +4,25 @@ const Loader = ({ onLoadingComplete }) => {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
+    // Disable scrolling and hide cursor on the body/html during loading
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.cursor = "none";
+    document.documentElement.style.cursor = "none";
+
     // Smoothly fade out the loader overlay after the SVG stroke animation completes (5 seconds)
     const fadeTimer = setTimeout(() => {
       setFadeOut(true);
     }, 5000);
 
-    return () => clearTimeout(fadeTimer);
+    return () => {
+      clearTimeout(fadeTimer);
+      // Restore scrolling and cursor when the loader is unmounted
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.cursor = "";
+      document.documentElement.style.cursor = "";
+    };
   }, []);
 
   const handleTransitionEnd = (e) => {
@@ -48,7 +61,7 @@ const Loader = ({ onLoadingComplete }) => {
     <>
       <style dangerouslySetInnerHTML={{ __html: styles }} />
       <div
-        className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-700 ease-out px-6 md:px-12 lg:px-20 ${
+        className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-700 ease-out px-6 md:px-12 lg:px-20 cursor-none select-none pointer-events-auto ${
           fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
         style={{

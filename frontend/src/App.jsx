@@ -61,7 +61,7 @@ const App = () => {
 
   return (
     <ThemeProvider>
-      <FluidCursor />
+      {!isLoading && <FluidCursor />}
       {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
       <Layout>
         <Navbar onTerminalClick={() => setIsTerminalOpen(true)} />
