@@ -44,21 +44,21 @@ const Carousel = ({ direction = "left", isDark }) => {
     gsap.fromTo(techItemsRef.current,
       { 
         opacity: 0, 
-        y: 30, 
-        scale: 0.8,
-        rotation: direction === "left" ? -15 : 15
+        y: 15, 
+        scale: 0.9,
+        rotation: direction === "left" ? -5 : 5
       },
       {
         opacity: 1,
         y: 0,
         scale: 1,
         rotation: 0,
-        duration: 0.3,
-        stagger: 0.03,
+        duration: 0.25,
+        stagger: 0.02,
         ease: "power2.out",
         scrollTrigger: {
           trigger: listRef.current,
-          start: "top 85%",
+          start: "top 98%", // Triggers almost immediately
           end: "bottom 15%",
           toggleActions: "play none none reverse"
         }
@@ -153,7 +153,7 @@ const TechStackCarousel = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        start: "top 98%", // Triggers almost immediately when section enters viewport
         end: "bottom 10%",
         toggleActions: "play none none reverse"
       }
@@ -161,18 +161,18 @@ const TechStackCarousel = () => {
 
     // Section entrance animation
     tl.fromTo(sectionRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.4 }
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.3 }
     )
     .fromTo(titleRef.current,
-      { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
-      "-=0.2"
+      { opacity: 0, y: 10, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.25 },
+      "-=0.15"
     )
     .fromTo(carouselRef.current,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.4 },
-      "-=0.15"
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.3 },
+      "-=0.1"
     );
 
     // Cleanup

@@ -76,7 +76,7 @@ const Timeline = ({ data }) => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: scrollContainerRef.current,
-        start: "top 80%",
+        start: "top 98%", // Triggers almost immediately when section enters viewport
         end: "bottom 20%",
         toggleActions: "play none none reverse"
       }
@@ -84,28 +84,28 @@ const Timeline = ({ data }) => {
 
     // Heading animations
     tl.fromTo(headingRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.25 }
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.2 }
     )
     .fromTo(descriptionRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.25 },
-      "-=0.15"
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.2 },
+      "-=0.1"
     );
 
     // Timeline items stagger animation
     if (timelineItemsRef.current && timelineItemsRef.current.length > 0) {
       gsap.fromTo(timelineItemsRef.current,
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 15 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.3,
-          stagger: 0.1,
+          duration: 0.25,
+          stagger: 0.05,
           ease: "power2.out",
           scrollTrigger: {
             trigger: timelineRef.current,
-            start: "top 85%",
+            start: "top 98%", // Triggers almost immediately
             end: "bottom 15%",
             toggleActions: "play none none reverse"
           }
@@ -120,7 +120,7 @@ const Timeline = ({ data }) => {
         if (cardRef) {
           ScrollTrigger.create({
             trigger: cardRef,
-            start: "top 80%",
+            start: "top 95%", // Triggers almost immediately
             end: "bottom 20%",
             onEnter: () => {
               cardRef.classList.add('scroll-glow');

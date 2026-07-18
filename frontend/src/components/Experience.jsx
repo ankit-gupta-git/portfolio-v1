@@ -183,7 +183,7 @@ const Experience = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        start: "top 98%", // Triggers almost immediately when section enters viewport
         end: "bottom 10%",
         toggleActions: "play none none reverse"
       }
@@ -191,18 +191,18 @@ const Experience = () => {
 
     // Section entrance animation
     tl.fromTo(sectionRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.4 }
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.3 }
     )
     .fromTo(titleRef.current,
-      { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
-      "-=0.2"
+      { opacity: 0, y: 10, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.25 },
+      "-=0.15"
     )
     .fromTo(timelineRef.current,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.4 },
-      "-=0.2"
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.3 },
+      "-=0.15"
     );
 
     // Cleanup

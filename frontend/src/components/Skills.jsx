@@ -208,7 +208,7 @@ const Skills = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 90%",
+        start: "top 98%", // Triggers almost immediately when section enters viewport
         end: "bottom 10%",
         toggleActions: "play none none reverse"
       }
@@ -216,35 +216,35 @@ const Skills = () => {
 
     // Section entrance animation
     tl.fromTo(sectionRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.4 }
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.3 }
     )
     .fromTo(titleRef.current,
-      { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
-      "-=0.2"
+      { opacity: 0, y: 10, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.25 },
+      "-=0.15"
     )
     .fromTo(subtitleRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.3 },
-      "-=0.15"
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.25 },
+      "-=0.1"
     );
 
     // Stagger animation for skill cards
     if (cardsRef.current && cardsRef.current.length > 0) {
       gsap.fromTo(cardsRef.current,
-        { opacity: 0, y: 60, scale: 0.8, rotationY: -15 },
+        { opacity: 0, y: 20, scale: 0.9, rotationY: -10 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
           rotationY: 0,
-          duration: 0.4,
-          stagger: 0.08,
+          duration: 0.3,
+          stagger: 0.05,
           ease: "power2.out",
           scrollTrigger: {
             trigger: cardsRef.current[0],
-            start: "top 95%",
+            start: "top 98%", // Triggers almost immediately
             end: "bottom 5%",
             toggleActions: "play none none reverse"
           }
@@ -254,16 +254,16 @@ const Skills = () => {
 
     // Text box animation
     gsap.fromTo(textBoxRef.current,
-      { opacity: 0, y: 30, scale: 0.95 },
+      { opacity: 0, y: 15, scale: 0.98 },
       {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.35,
+        duration: 0.25,
         ease: "power2.out",
         scrollTrigger: {
           trigger: textBoxRef.current,
-          start: "top 95%",
+          start: "top 98%", // Triggers almost immediately
           end: "bottom 5%",
           toggleActions: "play none none reverse"
         }

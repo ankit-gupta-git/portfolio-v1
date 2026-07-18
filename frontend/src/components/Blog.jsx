@@ -76,7 +76,7 @@ const Blog = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 90%", // Changed from 80% to 90% - triggers earlier
+        start: "top 98%", // Triggers almost immediately when section enters viewport
         end: "bottom 10%",
         toggleActions: "play none none reverse"
       }
@@ -84,39 +84,39 @@ const Blog = () => {
 
     // Section entrance animation
     tl.fromTo(sectionRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.4 }
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.3 }
     )
     .fromTo(headerRef.current,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.4 },
-      "-=0.2"
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.3 },
+      "-=0.15"
     )
     .fromTo(titleRef.current,
-      { opacity: 0, y: 30, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.3 },
-      "-=0.3"
+      { opacity: 0, y: 10, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.25 },
+      "-=0.2"
     )
     .fromTo(descriptionRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.3 },
-      "-=0.2"
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.25 },
+      "-=0.15"
     );
 
     // Stagger animation for blog cards
     if (blogCardsRef.current && blogCardsRef.current.length > 0) {
       gsap.fromTo(blogCardsRef.current,
-        { opacity: 0, y: 50, scale: 0.9 },
+        { opacity: 0, y: 20, scale: 0.95 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.35,
-          stagger: 0.08,
+          duration: 0.25,
+          stagger: 0.05,
           ease: "power2.out",
           scrollTrigger: {
             trigger: blogCardsRef.current[0],
-            start: "top 95%", // Changed from 85% to 95% - triggers much earlier
+            start: "top 98%", // Triggers almost immediately
             end: "bottom 5%",
             toggleActions: "play none none reverse"
           }
@@ -126,15 +126,15 @@ const Blog = () => {
 
     // CTA animation
     gsap.fromTo(ctaRef.current,
-      { opacity: 0, y: 30 },
+      { opacity: 0, y: 15 },
       {
         opacity: 1,
         y: 0,
-        duration: 0.3,
+        duration: 0.25,
         ease: "power2.out",
         scrollTrigger: {
           trigger: ctaRef.current,
-          start: "top 95%", // Changed from 90% to 95% - triggers much earlier
+          start: "top 98%", // Triggers almost immediately
           end: "bottom 5%",
           toggleActions: "play none none reverse"
         }

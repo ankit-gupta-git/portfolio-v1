@@ -5,6 +5,23 @@ import { motion } from "framer-motion";
 
 const projects = [
   {
+    title: "Forge – Full-Stack AI App Generator",
+    description:
+      "AI-powered React application generator that helps users build, preview, and refine web apps in real time with agentic multi-file code improvements.",
+    tech: [
+      "Next.js 15",
+      "TypeScript",
+      "Gemini 3.5 Flash",
+      "Prisma",
+      "Supabase",
+      "Clerk",
+    ],
+    github: "https://github.com/ankit-gupta-git/forge-ai-app-builder",
+    live: "https://forge-studio-neon.vercel.app/",
+    image: "/ProjectImg/forge.png",
+    status: "AI SaaS",
+  },
+  {
     title: "Hirrd – AI-Powered Job Portal",
     description:
       "A modern job portal that leverages AI to connect job seekers with relevant opportunities. Features include AI-powered resume analysis, personalized job recommendations, and smart matching algorithms.",
@@ -68,6 +85,23 @@ const projects = [
     image: "/ProjectImg/Reatime_Chat.png",
     status: "Fullstack",
   },
+  {
+    title: "Hovio – Airbnb Clone",
+    description:
+      "Modern full-stack Airbnb-inspired platform for discovering stays, listing properties, booking accommodations, and managing reviews securely.",
+    tech: [
+      "React.js",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Cloudinary",
+      "Passport.js",
+    ],
+    github: "https://github.com/ankit-gupta-git/Hovio",
+    live: "https://hovio-hsp7.onrender.com",
+    image: "/ProjectImg/hovio.png",
+    status: "Fullstack",
+  },
 ];
 
 const Projects = () => {
@@ -78,21 +112,21 @@ const Projects = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
       },
     },
   };
 
   const item = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     show: {
       opacity: 1,
       y: 0,
       transition: {
         type: "spring",
-        stiffness: 100,
-        damping: 15,
+        stiffness: 150,
+        damping: 18,
       },
     },
   };
@@ -108,9 +142,9 @@ const Projects = () => {
       <div className="max-w-8xl mx-auto">
         {/* Heading */}
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "0px 0px 100px 0px" }}
           className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik mb-4 ${isDark
               ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
               : "text-[#111827]"
@@ -123,8 +157,8 @@ const Projects = () => {
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
+          viewport={{ once: true, margin: "0px 0px 100px 0px" }}
+          transition={{ delay: 0.1 }}
           className={`text-center max-w-2xl mx-auto mb-16 text-base sm:text-lg ${isDark ? "text-gray-400" : "text-gray-600"
             }`}
         >
@@ -137,7 +171,7 @@ const Projects = () => {
           variants={container}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "0px 0px 150px 0px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {projects.map((project, index) => (
