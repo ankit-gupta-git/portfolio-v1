@@ -19,7 +19,10 @@ app.use(cors({
             allowedOrigins.push(process.env.FRONTEND_URL);
         }
         
-        if (allowedOrigins.includes(origin)) {
+        // Allow local development origins
+        const isLocal = origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:');
+        
+        if (allowedOrigins.includes(origin) || isLocal) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
