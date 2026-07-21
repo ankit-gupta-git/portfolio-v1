@@ -11,24 +11,27 @@ app.use(cors({
         
         const allowedOrigins = [
             'https://ankitbuilds.vercel.app',
-            'http://localhost:5173'
+            'http://localhost:5173',
+            'http://localhost:3000'
         ];
         
-        // Add FRONTEND_URL if it exists and is valid
+        // Add FRONTEND_URL if it exists and is valid (strip trailing slash)
         if (process.env.FRONTEND_URL && process.env.FRONTEND_URL.startsWith('http')) {
-            allowedOrigins.push(process.env.FRONTEND_URL);
+            const cleanUrl = process.env.FRONTEND_URL.replace(/\/$/, '');
+            allowedOrigins.push(cleanUrl);
         }
         
-        // Allow local development origins
+        // Allow local development origins and Vercel domains
         const isLocal = origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:');
+        const isVercel = origin.endsWith('.vercel.app');
         
-        if (allowedOrigins.includes(origin) || isLocal) {
+        if (allowedOrigins.includes(origin) || isLocal || isVercel) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true
 }));
 

@@ -4,7 +4,8 @@ import { Send } from 'lucide-react';
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown';
 
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/ai/get-response`;
+const backendBase = import.meta.env.VITE_BACKEND_URL ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '') : 'http://localhost:5000';
+const API_URL = `${backendBase}/ai/get-response`;
 
 const suggestionChips = [
   { icon: <FaPalette size={16} />, text: 'Tell me about your skills' },

@@ -6,8 +6,8 @@ const cache = new NodeCache({ stdTTL: 300 });
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// Model EXACTLY as per docs
-const MODEL = "gemini-3-flash-preview";
+// Model configuration strictly set to gemini-3.6-flash
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
 // Debug: Log API key status
 console.log(
