@@ -21,6 +21,7 @@ export const useLenisSmoothScroll = (isLoading = false) => {
     });
 
     lenisRef.current = lenis;
+    window.lenis = lenis;
 
     // Connect Lenis scroll events to GSAP ScrollTrigger updates
     lenis.on('scroll', ScrollTrigger.update);
@@ -37,6 +38,9 @@ export const useLenisSmoothScroll = (isLoading = false) => {
       lenis.destroy();
       gsap.ticker.remove(updateTicker);
       lenisRef.current = null;
+      if (window.lenis === lenis) {
+        delete window.lenis;
+      }
     };
   }, []);
 

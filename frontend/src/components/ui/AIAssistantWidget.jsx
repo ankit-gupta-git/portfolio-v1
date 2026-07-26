@@ -131,15 +131,27 @@ const AIAssistantWidget = () => {
     }
   }, [messages, open, currentTypingMessage]);
 
-  // Scroll lock effect
+  // Scroll lock effect - locks background page and stops Lenis smooth scroll
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      if (window.lenis) {
+        window.lenis.stop();
+      }
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      if (window.lenis) {
+        window.lenis.start();
+      }
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      if (window.lenis) {
+        window.lenis.start();
+      }
     };
   }, [open]);
 
@@ -245,12 +257,16 @@ const AIAssistantWidget = () => {
       {/* Modal UI */}
       {open && (
         <div 
+          data-lenis-prevent
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4"
           onClick={(e) => {
             if (e.target === e.currentTarget) setOpen(false);
           }}
         >
-          <div className="relative w-full max-w-4xl mx-auto rounded-xl sm:rounded-2xl bg-[#181c23] shadow-2xl border border-[#23283a] flex flex-col h-[85vh] sm:h-[600px]">
+          <div 
+            data-lenis-prevent
+            className="relative w-full max-w-4xl mx-auto rounded-xl sm:rounded-2xl bg-[#181c23] shadow-2xl border border-[#23283a] flex flex-col h-[85vh] sm:h-[600px]"
+          >
             {isInitialLoading ? (
               // Initial Loading State UI
               <div className="flex flex-col items-center justify-center flex-1 p-4 sm:p-6">
@@ -290,6 +306,7 @@ const AIAssistantWidget = () => {
                 {/* Message Area */}
                 <div
                   ref={chatAreaRef}
+                  data-lenis-prevent
                   className="flex-1 relative bg-[#181c23] overflow-y-auto"
                   style={{
                     WebkitOverflowScrolling: 'touch', // Enable smooth scrolling on iOS
