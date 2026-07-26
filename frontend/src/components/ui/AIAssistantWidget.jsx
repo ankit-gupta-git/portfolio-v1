@@ -4,8 +4,13 @@ import { Send } from 'lucide-react';
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown';
 
-const backendBase = import.meta.env.VITE_BACKEND_URL ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '') : 'http://localhost:5000';
+const defaultBackendUrl = import.meta.env.MODE === 'production' || !import.meta.env.DEV
+  ? 'https://portfolio-v1-1-uc52.onrender.com'
+  : 'http://localhost:5000';
+
+const backendBase = (import.meta.env.VITE_BACKEND_URL || defaultBackendUrl).replace(/\/$/, '');
 const API_URL = `${backendBase}/ai/get-response`;
+
 
 const suggestionChips = [
   { icon: <FaPalette size={16} />, text: 'Tell me about your skills' },
@@ -141,6 +146,8 @@ const AIAssistantWidget = () => {
   const handleOpenModal = () => {
     setIsInitialLoading(true);
     setOpen(true);
+    // Ping backend warmup endpoint to kick off Render cold-start early if needed
+    fetch(`${backendBase}/api/warmup`).catch(() => {});
     setTimeout(() => {
       setIsInitialLoading(false);
     }, 1000);
@@ -151,7 +158,7 @@ const AIAssistantWidget = () => {
     handleSend(new Event('submit'), text);
   };
 
-  // Optimize handleSend with better state management
+  // Optimize handleSend with better state management and retry logic for production cold-starts
   const handleSend = useCallback(async (e, suggestedText = null) => {
     e.preventDefault();
     const messageToSend = suggestedText || input;
@@ -165,46 +172,57 @@ const AIAssistantWidget = () => {
     };
     updates();
 
-    try {
-      console.log('🔄 Frontend: Making request to:', API_URL);
-      console.log('🔄 Frontend: Request payload:', { prompt: messageToSend });
-      
-      const response = await axios.post(API_URL, { prompt: messageToSend });
-      
-      console.log('✅ Frontend: Response received:', response.data);
-      
-      // Batch state updates for response
-      const responseUpdates = () => {
-        setIsLoading(false);
-        setIsThinking(true);
-      };
-      responseUpdates();
-      
-      // Reduced thinking time
+    const maxRetries = 2;
+    let attempt = 0;
+    let success = false;
+    let responseData = null;
+    let lastError = null;
+
+    while (attempt <= maxRetries && !success) {
+      try {
+        console.log(`🔄 Frontend: Making request to: ${API_URL} (Attempt ${attempt + 1})`);
+        // Use a 45s timeout to allow Render free tier to spin up from cold sleep
+        const response = await axios.post(API_URL, { prompt: messageToSend }, { timeout: 45000 });
+        console.log('✅ Frontend: Response received:', response.data);
+        responseData = response.data;
+        success = true;
+      } catch (error) {
+        lastError = error;
+        console.error(`❌ Frontend: Attempt ${attempt + 1} failed:`, error.message);
+        attempt++;
+        if (attempt <= maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, 2500));
+        }
+      }
+    }
+
+    if (success && responseData) {
+      setIsLoading(false);
+      setIsThinking(true);
+
       setTimeout(() => {
         setIsThinking(false);
         setIsTyping(true);
-        typeMessage(response.data.response);
-      }, 500); // Further reduced from 800ms to 500ms
-    } catch (error) {
-      console.error("❌ Frontend: Error fetching response:", error);
+        typeMessage(responseData.response);
+      }, 500);
+    } else {
       console.error("❌ Frontend: Error details:", {
-        message: error.message,
-        status: error.response?.status,
-        data: error.response?.data,
+        message: lastError?.message,
+        status: lastError?.response?.status,
+        data: lastError?.response?.data,
         url: API_URL
       });
-      
-      const errorUpdates = () => {
-        setIsLoading(false);
-        setIsThinking(true);
-      };
-      errorUpdates();
-      
+
+      setIsLoading(false);
+      setIsThinking(true);
+
+      const errorText = lastError?.response?.data?.error || 
+        "I'm having trouble connecting to the server. If the server was sleeping (Render cold start), please try sending your message once more!";
+
       setTimeout(() => {
         setIsThinking(false);
         setIsTyping(true);
-        typeMessage(error.response?.data?.error || "I apologize, but I'm having trouble connecting to the server. Please make sure the backend server is running and try again.");
+        typeMessage(errorText);
       }, 500);
     }
   }, [input, typeMessage]);

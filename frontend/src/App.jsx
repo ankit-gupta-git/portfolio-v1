@@ -17,11 +17,15 @@ import TechStackCarousel from "./components/ui/TechStackCarousel";
 import GithubContributions from "./components/ui/GithubContributions";
 import { Terminal } from "./components/Terminal";
 import FluidCursor from "./components/FluidCursor";
+import { useLenisSmoothScroll } from "./hooks/useLenisSmoothScroll";
 import "./App.css";
 
 const App = () => {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize Lenis smooth scrolling synced with GSAP ScrollTrigger
+  useLenisSmoothScroll(isLoading);
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -36,23 +40,17 @@ const App = () => {
       // Mark as done immediately
       sessionStorage.setItem("warmup_done", "true");
 
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+      const defaultBackendUrl = import.meta.env.MODE === 'production' || !import.meta.env.DEV
+        ? 'https://portfolio-v1-1-uc52.onrender.com'
+        : 'http://localhost:5000';
+      const backendUrl = (import.meta.env.VITE_BACKEND_URL || defaultBackendUrl).replace(/\/$/, '');
 
-        // 2. Fire and forget request with timeout
-        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/warmup`, {
-          method: "GET",
-          signal: controller.signal,
-        });
-        
-        clearTimeout(timeoutId);
-        console.log("Backend warmed up");
+      try {
+        // Fire and forget request without short abort so Render can wake up fully
+        fetch(`${backendUrl}/api/warmup`).catch(() => {});
+        console.log("Backend warmup request sent to:", backendUrl);
       } catch (error) {
-        // Silently fail - this shouldn't affect the UX
-        if (error.name === 'AbortError') {
-           console.log("Warmup timed out");
-        }
+        // Silently fail - this shouldn't affect UX
       }
     };
 

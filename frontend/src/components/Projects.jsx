@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useTheme } from "./ui/ThemeContext";
 import ProjectCard from "./ProjectCard";
-import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -106,33 +109,39 @@ const projects = [
 
 const Projects = () => {
   const { isDark } = useTheme();
+  const sectionRef = useRef(null);
+  const cardsGridRef = useRef(null);
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.05,
-      },
-    },
-  };
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (cardsGridRef.current) {
+        gsap.fromTo(
+          cardsGridRef.current.children,
+          { opacity: 0, y: 50, scale: 0.92, rotationX: -8 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            rotationX: 0,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: cardsGridRef.current,
+              start: "top 88%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    }, sectionRef);
 
-  const item = {
-    hidden: { opacity: 0, y: 15 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 150,
-        damping: 18,
-      },
-    },
-  };
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="projects"
       className={`py-32 px-10 font-figtree ${!isDark
           ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]"
@@ -141,48 +150,39 @@ const Projects = () => {
     >
       <div className="max-w-8xl mx-auto">
         {/* Heading */}
-        <motion.h2
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "0px 0px 100px 0px" }}
+        <h2
           className={`text-4xl sm:text-5xl md:text-6xl font-bold text-center font-dxgrafik mb-4 ${isDark
               ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-800"
               : "text-[#111827]"
             }`}
         >
           Projects
-        </motion.h2>
+        </h2>
 
         {/* Subtitle / Para */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "0px 0px 100px 0px" }}
-          transition={{ delay: 0.1 }}
+        <p
           className={`text-center max-w-2xl mx-auto mb-16 text-base sm:text-lg ${isDark ? "text-gray-400" : "text-gray-600"
             }`}
         >
           Yeah, I work hard 💼 <br />
           Each project is unique. Here are some of my works.
-        </motion.p>
+        </p>
 
         {/* Projects Grid */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "0px 0px 150px 0px" }}
+        <div
+          ref={cardsGridRef}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {projects.map((project, index) => (
-            <motion.div key={index} variants={item} className="w-full">
+            <div key={index} className="w-full">
               <ProjectCard project={project} />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
 export default Projects;
+

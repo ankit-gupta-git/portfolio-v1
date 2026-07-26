@@ -6,30 +6,8 @@ const app = express();
 // Enable CORS for frontend
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        
-        const allowedOrigins = [
-            'https://ankitbuilds.vercel.app',
-            'http://localhost:5173',
-            'http://localhost:3000'
-        ];
-        
-        // Add FRONTEND_URL if it exists and is valid (strip trailing slash)
-        if (process.env.FRONTEND_URL && process.env.FRONTEND_URL.startsWith('http')) {
-            const cleanUrl = process.env.FRONTEND_URL.replace(/\/$/, '');
-            allowedOrigins.push(cleanUrl);
-        }
-        
-        // Allow local development origins and Vercel domains
-        const isLocal = origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:');
-        const isVercel = origin.endsWith('.vercel.app');
-        
-        if (allowedOrigins.includes(origin) || isLocal || isVercel) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
+        // Allow all requesting origins (reflect origin) so production frontend deployments can always connect
+        callback(null, true);
     },
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true

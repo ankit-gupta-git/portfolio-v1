@@ -11,7 +11,7 @@ const About = () => {
   const { isDark } = useTheme();
   const [currentText, setCurrentText] = useState(0);
   const [animate, setAnimate] = useState(true);
-  
+
   // Refs for GSAP animations
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
@@ -20,7 +20,7 @@ const About = () => {
   const introRef = useRef(null);
   const paragraphsRef = useRef(null);
   const carouselRef = useRef(null);
-  
+
   const carouselTexts = [
     "explore new places",
     "play video games",
@@ -41,7 +41,6 @@ const About = () => {
 
   // GSAP Animations
   useEffect(() => {
-    // Check if all refs are available before creating animations
     if (!sectionRef.current || !titleRef.current || !contentRef.current || !whoAmIRef.current || !introRef.current || !paragraphsRef.current || !carouselRef.current) {
       return;
     }
@@ -49,7 +48,7 @@ const About = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 98%", // Triggers almost immediately when section enters viewport
+        start: "top 98%",
         end: "bottom 10%",
         toggleActions: "play none none reverse"
       }
@@ -91,13 +90,41 @@ const About = () => {
       "-=0.15"
     );
 
-    // Cleanup
     return () => {
       if (tl) {
         tl.kill();
       }
     };
   }, []);
+
+  // GSAP 3D Interactive Mouse Tilt
+  const handleMouseMove = (e) => {
+    if (!contentRef.current) return;
+    const rect = contentRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    const tiltX = (y / (rect.height / 2)) * -6;
+    const tiltY = (x / (rect.width / 2)) * 6;
+
+    gsap.to(contentRef.current, {
+      rotationX: tiltX,
+      rotationY: tiltY,
+      transformPerspective: 1200,
+      ease: "power2.out",
+      duration: 0.5,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!contentRef.current) return;
+    gsap.to(contentRef.current, {
+      rotationX: 0,
+      rotationY: 0,
+      ease: "power3.out",
+      duration: 0.8,
+    });
+  };
 
   return (
     <section
@@ -134,11 +161,14 @@ const About = () => {
       {/* About Content */}
       <div
         ref={contentRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className={`max-w-4xl mx-auto px-8 py-20 rounded-3xl ${
           isDark
             ? "border border-white/20 bg-white/5 backdrop-blur-[20px] shadow-[0_12px_48px_0_rgba(255,255,255,0.1)]"
             : "bg-white/90 backdrop-blur-[20px] shadow-lg border border-white/50"
-        } text-left transition-all duration-300 hover:shadow-xl`}
+        } text-left transition-all duration-300 hover:shadow-2xl`}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Who Am I */}
         <div ref={whoAmIRef} className="pb-4">
@@ -207,4 +237,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default About;

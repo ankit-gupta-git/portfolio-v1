@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
 import {
   FaGithub,
   FaLinkedin,
@@ -14,6 +15,8 @@ import myProfileImg from "../assets/myimg.webp";
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();
   const progressBarRef = useRef(null);
+  const heroRef = useRef(null);
+  const profileContainerRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,12 +31,126 @@ const Hero = () => {
       }
     };
 
-    // Initialize scroll progress on mount
     handleScroll();
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // GSAP Entrance & Floating Yoyo Loop Animations
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Staggered Entrance for Hero Left Content
+      gsap.fromTo(
+        ".gsap-hero-anim",
+        { opacity: 0, y: 35, filter: "blur(8px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 1,
+          stagger: 0.12,
+          ease: "power3.out",
+        }
+      );
+
+      // Entrance for Profile Image Container
+      gsap.fromTo(
+        profileContainerRef.current,
+        { opacity: 0, scale: 0.7, rotation: -8 },
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 1.2,
+          ease: "back.out(1.5)",
+          delay: 0.2,
+        }
+      );
+
+      // Continuous Floating Animation for Tech Badges
+      gsap.to(".gsap-floating-badge", {
+        y: -10,
+        duration: 2.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.easeInOut",
+        stagger: {
+          amount: 1.2,
+          from: "random",
+        },
+      });
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  // GSAP 3D Interactive Mouse Parallax & Tilt
+  const handleMouseMove = (e) => {
+    if (!heroRef.current || !profileContainerRef.current) return;
+    const rect = heroRef.current.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left - rect.width / 2;
+    const mouseY = e.clientY - rect.top - rect.height / 2;
+
+    const tiltX = (mouseY / (rect.height / 2)) * -16;
+    const tiltY = (mouseX / (rect.width / 2)) * 16;
+
+    gsap.to(profileContainerRef.current, {
+      rotationX: tiltX,
+      rotationY: tiltY,
+      transformPerspective: 1000,
+      ease: "power2.out",
+      duration: 0.5,
+    });
+
+    gsap.to(".gsap-floating-badge", {
+      x: (mouseX / (rect.width / 2)) * 18,
+      y: (mouseY / (rect.height / 2)) * 18,
+      ease: "power2.out",
+      duration: 0.6,
+      stagger: 0.04,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!profileContainerRef.current) return;
+    gsap.to(profileContainerRef.current, {
+      rotationX: 0,
+      rotationY: 0,
+      ease: "power3.out",
+      duration: 0.8,
+    });
+
+    gsap.to(".gsap-floating-badge", {
+      x: 0,
+      y: 0,
+      ease: "power3.out",
+      duration: 0.8,
+    });
+  };
+
+  // GSAP Magnetic Effect for Hovering Elements
+  const handleMagneticMove = (e) => {
+    const target = e.currentTarget;
+    const rect = target.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) * 0.35;
+    const y = (e.clientY - rect.top - rect.height / 2) * 0.35;
+
+    gsap.to(target, {
+      x: x,
+      y: y,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+  const handleMagneticLeave = (e) => {
+    gsap.to(e.currentTarget, {
+      x: 0,
+      y: 0,
+      duration: 0.5,
+      ease: "elastic.out(1, 0.4)",
+    });
+  };
 
   return (
     <>
@@ -60,7 +177,10 @@ const Hero = () => {
       />
 
       <section
+        ref={heroRef}
         id="home"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className={`min-h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-20 relative transition duration-300 ${
           !isDark
             ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]"
@@ -70,6 +190,8 @@ const Hero = () => {
         {/* Theme Toggle Switch */}
         <button
           onClick={() => setIsDark(!isDark)}
+          onMouseMove={handleMagneticMove}
+          onMouseLeave={handleMagneticLeave}
           className={`absolute top-24 sm:top-6 right-6 z-50 w-12 h-6 sm:w-16 sm:h-8 rounded-full p-1 transition-colors duration-300 ease-in-out ${
             isDark
               ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
@@ -94,39 +216,64 @@ const Hero = () => {
         </button>
 
         <div className="max-w-7xl w-full grid md:grid-cols-2 gap-10 items-center">
-          {/* RIGHT SIDE - IMAGE */}
+          {/* RIGHT SIDE - PROFILE IMAGE WITH GSAP 3D TILT & FLOATING TECH BADGES */}
           <div className="flex justify-center order-1 md:order-2">
-            <div
-              className={`relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full p-1 shadow-lg ${
-                isDark
-                  ? "bg-gradient-to-tr from-blue-600 to-purple-600"
-                  : "bg-gradient-to-tr from-[#159ccb] to-[#0f7a9e]"
-              }`}
-            >
+            <div className="relative">
+              {/* Floating Tech Badges */}
+              <div className="gsap-floating-badge absolute -top-3 -left-4 sm:-top-5 sm:-left-8 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-blue-500/30 text-blue-400 bg-black/70 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                React
+              </div>
+
+              <div className="gsap-floating-badge absolute top-3 -right-4 sm:top-5 sm:-right-10 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-purple-500/30 text-purple-400 bg-black/70 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                GenAI
+              </div>
+
+              <div className="gsap-floating-badge absolute bottom-3 -left-4 sm:bottom-5 sm:-left-10 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-emerald-500/30 text-emerald-400 bg-black/70 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Node.js
+              </div>
+
+              <div className="gsap-floating-badge absolute -bottom-3 -right-4 sm:-bottom-5 sm:-right-8 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-amber-500/30 text-amber-400 bg-black/70 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                MERN
+              </div>
+
+              {/* Profile Image Frame */}
               <div
-                className={`w-full h-full rounded-full p-1 ${
-                  isDark ? "bg-black" : "bg-white"
+                ref={profileContainerRef}
+                className={`relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full p-1 shadow-2xl transition-shadow duration-300 ${
+                  isDark
+                    ? "bg-gradient-to-tr from-blue-600 via-purple-600 to-pink-600 shadow-blue-500/20"
+                    : "bg-gradient-to-tr from-[#159ccb] via-[#0f7a9e] to-[#2563eb] shadow-blue-500/10"
                 }`}
               >
-                <img
-                  src={myProfileImg}
-                  alt="Ankit Gupta"
-                  className="rounded-full object-cover w-full h-full"
-                  width={288}
-                  height={288}
-                  fetchPriority="high"
-                />
+                <div
+                  className={`w-full h-full rounded-full p-1 ${
+                    isDark ? "bg-black" : "bg-white"
+                  }`}
+                >
+                  <img
+                    src={myProfileImg}
+                    alt="Ankit Gupta"
+                    className="rounded-full object-cover w-full h-full pointer-events-none select-none"
+                    width={288}
+                    height={288}
+                    fetchPriority="high"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* LEFT SIDE */}
+          {/* LEFT SIDE - STAGGERED GSAP ENTRANCE CONTENT */}
           <div
             className={`space-y-6 order-2 md:order-1 ${
               isDark ? "text-white" : "text-[#111827]"
             } transition duration-300`}
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-col gap-2 text-center md:text-left">
+            <h1 className="gsap-hero-anim text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-col gap-2 text-center md:text-left">
               <span>Hi, I'm</span>
               <span
                 className={`${
@@ -137,24 +284,26 @@ const Hero = () => {
               </span>
             </h1>
             <h2
-              className={`text-lg sm:text-xl md:text-2xl font-medium ${
+              className={`gsap-hero-anim text-lg sm:text-xl md:text-2xl font-medium ${
                 isDark ? "text-gray-400" : "text-gray-600"
               }`}
             >
               Full-Stack Developer | MERN | Generative AI
             </h2>
             <p
-              className={`max-w-xl text-sm sm:text-base md:text-lg ${
+              className={`gsap-hero-anim max-w-xl text-sm sm:text-base md:text-lg ${
                 isDark ? "text-gray-500" : "text-gray-700"
               }`}
             >
               I build scalable full-stack products — from system design and APIs to responsive, high-performance frontends. With experience shipping production applications, winning hackathons, and solving 500+ DSA problems, I focus on writing code that scales and performs in real-world environments. Currently exploring Generative AI and intelligent agents to build smarter, more efficient systems. Always open to opportunities where I can contribute and create meaningful impact.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
+            {/* CTA Buttons with GSAP Magnetic Hover */}
+            <div className="gsap-hero-anim flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
               <a
                 href="/Ankit_Kumar_Gupta_SDE_Resume.pdf"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
                   isDark
                     ? "bg-black/30 backdrop-blur-md border-2 border-blue-500/50"
@@ -178,6 +327,8 @@ const Hero = () => {
                 href="https://leetcode.com/ankitguptaa17"
                 target="_blank"
                 rel="noreferrer"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
                   isDark
                     ? "bg-black/30 backdrop-blur-md border-2 border-orange-500/50"
@@ -199,14 +350,16 @@ const Hero = () => {
               </a>
             </div>
 
-            {/* Social Links */}
-            <div className="flex gap-8 pt-2 justify-center md:justify-start">
+            {/* Social Links with GSAP Magnetic Hover */}
+            <div className="gsap-hero-anim flex gap-8 pt-2 justify-center md:justify-start">
               {/* GitHub */}
               <a
                 href="https://github.com/ankit-gupta-git"
                 target="_blank"
                 rel="noreferrer"
-                className="transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 hover:rotate-[6deg] hover:text-blue-500"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+                className="transition-colors duration-300 hover:text-blue-500 flex items-center justify-center p-2"
               >
                 <FaGithub className="text-[1.6rem]" />
               </a>
@@ -216,7 +369,9 @@ const Hero = () => {
                 href="https://linkedin.com/in/iamankit-gupta"
                 target="_blank"
                 rel="noreferrer"
-                className="transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 hover:-rotate-[6deg] hover:text-blue-500"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+                className="transition-colors duration-300 hover:text-blue-500 flex items-center justify-center p-2"
               >
                 <FaLinkedin className="text-[1.6rem]" />
               </a>
@@ -226,7 +381,9 @@ const Hero = () => {
                 href="https://twitter.com/ankitgupta_79"
                 target="_blank"
                 rel="noreferrer"
-                className="transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 hover:rotate-[4deg] hover:text-blue-500"
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+                className="transition-colors duration-300 hover:text-blue-500 flex items-center justify-center p-2"
               >
                 <FaXTwitter className="text-[1.6rem]" />
               </a>
