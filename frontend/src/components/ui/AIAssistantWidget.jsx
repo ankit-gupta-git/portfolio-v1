@@ -44,7 +44,7 @@ const SuggestionChips = memo(({ onSuggestionClick }) => (
   </div>
 ));
 
-// WhatsApp-style Message component
+// WhatsApp-style Message component with live streaming cursor support
 const Message = memo(({ message }) => {
   const [copied, setCopied] = useState(false);
 
@@ -70,14 +70,16 @@ const Message = memo(({ message }) => {
             <span className="text-xs font-semibold text-blue-400 flex items-center gap-1.5">
               <Bot size={13} className="text-blue-400" /> Ankit's AI
             </span>
-            <button
-              onClick={handleCopy}
-              className="text-gray-400 hover:text-white p-1 rounded transition-colors text-xs flex items-center gap-1 bg-[#181c27] border border-[#2e3752]"
-              title="Copy response"
-            >
-              {copied ? <Check size={12} className="text-green-400" /> : <Copy size={12} />}
-              <span className="text-[10px] text-gray-300">{copied ? 'Copied' : 'Copy'}</span>
-            </button>
+            {!message.isStreaming && (
+              <button
+                onClick={handleCopy}
+                className="text-gray-400 hover:text-white p-1 rounded transition-colors text-xs flex items-center gap-1 bg-[#181c27] border border-[#2e3752]"
+                title="Copy response"
+              >
+                {copied ? <Check size={12} className="text-green-400" /> : <Copy size={12} />}
+                <span className="text-[10px] text-gray-300">{copied ? 'Copied' : 'Copy'}</span>
+              </button>
+            )}
           </div>
         )}
 
@@ -97,6 +99,9 @@ const Message = memo(({ message }) => {
             >
               {message.text}
             </ReactMarkdown>
+            {message.isStreaming && (
+              <span className="inline-block w-2 h-4 ml-1 bg-blue-400 animate-pulse align-middle rounded-xs" />
+            )}
           </div>
         )}
 
@@ -129,6 +134,7 @@ const AIAssistantWidget = () => {
 
   const messagesEndRef = useRef(null);
   const chatAreaRef = useRef(null);
+  const streamIntervalRef = useRef(null);
 
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
@@ -176,6 +182,13 @@ const AIAssistantWidget = () => {
     };
   }, [open]);
 
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (streamIntervalRef.current) clearInterval(streamIntervalRef.current);
+    };
+  }, []);
+
   const handleOpenModal = () => {
     setIsInitialLoading(true);
     setOpen(true);
@@ -186,6 +199,7 @@ const AIAssistantWidget = () => {
   };
 
   const handleClearChat = () => {
+    if (streamIntervalRef.current) clearInterval(streamIntervalRef.current);
     setMessages([
       {
         from: 'ai',
@@ -199,6 +213,52 @@ const AIAssistantWidget = () => {
     setInput(text);
     handleSend(new Event('submit'), text);
   };
+
+  // Real-time word-by-word streaming typewriter effect
+  const streamResponseText = useCallback((fullText) => {
+    setIsThinking(false);
+    const timeStr = formatTime();
+
+    // Append initial empty streaming AI message
+    setMessages(prev => [...prev, { from: 'ai', text: '', isStreaming: true, time: timeStr }]);
+
+    const chunks = fullText.match(/\S+|\s+/g) || [fullText];
+    let index = 0;
+
+    if (streamIntervalRef.current) clearInterval(streamIntervalRef.current);
+
+    streamIntervalRef.current = setInterval(() => {
+      if (index < chunks.length) {
+        const partialText = chunks.slice(0, index + 1).join('');
+        setMessages(prev => {
+          if (prev.length === 0) return prev;
+          const updated = [...prev];
+          const lastIdx = updated.length - 1;
+          updated[lastIdx] = {
+            ...updated[lastIdx],
+            text: partialText,
+            isStreaming: index < chunks.length - 1
+          };
+          return updated;
+        });
+        index++;
+        scrollToBottom();
+      } else {
+        clearInterval(streamIntervalRef.current);
+        setIsLoading(false);
+        setMessages(prev => {
+          if (prev.length === 0) return prev;
+          const updated = [...prev];
+          const lastIdx = updated.length - 1;
+          updated[lastIdx] = {
+            ...updated[lastIdx],
+            isStreaming: false
+          };
+          return updated;
+        });
+      }
+    }, 18); // 18ms per word stream speed
+  }, [scrollToBottom]);
 
   const handleSend = useCallback(async (e, suggestedText = null) => {
     e.preventDefault();
@@ -247,17 +307,16 @@ const AIAssistantWidget = () => {
       }
     }
 
-    setIsLoading(false);
-    setIsThinking(false);
-
     if (success && responseData?.response) {
-      setMessages(prev => [...prev, { from: 'ai', text: responseData.response, time: formatTime() }]);
+      streamResponseText(responseData.response);
     } else {
+      setIsLoading(false);
+      setIsThinking(false);
       const errorText = lastError?.response?.data?.error || 
         "Hey! I had a minor trouble connecting to the server. Please try sending your message once again!";
       setMessages(prev => [...prev, { from: 'ai', text: errorText, time: formatTime() }]);
     }
-  }, [input, isLoading, messages]);
+  }, [input, isLoading, messages, streamResponseText]);
 
   return (
     <>
