@@ -59,15 +59,24 @@ export const Terminal = ({ isOpen, onClose }) => {
   const [input, setInput] = React.useState('');
   const [historyIndex, setHistoryIndex] = React.useState(null);
 
-  // Block background scroll when terminal opens
+  // Block background scroll when terminal opens & stop Lenis smooth scroll
   React.useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      if (typeof window !== 'undefined' && window.lenis) {
+        window.lenis.stop();
+      }
     } else {
       document.body.style.overflow = 'unset';
+      if (typeof window !== 'undefined' && window.lenis) {
+        window.lenis.start();
+      }
     }
     return () => {
       document.body.style.overflow = 'unset';
+      if (typeof window !== 'undefined' && window.lenis) {
+        window.lenis.start();
+      }
     };
   }, [isOpen]);
 
@@ -536,6 +545,8 @@ Terminal Navigation:
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
+      data-lenis-prevent
+      onWheel={(e) => e.stopPropagation()}
     >
       <motion.div
         className="w-full max-w-4xl h-[80vh] bg-black rounded-lg overflow-hidden flex flex-col border-2 border-green-500 shadow-2xl shadow-green-500/20"
@@ -543,6 +554,7 @@ Terminal Navigation:
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
         onClick={(e) => e.stopPropagation()}
+        data-lenis-prevent
       >
         {/* Header */}
         <div className="bg-gray-950 px-4 py-3 flex justify-between items-center border-b-2 border-green-500/50">
@@ -563,10 +575,12 @@ Terminal Navigation:
         {/* Terminal body with green scrollbar */}
         <div 
           ref={terminalRef} 
-          className="flex-1 p-4 overflow-y-auto bg-black text-green-400 font-mono text-sm"
+          className="flex-1 p-4 overflow-y-auto bg-black text-green-400 font-mono text-sm overscroll-contain"
+          data-lenis-prevent
           style={{
             scrollbarColor: '#16a34a #0a0a0a',
-            scrollbarWidth: 'thin'
+            scrollbarWidth: 'thin',
+            overscrollBehavior: 'contain'
           }}
         >
           {/* Custom scrollbar styling - SHORTER */}
