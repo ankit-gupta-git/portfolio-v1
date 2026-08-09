@@ -79,6 +79,24 @@ body {
 
 
 
+.font-syne {
+  font-family: 'Syne', sans-serif;
+}
+
+.font-unbounded {
+  font-family: 'Unbounded', sans-serif;
+}
+
+/* Oversized Text Stroke & Glow utilities */
+.text-stroke-sm {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+}
+
+.light .text-stroke-sm,
+:root:not(.dark) .text-stroke-sm {
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2);
+}
+
 .font-dxgrafik {
   font-family: 'DxGrafik', sans-serif;
   font-weight: 600;
