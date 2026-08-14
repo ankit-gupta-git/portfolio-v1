@@ -32,7 +32,7 @@ export const useLenisSmoothScroll = (isLoading = false) => {
     };
 
     gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     return () => {
       lenis.destroy();

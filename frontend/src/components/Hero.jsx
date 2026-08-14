@@ -19,7 +19,9 @@ const Hero = () => {
   const profileContainerRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateProgressBar = () => {
       const totalScroll = window.scrollY || document.documentElement.scrollTop;
       const windowHeight =
         document.documentElement.scrollHeight -
@@ -29,9 +31,17 @@ const Hero = () => {
       if (progressBarRef.current) {
         progressBarRef.current.style.transform = `scaleX(${scroll})`;
       }
+      ticking = false;
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateProgressBar);
+        ticking = true;
+      }
+    };
+
+    updateProgressBar();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

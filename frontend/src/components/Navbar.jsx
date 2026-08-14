@@ -24,22 +24,32 @@ const Navbar = ({ onTerminalClick }) => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY + 100;
-      navLinks.forEach((link) => {
-        const section = document.querySelector(link.href);
-        if (section) {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-          if (scrollY >= top && scrollY < top + height) {
-            setActive(link.name);
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px",
+      threshold: 0,
+    };
+
+    const handleIntersect = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = `#${entry.target.id}`;
+          const matchingLink = navLinks.find((link) => link.href === id);
+          if (matchingLink) {
+            setActive(matchingLink.name);
           }
         }
       });
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    navLinks.forEach((link) => {
+      const section = document.querySelector(link.href);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
   }, [navLinks]);
 
   useEffect(() => {

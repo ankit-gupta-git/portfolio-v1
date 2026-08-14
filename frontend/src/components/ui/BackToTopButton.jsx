@@ -6,17 +6,25 @@ const BackToTopButton = () => {
   const { isDark } = useTheme();
 
   useEffect(() => {
+    let ticking = false;
+
     const toggleVisibility = () => {
-      if (window.scrollY > 100) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
+      const shouldShow = window.scrollY > 300;
+      setIsVisible((prev) => (prev !== shouldShow ? shouldShow : prev));
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(toggleVisibility);
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', toggleVisibility);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 

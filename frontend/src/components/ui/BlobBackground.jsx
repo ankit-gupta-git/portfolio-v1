@@ -18,11 +18,12 @@ export default function BlobBackground() {
       ];
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none transform-gpu">
       {blobs.map((blob, i) => (
         <div
           key={i}
-          className={`absolute ${blob.size} ${blob.bg} ${blob.opacity} blur-[60px] ${blob.position} rounded-full animate-blob`}
+          className={`absolute ${blob.size} ${blob.bg} ${blob.opacity} blur-[50px] ${blob.position} rounded-full transform-gpu`}
+          style={{ willChange: "transform", transform: "translate3d(0,0,0)" }}
         />
       ))}
     </div>

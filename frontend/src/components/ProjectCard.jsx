@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { useTheme } from './ui/ThemeContext';
@@ -10,13 +10,14 @@ const ProjectCard = ({ project }) => {
 
   const cardRef = useRef(null);
   const glowRef = useRef(null);
+  const descRef = useRef(null);
 
-  const checkTextOverflow = (e) => {
-    if (e) {
-      const hasOverflow = e.scrollHeight > e.clientHeight;
+  useEffect(() => {
+    if (descRef.current) {
+      const hasOverflow = descRef.current.scrollHeight > descRef.current.clientHeight;
       setNeedsExpansion(hasOverflow);
     }
-  };
+  }, [project.description]);
 
   // GSAP 3D Tilt & Radial Spotlight Effect
   const handleMouseMove = (e) => {
@@ -160,7 +161,7 @@ const ProjectCard = ({ project }) => {
 
           <div className="relative mb-5 flex-1">
             <p
-              ref={checkTextOverflow}
+              ref={descRef}
               className={`text-sm leading-relaxed transition-all duration-300 ${
                 isDark ? "text-gray-300" : "text-gray-600"
               } ${isExpanded ? '' : 'line-clamp-3'}`}

@@ -1,20 +1,21 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-// Inline mouse position hook
-function useMousePosition() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+// Inline mouse position hook with ref to avoid component re-renders on mousemove
+function useMousePositionRef() {
+  const mouseRef = useRef({ x: -1000, y: -1000 });
 
   useEffect(() => {
     const updateMousePosition = (ev) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY });
+      mouseRef.current.x = ev.clientX;
+      mouseRef.current.y = ev.clientY;
     };
 
-    window.addEventListener("mousemove", updateMousePosition);
+    window.addEventListener("mousemove", updateMousePosition, { passive: true });
     return () => window.removeEventListener("mousemove", updateMousePosition);
   }, []);
 
-  return mousePosition;
+  return mouseRef;
 }
 
 // Inline utility to merge Tailwind classes
@@ -32,9 +33,10 @@ export const Sparkles = ({
   particleColor = "#FFFFFF",
 }) => {
   const canvasRef = useRef(null);
-  const mousePosition = useMousePosition();
+  const mousePositionRef = useMousePositionRef();
   const particles = useRef([]);
   const animationFrame = useRef(0);
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -43,6 +45,19 @@ export const Sparkles = ({
     if (!ctx) return;
 
     const canvas = canvasRef.current;
+    
+    // Intersection Observer to pause rendering when offscreen
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && !animationFrame.current) {
+          animate();
+        }
+      }
+    }, { threshold: 0.05 });
+
+    intersectionObserver.observe(canvas);
+
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.target === canvas) {
@@ -57,8 +72,10 @@ export const Sparkles = ({
     canvas.height = canvas.offsetHeight;
 
     const createParticles = () => {
-      const density =
-        (particleDensity * canvas.width * canvas.height) / (1920 * 1080);
+      const density = Math.min(
+        150,
+        Math.floor((particleDensity * canvas.width * canvas.height) / (1920 * 1080))
+      );
       particles.current = Array.from({ length: density }, () =>
         new Particle(
           Math.random() * canvas.width,
@@ -72,11 +89,15 @@ export const Sparkles = ({
     createParticles();
 
     const animate = () => {
-      if (!ctx || !canvas) return;
+      if (!ctx || !canvas || !isVisibleRef.current) {
+        animationFrame.current = 0;
+        return;
+      }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const currentMouse = mousePositionRef.current;
       particles.current.forEach((particle) => {
-        particle.update(canvas.width, canvas.height, mousePosition);
+        particle.update(canvas.width, canvas.height, currentMouse);
         particle.draw(ctx);
       });
 
@@ -86,12 +107,14 @@ export const Sparkles = ({
     animate();
 
     return () => {
+      intersectionObserver.disconnect();
       resizeObserver.disconnect();
       if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current);
+        animationFrame.current = 0;
       }
     };
-  }, [minSize, maxSize, particleDensity, particleColor]);
+  }, [minSize, maxSize, particleDensity, particleColor, mousePositionRef]);
 
   return (
     <canvas

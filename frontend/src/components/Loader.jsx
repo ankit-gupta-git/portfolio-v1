@@ -1,22 +1,36 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
+
+const greetings = [
+  "Hello",
+  "नमस्ते",
+  "ہیلو",
+  "Hola",
+  "Bonjour",
+  "Hallo",
+  "Ciao",
+  "Привет",
+  "你好",
+  "مرحبا"
+];
 
 const Loader = ({ onLoadingComplete }) => {
-  const [fadeOut, setFadeOut] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
+  const counterRef = useRef(null);
+  const svgRef = useRef(null);
+  const pathRef = useRef(null);
 
   useEffect(() => {
-    // Scroll to top when page reloads into intro
+    // Lock scroll during intro
     window.scrollTo(0, 0);
 
-    // Prevent scroll wheel, touch scroll, and navigation keys during intro loading
-    const preventScroll = (e) => {
-      e.preventDefault();
-    };
-
+    const preventScroll = (e) => e.preventDefault();
     const preventDefaultKeys = (e) => {
       const keys = ["Space", "ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End"];
-      if (keys.includes(e.code)) {
-        e.preventDefault();
-      }
+      if (keys.includes(e.code)) e.preventDefault();
     };
 
     document.body.style.overflow = "hidden";
@@ -28,92 +42,165 @@ const Loader = ({ onLoadingComplete }) => {
     window.addEventListener("touchmove", preventScroll, { passive: false });
     window.addEventListener("keydown", preventDefaultKeys, { passive: false });
 
-    // Smoothly fade out the loader overlay after the SVG stroke animation completes (5 seconds)
-    const fadeTimer = setTimeout(() => {
-      setFadeOut(true);
-    }, 5000);
+    // Smooth counter animation from 0 to 100%
+    const counterObj = { value: 0 };
+    gsap.to(counterObj, {
+      value: 100,
+      duration: 2.1,
+      ease: "power1.inOut",
+      onUpdate: () => {
+        setProgress(Math.round(counterObj.value));
+      },
+    });
+
+    // Word cycling interval (190ms per word)
+    let wordIdx = 0;
+    const intervalId = setInterval(() => {
+      wordIdx++;
+      if (wordIdx < greetings.length) {
+        setIndex(wordIdx);
+      } else {
+        clearInterval(intervalId);
+        triggerCurtainExit();
+      }
+    }, 190);
+
+    const triggerCurtainExit = () => {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          if (onLoadingComplete) onLoadingComplete();
+        },
+      });
+
+      // Text scale up & cinematic blur out
+      tl.to(textRef.current, {
+        scale: 1.15,
+        opacity: 0,
+        filter: "blur(10px)",
+        duration: 0.4,
+        ease: "power2.in",
+      })
+      .to(
+        counterRef.current,
+        {
+          opacity: 0,
+          y: 15,
+          duration: 0.3,
+          ease: "power2.in",
+        },
+        "-=0.3"
+      );
+
+      // SVG Curved Arch Exit (Luxury Curtain Reveal)
+      const height = window.innerHeight;
+      const width = window.innerWidth;
+      const curveHeight = height * 0.3;
+
+      if (pathRef.current) {
+        tl.to(pathRef.current, {
+          attr: {
+            d: `M0 0 L${width} 0 L${width} ${height} Q${width / 2} ${height - curveHeight} 0 ${height} Z`
+          },
+          duration: 0.4,
+          ease: "power2.in"
+        })
+        .to(pathRef.current, {
+          attr: {
+            d: `M0 0 L${width} 0 L${width} 0 Q${width / 2} 0 0 0 Z`
+          },
+          duration: 0.6,
+          ease: "power4.out"
+        })
+        .to(
+          containerRef.current,
+          {
+            opacity: 0,
+            duration: 0.1,
+            pointerEvents: "none",
+          },
+          "-=0.1"
+        );
+      } else {
+        tl.to(containerRef.current, {
+          y: "-100%",
+          duration: 0.9,
+          ease: "power4.inOut",
+        });
+      }
+    };
 
     return () => {
-      clearTimeout(fadeTimer);
+      clearInterval(intervalId);
       window.removeEventListener("wheel", preventScroll);
       window.removeEventListener("touchmove", preventScroll);
       window.removeEventListener("keydown", preventDefaultKeys);
 
-      // Restore scrolling and cursor when the loader is unmounted
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
       document.body.style.cursor = "";
       document.documentElement.style.cursor = "";
     };
-  }, []);
+  }, [onLoadingComplete]);
 
-  const handleTransitionEnd = (e) => {
-    // Only call onLoadingComplete when the opacity transition of the container completes
-    if (fadeOut && e.target === e.currentTarget) {
-      onLoadingComplete();
+  // GSAP micro-entrance per greeting word change
+  useEffect(() => {
+    if (textRef.current) {
+      gsap.fromTo(
+        textRef.current,
+        { opacity: 0, y: 14, filter: "blur(5px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }
+      );
     }
-  };
+  }, [index]);
 
-  const styles = `
-    html, body, body * {
-      cursor: none !important;
-    }
-
-    .hello__svg {
-      overflow: visible !important;
-    }
-
-    .hello__svg-path {
-      fill: none;
-      stroke: #ffffff;
-      stroke-linecap: round;
-      stroke-miterlimit: 10;
-      stroke-width: 35px;
-      stroke-dasharray: 5800px;
-      stroke-dashoffset: 5800px;
-      animation: anim__hello 5s linear forwards;
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.45));
-    }
-
-    @keyframes anim__hello {
-      0% {
-        stroke-dashoffset: 5800;
-      }
-      25% {
-        stroke-dashoffset: 5800;
-      }
-      100% {
-        stroke-dashoffset: 0;
-      }
-    }
-  `;
+  const initialD = typeof window !== "undefined"
+    ? `M0 0 L${window.innerWidth} 0 L${window.innerWidth} ${window.innerHeight} Q${window.innerWidth / 2} ${window.innerHeight} 0 ${window.innerHeight} Z`
+    : "";
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: styles }} />
-      <div
-        className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ease-out cursor-none select-none pointer-events-auto bg-black ${
-          fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
-        style={{
-          backgroundColor: "#000000"
-        }}
-        onTransitionEnd={handleTransitionEnd}
+    <div
+      ref={containerRef}
+      className="fixed inset-0 w-full h-screen z-[99999] select-none pointer-events-auto overflow-hidden bg-transparent"
+    >
+      {/* SVG Background Overlay Curtain */}
+      <svg
+        ref={svgRef}
+        className="absolute inset-0 w-full h-full pointer-events-none fill-black"
       >
-        <div className="w-44 sm:w-56 md:w-64 lg:w-72 max-w-[280px] flex items-center justify-center">
-          <svg
-            className="w-full h-auto max-w-full hello__svg"
-            viewBox="0 0 1230.94 414.57"
+        <path ref={pathRef} d={initialD} />
+      </svg>
+
+      {/* Main Content Area */}
+      <div className="relative z-10 w-full h-full flex flex-col justify-between p-8 sm:p-12 md:p-16">
+        {/* Top Spacer / Status */}
+        <div className="flex justify-between items-center text-xs font-mono text-gray-500 uppercase tracking-widest">
+          <span>PORTFOLIO v1.0</span>
+          <span>ANKIT GUPTA</span>
+        </div>
+
+        {/* Center Greetings */}
+        <div className="flex items-center justify-center my-auto">
+          <h1
+            ref={textRef}
+            className="text-center font-bold text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight font-dxgrafik flex items-center justify-center gap-3 sm:gap-4"
           >
-            <path
-              className="hello__svg-path"
-              d="M-293.58-104.62S-103.61-205.49-60-366.25c9.13-32.45,9-58.31,0-74-10.72-18.82-49.69-33.21-75.55,31.94-27.82,70.11-52.22,377.24-44.11,322.48s34-176.24,99.89-183.19c37.66-4,49.55,23.58,52.83,47.92a117.06,117.06,0,0,1-3,45.32c-7.17,27.28-20.47,97.67,33.51,96.86,66.93-1,131.91-53.89,159.55-84.49,31.1-36.17,31.1-70.64,19.27-90.25-16.74-29.92-69.47-33-92.79,16.73C62.78-179.86,98.7-93.8,159-81.63S302.7-99.55,393.3-269.92c29.86-58.16,52.85-114.71,46.14-150.08-7.44-39.21-59.74-54.5-92.87-8.7-47,65-61.78,266.62-34.74,308.53S416.62-58,481.52-130.31s133.2-188.56,146.54-256.23c14-71.15-56.94-94.64-88.4-47.32C500.53-375,467.58-229.49,503.3-127a73.73,73.73,0,0,0,23.43,33.67c25.49,20.23,55.1,16,77.46,6.32a111.25,111.25,0,0,0,30.44-19.87c37.73-34.23,29-36.71,64.58-127.53C724-284.3,785-298.63,821-259.13a71,71,0,0,1,13.69,22.56c17.68,46,6.81,80-6.81,107.89-12,24.62-34.56,42.72-61.45,47.91-23.06,4.45-48.37-.35-66.48-24.27a78.88,78.88,0,0,1-12.66-25.8c-14.75-51,4.14-88.76,11-101.41,6.18-11.39,37.26-69.61,103.42-42.24,55.71,23.05,100.66-23.31,100.66-23.31"
-              transform="translate(311.08 476.02)"
-            />
-          </svg>
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-500 animate-pulse shadow-[0_0_12px_rgba(59,130,246,0.8)] inline-block" />
+            <span>{greetings[index]}</span>
+          </h1>
+        </div>
+
+        {/* Bottom Percentage Counter */}
+        <div
+          ref={counterRef}
+          className="flex justify-between items-end text-sm sm:text-base font-mono text-gray-400 border-t border-white/10 pt-4"
+        >
+          <span className="text-xs text-blue-400/80 uppercase tracking-wider">Loading System</span>
+          <span className="text-2xl sm:text-3xl font-bold text-white font-mono">
+            {progress < 10 ? `0${progress}` : progress}%
+          </span>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
