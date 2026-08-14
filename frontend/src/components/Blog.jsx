@@ -27,7 +27,7 @@ const Blog = () => {
       topic: "Next.js 13",
       readTime: "5 min read",
       publishDate: "July 18, 2025",
-      image: "/BlogImg/next.jpg",
+      image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/next.webp",
       mediumUrl: "https://medium.com/@ankitkumargupta752/why-next-js-is-my-go-to-framework-for-building-modern-web-apps-2f03133ff06b",
       tags: ["Next.js", "React", "Web Development"]
     },
@@ -38,7 +38,7 @@ const Blog = () => {
       topic: "Prompt Engineering",
       readTime: "4 min read",
       publishDate: "July 20, 2025",
-      image: "/BlogImg/Prompt.webp",
+      image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/prompt-engineering-banner-3d-illustration-260nw-2295088865.webp",
       mediumUrl: "https://medium.com/@ankitkumargupta752/how-prompt-engineering-changed-the-way-i-code-and-think-6d408a4347a4",
       tags: ["Prompt Engineering", "AI Tools", "Coding", "Learning", "ChatGPT", "Software Development"]
     },
@@ -60,7 +60,7 @@ const Blog = () => {
       topic: "Microservices",
       readTime: "5 min read",
       publishDate: "Oct 12, 2025",
-      image: "/BlogImg/Monolithic vs Microservices.jpeg",
+      image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/Monolithic%20vs%20Microservices.webp",
       mediumUrl: "https://medium.com/@ankitkumargupta752/monolithic-vs-microservices-architecture-understanding-how-modern-apps-are-built-9f8ef76ca40a",
       tags: ["Microservices", "Monolithic", "Software Architecture"]
     }

@@ -1,27 +1,37 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import useFluidCursor from '../hooks/useFluidCursor';
 import { useTheme } from './ui/ThemeContext';
 
 const FluidCursor = () => {
   const { isDark } = useTheme();
-
-  // Disable on mobile/touch devices for high-performance scrolling
-  const isTouchDevice = typeof window !== 'undefined' && (
-    'ontouchstart' in window ||
-    window.matchMedia('(pointer: coarse)').matches ||
-    window.innerWidth < 768
-  );
+  const [isMobile, setIsMobile] = useState(true);
 
   useEffect(() => {
-    if (!isDark || isTouchDevice) return;
+    const checkMobile = () => {
+      const isTouch =
+        typeof window !== 'undefined' &&
+        ('ontouchstart' in window ||
+          (navigator && navigator.maxTouchPoints > 0) ||
+          window.matchMedia('(pointer: coarse)').matches ||
+          window.innerWidth < 768);
+      setIsMobile(isTouch);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile, { passive: true });
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!isDark || isMobile) return;
 
     const cleanup = useFluidCursor();
     return () => {
       if (cleanup) cleanup();
     };
-  }, [isDark, isTouchDevice]);
-  
-  if (!isDark || isTouchDevice) return null;
+  }, [isDark, isMobile]);
+
+  if (!isDark || isMobile) return null;
 
   return (
     <div className="fixed top-0 left-0 z-[2] pointer-events-none">

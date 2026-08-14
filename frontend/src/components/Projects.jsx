@@ -21,7 +21,7 @@ const projects = [
     ],
     github: "https://github.com/ankit-gupta-git/forge-ai-app-builder",
     live: "https://forge-studio-neon.vercel.app/",
-    image: "/ProjectImg/forge.png",
+    image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/forge.webp",
     status: "AI SaaS",
   },
   {
@@ -31,7 +31,7 @@ const projects = [
     tech: ["React.js", "Supabase (PostgreSQL)", "Clerk", "LLM APIs"],
     github: "https://github.com/ankit-gupta-git/ai-job-portal",
     live: "https://job-portal-dun-chi.vercel.app/",
-    image: "/ProjectImg/Hirrd.png",
+    image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/Hirrd.webp",
     status: "Fullstack",
   },
   {
@@ -48,7 +48,7 @@ const projects = [
     ],
     github: "https://github.com/ankit-gupta-git/napster-recommendation-system",
     live: "https://napster-recommendation-system.vercel.app/",
-    image: "/ProjectImg/napster.png",
+    image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/napster.webp",
     status: "Fullstack",
   },
   {
@@ -58,7 +58,7 @@ const projects = [
     tech: ["MongoDB", "Express.js", "React.js", "Node.js", "Firebase", "Stripe", "Redux Toolkit", "Gemini API", "Recharts"],
     github: "https://github.com/ankit-gupta-git/AI-Interview-Agent",
     live: "https://interviewiq-ai.vercel.app/",
-    image: "/ProjectImg/InterviewIQ.png",
+    image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/InterviewIQ.webp",
     status: "Fullstack",
   },
   {
@@ -75,17 +75,7 @@ const projects = [
     ],
     github: "https://github.com/ankit-gupta-git/ally-support",
     live: "https://ally-support.vercel.app/",
-    image: "/ProjectImg/AllySupport.png",
-    status: "Fullstack",
-  },
-  {
-    title: "NeuraChat - Realtime AI Chat",
-    description:
-      "A real-time group chat built with Socket.IO and Node.js, featuring AI-powered assistant and smart summaries.",
-    tech: ["React", "Three.js", "OpenAI", "Socket.IO", "Node.js"],
-    github: "https://github.com/ankit-gupta-git/realtime-ai-chat",
-    live: "https://realtime-ai-chat-lilac.vercel.app/",
-    image: "/ProjectImg/Reatime_Chat.png",
+    image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/AllySupport.webp",
     status: "Fullstack",
   },
   {
@@ -102,7 +92,7 @@ const projects = [
     ],
     github: "https://github.com/ankit-gupta-git/Hovio",
     live: "https://hovio-hsp7.onrender.com",
-    image: "/ProjectImg/hovio.png",
+    image: "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/hovio.webp",
     status: "Fullstack",
   },
 ];

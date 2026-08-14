@@ -1,30 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React from "react";
 import { useTheme } from "./ui/ThemeContext";
 import { FaGithub, FaLinkedin, FaXTwitter, FaArrowUp, FaEnvelope, FaLocationDot } from "react-icons/fa6";
 import { Sparkles, CircleDot } from "lucide-react";
+import LiveClock from "./ui/LiveClock";
 
 const Footer = () => {
   const { isDark } = useTheme();
-  const [time, setTime] = useState("");
-
-  // Live IST (India) Time display
-  useEffect(() => {
-    const updateTime = () => {
-      const options = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      };
-      setTime(new Intl.DateTimeFormat("en-US", options).format(new Date()));
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -93,7 +74,7 @@ const Footer = () => {
                   <FaLocationDot className="text-blue-500" />
                   <span>India</span>
                   <span className="text-gray-400">|</span>
-                  <span className="font-mono text-blue-500 font-semibold">{time || "IST"}</span>
+                  <LiveClock />
                 </span>
 
                 <span
@@ -136,14 +117,12 @@ const Footer = () => {
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {socialLinks.map((social) => (
-                    <motion.a
+                    <a
                       key={social.name}
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-medium transition-all ${
+                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-medium transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 ${
                         isDark
                           ? "bg-white/5 hover:bg-blue-600/20 border-white/10 hover:border-blue-500/50 text-gray-200 hover:text-white"
                           : "bg-gray-50 hover:bg-blue-50 border-gray-200 hover:border-blue-300 text-gray-800 hover:text-blue-600"
@@ -151,18 +130,16 @@ const Footer = () => {
                     >
                       <span className="text-blue-500 text-sm">{social.icon}</span>
                       <span>{social.name}</span>
-                    </motion.a>
+                    </a>
                   ))}
                 </div>
               </div>
 
               {/* Back to Top */}
               <div className="mt-6 pt-4 flex items-center justify-between">
-                <motion.button
-                  whileHover={{ scale: 1.04, y: -2 }}
-                  whileTap={{ scale: 0.96 }}
+                <button
                   onClick={scrollToTop}
-                  className={`inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full border transition-all duration-200 hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer ${
                     isDark
                       ? "bg-white/10 hover:bg-blue-600 hover:border-blue-500 text-white border-white/15"
                       : "bg-gray-900 text-white hover:bg-blue-600 border-gray-800 shadow-sm"
@@ -170,7 +147,7 @@ const Footer = () => {
                 >
                   <span>Back to top</span>
                   <FaArrowUp className="text-xs" />
-                </motion.button>
+                </button>
               </div>
             </div>
           </div>

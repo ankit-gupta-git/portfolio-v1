@@ -10,7 +10,8 @@ import {
 } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 import { useTheme } from "./ui/ThemeContext";
-import myProfileImg from "../assets/myimg.webp";
+
+const myProfileImg = "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/myimg.webp";
 
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();

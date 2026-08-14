@@ -1,6 +1,5 @@
 import React from 'react';
 import { Terminal as TerminalIcon, X } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 // Box component for command outputs
 const Box = ({ title, children, className = '' }) => (
@@ -539,22 +538,14 @@ Terminal Navigation:
   if (!isOpen) return null;
 
   return (
-    <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-200"
       onClick={(e) => e.target === e.currentTarget && onClose()}
-      data-lenis-prevent
       onWheel={(e) => e.stopPropagation()}
     >
-      <motion.div
-        className="w-full max-w-4xl h-[80vh] bg-black rounded-lg overflow-hidden flex flex-col border-2 border-green-500 shadow-2xl shadow-green-500/20"
-        initial={{ scale: 0.95, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.95, y: 20 }}
+      <div
+        className="w-full max-w-4xl h-[80vh] bg-black rounded-lg overflow-hidden flex flex-col border-2 border-green-500 shadow-2xl shadow-green-500/20 transition-all duration-200 transform scale-100"
         onClick={(e) => e.stopPropagation()}
-        data-lenis-prevent
       >
         {/* Header */}
         <div className="bg-gray-950 px-4 py-3 flex justify-between items-center border-b-2 border-green-500/50">
@@ -667,8 +658,8 @@ Terminal Navigation:
             />
           </form>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
@@ -684,3 +675,5 @@ export const TerminalLauncher = ({ onClick }) => (
     </button>
   </div>
 );
+
+export default Terminal;

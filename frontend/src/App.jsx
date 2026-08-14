@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./components/ui/ThemeContext";
 import Loader from "./components/Loader";
@@ -11,21 +11,19 @@ import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import ProblemSolving from "./components/ProblemSolving";
 import Contact from "./components/Contact";
-import Blog from "./components/Blog";
-import AIAssistantWidget from "./components/ui/AIAssistantWidget";
-import TechStackCarousel from "./components/ui/TechStackCarousel";
-import GithubContributions from "./components/ui/GithubContributions";
-import { Terminal } from "./components/Terminal";
 import FluidCursor from "./components/FluidCursor";
-import { useLenisSmoothScroll } from "./hooks/useLenisSmoothScroll";
 import "./App.css";
+
+// Lazy-loaded heavy below-the-fold and widget components for code-splitting
+const Blog = lazy(() => import("./components/Blog"));
+const AIAssistantWidget = lazy(() => import("./components/ui/AIAssistantWidget"));
+const TechStackCarousel = lazy(() => import("./components/ui/TechStackCarousel"));
+const GithubContributions = lazy(() => import("./components/ui/GithubContributions"));
+const Terminal = lazy(() => import("./components/Terminal"));
 
 const App = () => {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Initialize Lenis smooth scrolling synced with GSAP ScrollTrigger
-  useLenisSmoothScroll(isLoading);
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -68,18 +66,26 @@ const App = () => {
         <Experience />
         <Skills />
         <ProblemSolving />
-        <TechStackCarousel />
+        <Suspense fallback={null}>
+          <TechStackCarousel />
+        </Suspense>
         <Projects />
-        <Blog />
-        <GithubContributions />
+        <Suspense fallback={null}>
+          <Blog />
+          <GithubContributions />
+        </Suspense>
         <Contact />
         <Footer />
       </Layout>
-      {!isLoading && <AIAssistantWidget />}
-      <Terminal 
-        isOpen={isTerminalOpen} 
-        onClose={() => setIsTerminalOpen(false)} 
-      />
+      <Suspense fallback={null}>
+        {!isLoading && <AIAssistantWidget />}
+        {isTerminalOpen && (
+          <Terminal 
+            isOpen={isTerminalOpen} 
+            onClose={() => setIsTerminalOpen(false)} 
+          />
+        )}
+      </Suspense>
     </ThemeProvider>
   );
 };
