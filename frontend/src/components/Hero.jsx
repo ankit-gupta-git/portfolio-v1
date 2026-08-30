@@ -10,8 +10,7 @@ import {
 } from "react-icons/fa6";
 import { HiOutlineDocumentArrowDown } from "react-icons/hi2";
 import { useTheme } from "./ui/ThemeContext";
-
-const myProfileImg = "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/myimg.webp";
+import CreativeProfileCard from "./ui/CreativeProfileCard";
 
 const Hero = () => {
   const { isDark, setIsDark } = useTheme();
@@ -47,7 +46,7 @@ const Hero = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // GSAP Entrance & Floating Yoyo Loop Animations
+  // GSAP Entrance Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Staggered Entrance for Hero Left Content
@@ -65,79 +64,24 @@ const Hero = () => {
       );
 
       // Entrance for Profile Image Container
-      gsap.fromTo(
-        profileContainerRef.current,
-        { opacity: 0, scale: 0.7, rotation: -8 },
-        {
-          opacity: 1,
-          scale: 1,
-          rotation: 0,
-          duration: 1.2,
-          ease: "back.out(1.5)",
-          delay: 0.2,
-        }
-      );
-
-      // Continuous Floating Animation for Tech Badges
-      gsap.to(".gsap-floating-badge", {
-        y: -10,
-        duration: 2.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.easeInOut",
-        stagger: {
-          amount: 1.2,
-          from: "random",
-        },
-      });
+      if (profileContainerRef.current) {
+        gsap.fromTo(
+          profileContainerRef.current,
+          { opacity: 0, scale: 0.85, y: 20 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power3.out",
+            delay: 0.2,
+          }
+        );
+      }
     }, heroRef);
 
     return () => ctx.revert();
   }, []);
-
-  // GSAP 3D Interactive Mouse Parallax & Tilt
-  const handleMouseMove = (e) => {
-    if (!heroRef.current || !profileContainerRef.current) return;
-    const rect = heroRef.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left - rect.width / 2;
-    const mouseY = e.clientY - rect.top - rect.height / 2;
-
-    const tiltX = (mouseY / (rect.height / 2)) * -16;
-    const tiltY = (mouseX / (rect.width / 2)) * 16;
-
-    gsap.to(profileContainerRef.current, {
-      rotationX: tiltX,
-      rotationY: tiltY,
-      transformPerspective: 1000,
-      ease: "power2.out",
-      duration: 0.5,
-    });
-
-    gsap.to(".gsap-floating-badge", {
-      x: (mouseX / (rect.width / 2)) * 18,
-      y: (mouseY / (rect.height / 2)) * 18,
-      ease: "power2.out",
-      duration: 0.6,
-      stagger: 0.04,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    if (!profileContainerRef.current) return;
-    gsap.to(profileContainerRef.current, {
-      rotationX: 0,
-      rotationY: 0,
-      ease: "power3.out",
-      duration: 0.8,
-    });
-
-    gsap.to(".gsap-floating-badge", {
-      x: 0,
-      y: 0,
-      ease: "power3.out",
-      duration: 0.8,
-    });
-  };
 
   // GSAP Magnetic Effect for Hovering Elements
   const handleMagneticMove = (e) => {
@@ -165,15 +109,6 @@ const Hero = () => {
 
   return (
     <>
-      {/* Preload Hero Image */}
-      <link
-        rel="preload"
-        href={myProfileImg}
-        as="image"
-        fetchPriority="high"
-        type="image/webp"
-      />
-
       {/* Scroll Progress Bar */}
       <div
         ref={progressBarRef}
@@ -190,31 +125,26 @@ const Hero = () => {
       <section
         ref={heroRef}
         id="home"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className={`min-h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-20 relative transition duration-300 ${
-          !isDark
+        className={`min-h-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-20 relative transition duration-300 ${!isDark
             ? "bg-gradient-to-br from-[#f1faff] via-[#e6f0ff] to-[#ffffff]"
             : ""
-        } ${isDark ? "pt-32 sm:pt-20 md:pt-24 lg:pt-28" : "pt-32 sm:pt-24 md:pt-24 lg:pt-28"}`}
+          } ${isDark ? "pt-32 sm:pt-20 md:pt-24 lg:pt-28" : "pt-32 sm:pt-24 md:pt-24 lg:pt-28"}`}
       >
         {/* Theme Toggle Switch */}
         <button
           onClick={() => setIsDark(!isDark)}
           onMouseMove={handleMagneticMove}
           onMouseLeave={handleMagneticLeave}
-          className={`absolute top-24 sm:top-6 right-6 z-50 w-12 h-6 sm:w-16 sm:h-8 rounded-full p-1 transition-colors duration-300 ease-in-out ${
-            isDark
+          className={`absolute top-24 sm:top-6 right-6 z-50 w-12 h-6 sm:w-16 sm:h-8 rounded-full p-1 transition-colors duration-300 ease-in-out ${isDark
               ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
               : "bg-gradient-to-r from-[#159ccb] to-[#0f7a9e]"
-          }`}
+            }`}
         >
           <div
             className="w-4 h-4 sm:w-6 sm:h-6 rounded-full flex items-center justify-center bg-white shadow-lg"
             style={{
-              transform: `translateX(${
-                isDark ? (window.innerWidth < 640 ? 24 : 32) : 0
-              }px)`,
+              transform: `translateX(${isDark ? (window.innerWidth < 640 ? 24 : 32) : 0
+                }px)`,
               transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
           >
@@ -227,84 +157,34 @@ const Hero = () => {
         </button>
 
         <div className="max-w-7xl w-full grid md:grid-cols-2 gap-10 items-center">
-          {/* RIGHT SIDE - PROFILE IMAGE WITH GSAP 3D TILT & FLOATING TECH BADGES */}
-          <div className="flex justify-center order-1 md:order-2">
-            <div className="relative">
-              {/* Floating Tech Badges */}
-              <div className="gsap-floating-badge absolute -top-3 -left-4 sm:-top-5 sm:-left-8 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-blue-500/30 text-blue-400 bg-black/70 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                React
-              </div>
-
-              <div className="gsap-floating-badge absolute top-3 -right-4 sm:top-5 sm:-right-10 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-purple-500/30 text-purple-400 bg-black/70 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                GenAI
-              </div>
-
-              <div className="gsap-floating-badge absolute bottom-3 -left-4 sm:bottom-5 sm:-left-10 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-emerald-500/30 text-emerald-400 bg-black/70 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Node.js
-              </div>
-
-              <div className="gsap-floating-badge absolute -bottom-3 -right-4 sm:-bottom-5 sm:-right-8 z-20 px-3 py-1.5 rounded-full text-xs font-semibold shadow-xl backdrop-blur-md border border-amber-500/30 text-amber-400 bg-black/70 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                MERN
-              </div>
-
-              {/* Profile Image Frame */}
-              <div
-                ref={profileContainerRef}
-                className={`relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full p-1 shadow-2xl transition-shadow duration-300 ${
-                  isDark
-                    ? "bg-gradient-to-tr from-blue-600 via-purple-600 to-pink-600 shadow-blue-500/20"
-                    : "bg-gradient-to-tr from-[#159ccb] via-[#0f7a9e] to-[#2563eb] shadow-blue-500/10"
-                }`}
-              >
-                <div
-                  className={`w-full h-full rounded-full p-1 ${
-                    isDark ? "bg-black" : "bg-white"
-                  }`}
-                >
-                  <img
-                    src={myProfileImg}
-                    alt="Ankit Gupta"
-                    className="rounded-full object-cover w-full h-full pointer-events-none select-none"
-                    width={288}
-                    height={288}
-                    fetchPriority="high"
-                  />
-                </div>
-              </div>
-            </div>
+          {/* RIGHT SIDE - MINIMALIST 3D ELEVATED PROFILE CARD */}
+          <div ref={profileContainerRef} className="flex justify-center order-1 md:order-2">
+            <CreativeProfileCard isDark={isDark} />
           </div>
 
           {/* LEFT SIDE - STAGGERED GSAP ENTRANCE CONTENT */}
           <div
-            className={`space-y-6 order-2 md:order-1 ${
-              isDark ? "text-white" : "text-[#111827]"
-            } transition duration-300`}
+            className={`space-y-6 order-2 md:order-1 ${isDark ? "text-white" : "text-[#111827]"
+              } transition duration-300`}
           >
             <h1 className="gsap-hero-anim text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-col gap-2 text-center md:text-left">
               <span>Hi, I'm</span>
               <span
-                className={`${
-                  isDark ? "text-blue-500" : "text-[#159ccb]"
-                } font-gyst`}
+                className={`${isDark ? "text-blue-500" : "text-[#159ccb]"
+                  } font-gyst`}
               >
                 Ankit Gupta
               </span>
             </h1>
             <h2
-              className={`gsap-hero-anim text-lg sm:text-xl md:text-2xl font-medium ${
-                isDark ? "text-gray-400" : "text-gray-600"
-              }`}
+              className={`gsap-hero-anim text-lg sm:text-xl md:text-2xl font-medium ${isDark ? "text-gray-400" : "text-gray-600"
+                }`}
             >
               Full-Stack Developer | MERN | Generative AI
             </h2>
             <p
-              className={`gsap-hero-anim max-w-xl text-sm sm:text-base md:text-lg ${
-                isDark ? "text-gray-500" : "text-gray-700"
-              }`}
+              className={`gsap-hero-anim max-w-xl text-sm sm:text-base md:text-lg ${isDark ? "text-gray-500" : "text-gray-700"
+                }`}
             >
               I build scalable full-stack products — from system design and APIs to responsive, high-performance frontends. With experience shipping production applications, winning hackathons, and solving 500+ DSA problems, I focus on writing code that scales and performs in real-world environments. Currently exploring Generative AI and intelligent agents to build smarter, more efficient systems. Always open to opportunities where I can contribute and create meaningful impact.
             </p>
@@ -315,21 +195,19 @@ const Hero = () => {
                 href="/Ankit_Kumar_Gupta_SDE_Resume.pdf"
                 onMouseMove={handleMagneticMove}
                 onMouseLeave={handleMagneticLeave}
-                className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
-                  isDark
+                className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${isDark
                     ? "bg-black/30 backdrop-blur-md border-2 border-blue-500/50"
                     : "bg-white/80 backdrop-blur-md border-2 border-[#159ccb]/30 shadow-sm"
-                }`}
+                  }`}
               >
                 <span
                   className={`absolute inset-0 bg-gradient-to-r from-[#159ccb] to-[#0f7a9e] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300`}
                 ></span>
                 <span
-                  className={`relative z-10 flex items-center gap-2 ${
-                    isDark
+                  className={`relative z-10 flex items-center gap-2 ${isDark
                       ? "text-white"
                       : "text-[#159ccb] group-hover:text-white group-active:text-white"
-                  }`}
+                    }`}
                 >
                   View CV <HiOutlineDocumentArrowDown className="text-lg" />
                 </span>
@@ -340,21 +218,19 @@ const Hero = () => {
                 rel="noreferrer"
                 onMouseMove={handleMagneticMove}
                 onMouseLeave={handleMagneticLeave}
-                className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${
-                  isDark
+                className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${isDark
                     ? "bg-black/30 backdrop-blur-md border-2 border-orange-500/50"
                     : "bg-white/80 backdrop-blur-md border-2 border-orange-600/30 shadow-sm"
-                }`}
+                  }`}
               >
                 <span
                   className={`absolute inset-0 bg-gradient-to-r from-orange-600 to-yellow-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300`}
                 ></span>
                 <span
-                  className={`relative z-10 flex items-center gap-2 ${
-                    isDark
+                  className={`relative z-10 flex items-center gap-2 ${isDark
                       ? "text-white"
                       : "text-orange-600 group-hover:text-white group-active:text-white"
-                  }`}
+                    }`}
                 >
                   LeetCode <FaCode className="text-lg" />
                 </span>
