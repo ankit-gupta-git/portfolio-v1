@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { RiSparklingFill } from "react-icons/ri";
 import { SiReact, SiNodedotjs, SiMongodb } from "react-icons/si";
 
-const profileImgUrl = "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/myimg.webp";
+const profileImgUrl = "https://ik.imagekit.io/zlbgvcgef/portfolio-v1/myimg.webp?v=2";
 
 export const CreativeProfileCard = ({ isDark }) => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
