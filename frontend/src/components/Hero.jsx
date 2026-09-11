@@ -192,7 +192,9 @@ const Hero = () => {
             {/* CTA Buttons with GSAP Magnetic Hover */}
             <div className="gsap-hero-anim flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
               <a
-                href="/Ankit_Kumar_Gupta_SDE_Resume.pdf"
+                href="/Ankit_Kumar_Gupta_Resume.pdf"
+                target="_blank"
+                rel="noreferrer"
                 onMouseMove={handleMagneticMove}
                 onMouseLeave={handleMagneticLeave}
                 className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg transition relative group overflow-hidden ${isDark
