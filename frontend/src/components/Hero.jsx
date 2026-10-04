@@ -192,7 +192,7 @@ const Hero = () => {
             {/* CTA Buttons with GSAP Magnetic Hover */}
             <div className="gsap-hero-anim flex flex-wrap gap-4 pt-2 justify-center md:justify-start">
               <a
-                href="/Ankit_Kumar_Gupta_Resume.pdf"
+                href="https://drive.google.com/file/d/1VSDsphVfNGgTigWoql8lBjk8K1y-3Q-C/view?usp=sharing"
                 target="_blank"
                 rel="noreferrer"
                 onMouseMove={handleMagneticMove}

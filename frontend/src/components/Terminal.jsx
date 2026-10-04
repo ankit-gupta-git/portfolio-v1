@@ -21,7 +21,7 @@ const CONTACT = {
   linkedin: 'https://www.linkedin.com/in/iamankit-gupta/',
   github: 'https://github.com/ankit-gupta-git',
   twitter: 'https://twitter.com/ankitgupta_79',
-  resume: 'https://drive.google.com/file/d/19HHUQSajGr2eHBJ2g9aGxZOoebAFhbbN/view?usp=sharing' // Update with your actual resume link
+  resume: 'https://drive.google.com/file/d/1VSDsphVfNGgTigWoql8lBjk8K1y-3Q-C/view?usp=sharing'
 };
 
 const ASCII_BANNER = [
@@ -274,7 +274,7 @@ Building expertise in AI, ML & full-stack development`;
         
         setTimeout(() => {
           if (typeof window !== 'undefined') {
-            window.open('https://drive.google.com/file/d/19HHUQSajGr2eHBJ2g9aGxZOoebAFhbbN/view?usp=sharing', '_blank');
+            window.open(CONTACT.resume, '_blank');
           }
           setHistory(prev => [
             ...prev, 
