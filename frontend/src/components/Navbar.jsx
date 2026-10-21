@@ -1,27 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FiMenu, FiX, FiTerminal } from "react-icons/fi";
+import { FaSun, FaMoon } from "react-icons/fa6";
 import { useTheme } from "./ui/ThemeContext";
 import { gsap } from "gsap";
 
+const navLinks = [
+  { name: "Home", href: "#home" },
+  { name: "About", href: "#about" },
+  { name: "Experience", href: "#experience" },
+  { name: "Skills", href: "#skills" },
+  { name: "Problem Solving", href: "#problemsolving" },
+  { name: "Projects", href: "#projects" },
+  { name: "Blog", href: "#blog" },
+  { name: "Contact", href: "#contact" },
+];
+
 const Navbar = ({ onTerminalClick }) => {
-  const { isDark } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("Home");
 
   const navbarRef = useRef(null);
   const welcomeTextRef = useRef(null);
   const mobileMenuRef = useRef(null);
-
-  const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Experience", href: "#experience" },
-    { name: "Skills", href: "#skills" },
-    { name: "Problem Solving", href: "#problemsolving" },
-    { name: "Projects", href: "#projects" },
-    { name: "Blog", href: "#blog" },
-    { name: "Contact", href: "#contact" },
-  ];
 
   useEffect(() => {
     const observerOptions = {
@@ -96,27 +97,38 @@ const Navbar = ({ onTerminalClick }) => {
             : "bg-white/40 border border-transparent shadow-lg"
         }`}
       >
-        {/* Mobile Menu Button + Welcome */}
-        <div className="flex items-center gap-3">
-          <div
-            className={`md:hidden text-2xl cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 ${
-              isDark ? "text-white hover:text-blue-400" : "text-gray-800 hover:text-blue-600"
-            }`}
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <FiX /> : <FiMenu />}
+        {/* Mobile Header Row */}
+        <div className="flex md:hidden items-center justify-between w-full">
+          <div className="flex items-center gap-3">
+            <button
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              className={`text-2xl cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 ${
+                isDark ? "text-white hover:text-blue-400" : "text-gray-800 hover:text-blue-600"
+              }`}
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              {menuOpen ? <FiX /> : <FiMenu />}
+            </button>
+
+            <span
+              ref={welcomeTextRef}
+              className={`text-sm font-medium bg-gradient-to-r ${
+                isDark
+                  ? "from-blue-400 to-purple-500 text-transparent bg-clip-text"
+                  : "from-blue-600 to-purple-600 text-transparent bg-clip-text"
+              }`}
+            >
+              Welcome
+            </span>
           </div>
 
-          <span
-            ref={welcomeTextRef}
-            className={`md:hidden text-sm font-medium bg-gradient-to-r ${
-              isDark
-                ? "from-blue-400 to-purple-500 text-transparent bg-clip-text"
-                : "from-blue-600 to-purple-600 text-transparent bg-clip-text"
-            }`}
+          <button
+            onClick={() => onTerminalClick && onTerminalClick()}
+            aria-label="Open Interactive Terminal"
+            className="p-1.5 rounded-lg bg-gray-100/30 dark:bg-white/10 text-emerald-400 cursor-pointer"
           >
-            Welcome
-          </span>
+            <FiTerminal className="w-4 h-4" />
+          </button>
         </div>
 
         {/* NAVIGATION + TERMINAL BUTTON */}
@@ -138,13 +150,14 @@ const Navbar = ({ onTerminalClick }) => {
               </a>
             ))}
 
-            {/* Terminal Button - SAME SPACING */}
+            {/* Terminal Button */}
             <button
               onClick={() => onTerminalClick && onTerminalClick()}
-              className="flex items-center gap-2 px-4 py-1.5 rounded-md bg-gray-100/20 dark:bg-white/10 hover:bg-gray-200/30 dark:hover:bg-white/20 transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-gray-100/30 dark:bg-white/10 hover:bg-gray-200/50 dark:hover:bg-white/20 transition-all duration-200 cursor-pointer border border-transparent dark:border-white/10"
+              title="Open Interactive Terminal"
             >
-              <FiTerminal className="w-5 h-5 text-green-500 animate-pulse" />
-              <span className="text-sm font-medium text-green-500">Terminal</span>
+              <FiTerminal className="w-4 h-4 text-emerald-400 animate-pulse" />
+              <span className="text-xs font-mono font-medium text-emerald-500 dark:text-emerald-400">Terminal</span>
             </button>
           </div>
         </nav>

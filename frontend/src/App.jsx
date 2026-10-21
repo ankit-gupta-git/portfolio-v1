@@ -47,7 +47,7 @@ const App = () => {
         // Fire and forget request without short abort so Render can wake up fully
         fetch(`${backendUrl}/api/warmup`).catch(() => {});
         console.log("Backend warmup request sent to:", backendUrl);
-      } catch (error) {
+      } catch {
         // Silently fail - this shouldn't affect UX
       }
     };
@@ -61,7 +61,7 @@ const App = () => {
       {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
       <Layout>
         <Navbar onTerminalClick={() => setIsTerminalOpen(true)} />
-        <Hero />
+        <Hero isLoading={isLoading} />
         <About />
         <Experience />
         <Skills />

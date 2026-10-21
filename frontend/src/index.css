@@ -105,6 +105,58 @@ body {
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace !important;
 }
 
+.font-instrument {
+  font-family: 'Instrument Serif', Georgia, serif;
+}
+
+.font-serif-editorial {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+}
+
+/* Subtle architectural grid pattern for hero */
+.hero-grid-pattern {
+  background-size: 48px 48px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+.light .hero-grid-pattern,
+:root:not(.dark) .hero-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+}
+
+/* Text line mask for GSAP editorial slide-up reveal */
+.line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+/* Animated scroll indicator scanning line */
+@keyframes scrollScan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.animate-scroll-scan {
+  animation: scrollScan 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
 /* Glow effects for experience cards */
 .experience-card-glow {
   position: relative;
