@@ -47,54 +47,7 @@ const Hero = ({ isLoading = false }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // GSAP Entrance Animations
-  useEffect(() => {
-    if (isLoading) return;
 
-    const ctx = gsap.context(() => {
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      if (prefersReducedMotion) {
-        gsap.to(".gsap-hero-anim", { opacity: 1, duration: 0.3 });
-        if (profileContainerRef.current) {
-          gsap.to(profileContainerRef.current, { opacity: 1, duration: 0.3 });
-        }
-        return;
-      }
-
-      // Master Staggered Entrance for Hero Content
-      gsap.fromTo(
-        ".gsap-hero-anim",
-        { opacity: 0, y: 35, filter: "blur(8px)" },
-        {
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-          duration: 1.1,
-          stagger: 0.12,
-          ease: "power3.out",
-        }
-      );
-
-      // Entrance for Sarthak-style Profile Visual
-      if (profileContainerRef.current) {
-        gsap.fromTo(
-          profileContainerRef.current,
-          { opacity: 0, scale: 0.9, y: 30 },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 1.3,
-            ease: "power3.out",
-            delay: 0.2,
-          }
-        );
-      }
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, [isLoading]);
 
   // GSAP Magnetic Effect for Hovering Elements
   const handleMagneticMove = (e) => {

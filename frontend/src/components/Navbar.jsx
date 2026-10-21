@@ -53,19 +53,7 @@ const Navbar = ({ onTerminalClick }) => {
     return () => observer.disconnect();
   }, [navLinks]);
 
-  useEffect(() => {
-    gsap.fromTo(
-      navbarRef.current,
-      { opacity: 0, y: -20 },
-      { opacity: 1, y: 0, duration: 0.3 }
-    );
 
-    gsap.fromTo(
-      welcomeTextRef.current,
-      { opacity: 0, x: -10 },
-      { opacity: 1, x: 0, duration: 0.25, delay: 0.1 }
-    );
-  }, []);
 
   useEffect(() => {
     if (!mobileMenuRef.current) return;

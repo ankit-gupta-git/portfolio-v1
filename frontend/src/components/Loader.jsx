@@ -28,7 +28,13 @@ const Loader = ({ onLoadingComplete }) => {
     window.addEventListener("touchmove", preventScroll, { passive: false });
     window.addEventListener("keydown", preventDefaultKeys, { passive: false });
 
+    // Safety timeout: automatically open curtain if anything stalls
+    const safetyTimer = setTimeout(() => {
+      triggerOpeningAnimation();
+    }, 4000);
+
     return () => {
+      clearTimeout(safetyTimer);
       window.removeEventListener("wheel", preventScroll);
       window.removeEventListener("touchmove", preventScroll);
       window.removeEventListener("keydown", preventDefaultKeys);
